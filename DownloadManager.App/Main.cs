@@ -5,14 +5,20 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DownloadManager.App.Enums;
+using DownloadManager.App.Util;
 
 namespace DownloadManager.App
 {
     public partial class Main : Form
     {
+        private static int workNumber = 0;
+
         public Main()
         {
             InitializeComponent();
@@ -41,6 +47,48 @@ namespace DownloadManager.App
         {
             if (!IsUrlValid() || !IsDestinationFolderValid()) return;
 
+            //Enum.TryParse(cmbDownloadMethod.Text, out DownloadMethod method);
+
+            //switch (method)
+            //{
+            //    case DownloadMethod.BeginInvoke:
+            //        break;
+            //    case DownloadMethod.Thread:
+            //        break;
+            //    case DownloadMethod.ThreadPool:
+            //        break;
+            //    case DownloadMethod.BackgroundWorker:
+            //        break;
+            //    case DownloadMethod.Task:
+            //        break;
+            //    default:
+            //        throw new NotSupportedException();
+            //}
+
+            int currentWorkNumber = Interlocked.Increment(ref workNumber);
+
+            string ext = Path.GetExtension(txtFileUrl.Text);
+            var fileName = $"{IdCreator.CreateNewId()}{ext}";
+            var path = Path.Combine(txtDestinationFolder.Text, fileName);
+
+            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} has started." +
+                                 Environment.NewLine);
+
+            try
+            {
+                using (WebClient webClient = new WebClient())
+                {
+                    webClient.DownloadFile(txtFileUrl.Text, path);
+                }
+            }
+            catch (Exception ex)
+            {
+                txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} terminated. Exception: {ex.Message}" +
+                                     Environment.NewLine);
+            }
+
+            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} was successful." +
+                                 Environment.NewLine);
         }
 
         private bool IsUrlValid()

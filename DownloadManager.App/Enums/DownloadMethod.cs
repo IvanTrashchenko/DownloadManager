@@ -1,4 +1,4 @@
-﻿namespace DownloadManager.App
+﻿namespace DownloadManager.App.Enums
 {
     public enum DownloadMethod
     {
