@@ -15,6 +15,7 @@ namespace DownloadManager.App
         public Main()
         {
             InitializeComponent();
+            cmbDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
         }
 
     }
