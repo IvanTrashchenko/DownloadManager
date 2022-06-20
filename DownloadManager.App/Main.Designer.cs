@@ -40,6 +40,8 @@ namespace DownloadManager.App
             this.txtDestinationFolder = new System.Windows.Forms.TextBox();
             this.btnFolderBrowserDialog = new System.Windows.Forms.Button();
             this.txtResult = new System.Windows.Forms.TextBox();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnStart = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -180,11 +182,38 @@ namespace DownloadManager.App
             this.txtResult.Size = new System.Drawing.Size(470, 252);
             this.txtResult.TabIndex = 9;
             // 
+            // btnClear
+            // 
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClear.AutoSize = true;
+            this.btnClear.Location = new System.Drawing.Point(433, 465);
+            this.btnClear.Margin = new System.Windows.Forms.Padding(20, 50, 20, 50);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(72, 33);
+            this.btnClear.TabIndex = 11;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnStart
+            // 
+            this.btnStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnStart.AutoSize = true;
+            this.btnStart.Location = new System.Drawing.Point(338, 465);
+            this.btnStart.Margin = new System.Windows.Forms.Padding(20, 50, 20, 50);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(89, 33);
+            this.btnStart.TabIndex = 10;
+            this.btnStart.Text = "Download";
+            this.btnStart.UseVisualStyleBackColor = true;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(534, 511);
+            this.Controls.Add(this.btnClear);
+            this.Controls.Add(this.btnStart);
             this.Controls.Add(this.txtResult);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -213,6 +242,8 @@ namespace DownloadManager.App
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TextBox txtDestinationFolder;
         private System.Windows.Forms.Button btnFolderBrowserDialog;
+        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Button btnStart;
     }
 }
 

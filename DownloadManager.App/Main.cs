@@ -30,5 +30,10 @@ namespace DownloadManager.App
                 }
             }
         }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtResult.Clear();
+        }
     }
 }
