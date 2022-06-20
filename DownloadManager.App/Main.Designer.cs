@@ -67,7 +67,7 @@ namespace DownloadManager.App
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(850, 232);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(470, 197);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // cmbDownloadMethod
@@ -75,20 +75,20 @@ namespace DownloadManager.App
             this.cmbDownloadMethod.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbDownloadMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDownloadMethod.Location = new System.Drawing.Point(0, 191);
+            this.cmbDownloadMethod.Location = new System.Drawing.Point(0, 161);
             this.cmbDownloadMethod.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.cmbDownloadMethod.Name = "cmbDownloadMethod";
-            this.cmbDownloadMethod.Size = new System.Drawing.Size(850, 23);
+            this.cmbDownloadMethod.Size = new System.Drawing.Size(470, 23);
             this.cmbDownloadMethod.TabIndex = 6;
             // 
             // txtFileUrl
             // 
             this.txtFileUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFileUrl.Location = new System.Drawing.Point(0, 39);
+            this.txtFileUrl.Location = new System.Drawing.Point(0, 33);
             this.txtFileUrl.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.txtFileUrl.Name = "txtFileUrl";
-            this.txtFileUrl.Size = new System.Drawing.Size(850, 23);
+            this.txtFileUrl.Size = new System.Drawing.Size(470, 23);
             this.txtFileUrl.TabIndex = 5;
             this.txtFileUrl.Text = "https://i.redd.it/ufxj58wy79w81.jpg";
             // 
@@ -96,7 +96,7 @@ namespace DownloadManager.App
             // 
             this.lblDownloadMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblDownloadMethod.AutoSize = true;
-            this.lblDownloadMethod.Location = new System.Drawing.Point(0, 171);
+            this.lblDownloadMethod.Location = new System.Drawing.Point(0, 141);
             this.lblDownloadMethod.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
             this.lblDownloadMethod.Name = "lblDownloadMethod";
             this.lblDownloadMethod.Size = new System.Drawing.Size(106, 15);
@@ -107,7 +107,7 @@ namespace DownloadManager.App
             // 
             this.lblDestinationFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblDestinationFolder.AutoSize = true;
-            this.lblDestinationFolder.Location = new System.Drawing.Point(0, 95);
+            this.lblDestinationFolder.Location = new System.Drawing.Point(0, 77);
             this.lblDestinationFolder.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
             this.lblDestinationFolder.Name = "lblDestinationFolder";
             this.lblDestinationFolder.Size = new System.Drawing.Size(101, 15);
@@ -118,7 +118,7 @@ namespace DownloadManager.App
             // 
             this.lblFileUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblFileUrl.AutoSize = true;
-            this.lblFileUrl.Location = new System.Drawing.Point(0, 19);
+            this.lblFileUrl.Location = new System.Drawing.Point(0, 13);
             this.lblFileUrl.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
             this.lblFileUrl.Name = "lblFileUrl";
             this.lblFileUrl.Size = new System.Drawing.Size(49, 15);
@@ -134,12 +134,12 @@ namespace DownloadManager.App
             this.tableLayoutPanel2.Controls.Add(this.txtDestinationFolder, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnFolderBrowserDialog, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 114);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 96);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(850, 38);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(470, 32);
             this.tableLayoutPanel2.TabIndex = 7;
             // 
             // txtDestinationFolder
@@ -149,7 +149,7 @@ namespace DownloadManager.App
             this.txtDestinationFolder.Location = new System.Drawing.Point(0, 1);
             this.txtDestinationFolder.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.txtDestinationFolder.Name = "txtDestinationFolder";
-            this.txtDestinationFolder.Size = new System.Drawing.Size(765, 23);
+            this.txtDestinationFolder.Size = new System.Drawing.Size(423, 23);
             this.txtDestinationFolder.TabIndex = 10;
             this.txtDestinationFolder.Text = "C:\\DownloadManagerFolder";
             // 
@@ -158,10 +158,10 @@ namespace DownloadManager.App
             this.btnFolderBrowserDialog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnFolderBrowserDialog.AutoSize = true;
-            this.btnFolderBrowserDialog.Location = new System.Drawing.Point(770, 0);
+            this.btnFolderBrowserDialog.Location = new System.Drawing.Point(428, 0);
             this.btnFolderBrowserDialog.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.btnFolderBrowserDialog.Name = "btnFolderBrowserDialog";
-            this.btnFolderBrowserDialog.Size = new System.Drawing.Size(80, 25);
+            this.btnFolderBrowserDialog.Size = new System.Drawing.Size(42, 25);
             this.btnFolderBrowserDialog.TabIndex = 11;
             this.btnFolderBrowserDialog.Text = "...";
             this.btnFolderBrowserDialog.UseVisualStyleBackColor = true;
@@ -172,19 +172,19 @@ namespace DownloadManager.App
             this.txtResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtResult.Location = new System.Drawing.Point(35, 238);
+            this.txtResult.Location = new System.Drawing.Point(35, 203);
             this.txtResult.Multiline = true;
             this.txtResult.Name = "txtResult";
             this.txtResult.ReadOnly = true;
             this.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtResult.Size = new System.Drawing.Size(850, 447);
+            this.txtResult.Size = new System.Drawing.Size(470, 252);
             this.txtResult.TabIndex = 9;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(914, 741);
+            this.ClientSize = new System.Drawing.Size(534, 511);
             this.Controls.Add(this.txtResult);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
