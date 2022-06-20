@@ -206,6 +206,7 @@ namespace DownloadManager.App
             this.btnStart.TabIndex = 10;
             this.btnStart.Text = "Download";
             this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // Main
             // 
