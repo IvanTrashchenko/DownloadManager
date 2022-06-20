@@ -151,6 +151,7 @@ namespace DownloadManager.App
             this.txtDestinationFolder.Name = "txtDestinationFolder";
             this.txtDestinationFolder.Size = new System.Drawing.Size(765, 23);
             this.txtDestinationFolder.TabIndex = 10;
+            this.txtDestinationFolder.Text = "C:\\DownloadManagerFolder";
             // 
             // btnFolderBrowserDialog
             // 
@@ -164,6 +165,7 @@ namespace DownloadManager.App
             this.btnFolderBrowserDialog.TabIndex = 11;
             this.btnFolderBrowserDialog.Text = "...";
             this.btnFolderBrowserDialog.UseVisualStyleBackColor = true;
+            this.btnFolderBrowserDialog.Click += new System.EventHandler(this.btnFolderBrowserDialog_Click);
             // 
             // txtResult
             // 

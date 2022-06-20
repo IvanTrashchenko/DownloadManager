@@ -18,5 +18,17 @@ namespace DownloadManager.App
             cmbDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
         }
 
+        private void btnFolderBrowserDialog_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    txtDestinationFolder.Text = fbd.SelectedPath;
+                }
+            }
+        }
     }
 }
