@@ -131,7 +131,7 @@ namespace DownloadManager.App
 
             string ext = Path.GetExtension(txtFileUrl.Text);
             var path = NextAvailableFilename(Path.Combine(txtDestinationFolder.Text, $"{txtFileName.Text}{ext}"));
-            var fileName = Path.GetFileNameWithoutExtension(path);
+            var fileName = Path.GetFileName(path);
 
             txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} has started." +
                                  Environment.NewLine);
