@@ -113,23 +113,7 @@ namespace DownloadManager.App
         {
             if (!IsUrlValid() || !IsNameValid() || !IsDestinationFolderValid()) return;
 
-            //Enum.TryParse(cmbDownloadMethod.Text, out DownloadMethod method);
-
-            //switch (method)
-            //{
-            //    case DownloadMethod.BeginInvoke:
-            //        break;
-            //    case DownloadMethod.Thread:
-            //        break;
-            //    case DownloadMethod.ThreadPool:
-            //        break;
-            //    case DownloadMethod.BackgroundWorker:
-            //        break;
-            //    case DownloadMethod.Task:
-            //        break;
-            //    default:
-            //        throw new NotSupportedException();
-            //}
+            Enum.TryParse(cmbDownloadMethod.Text, out DownloadMethod method);
 
             int currentWorkNumber = Interlocked.Increment(ref workNumber);
 
@@ -138,15 +122,30 @@ namespace DownloadManager.App
 
             try
             {
-                var response = Client.GetAsync(txtFileUrl.Text).GetAwaiter().GetResult();
-
-                var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
-                
-                var path = NextAvailableFilename(Path.Combine(txtDestinationFolder.Text, $"{txtFileName.Text}{ext}"));
-
-                using (var fileStream = File.Open(path, FileMode.CreateNew))
+                switch (method)
                 {
-                    response.Content.CopyToAsync(fileStream).GetAwaiter().GetResult();
+                    case DownloadMethod.BeginInvoke:
+                        break;
+                    case DownloadMethod.Thread:
+                        break;
+                    case DownloadMethod.ThreadPool:
+                        break;
+                    case DownloadMethod.BackgroundWorker:
+                        break;
+                    case DownloadMethod.Task:
+                        var workTask = DownloadFileAsync();
+                        workTask.ContinueWith(x =>
+                        {
+                            this.BeginInvoke((MethodInvoker)delegate
+                            {
+                                txtResult.AppendText(
+                                    $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading was successful." +
+                                    Environment.NewLine);
+                            });
+                        });
+                        break;
+                    default:
+                        throw new NotSupportedException();
                 }
             }
             catch (Exception ex)
@@ -154,9 +153,20 @@ namespace DownloadManager.App
                 txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading terminated. Exception: {ex.Message}" +
                                      Environment.NewLine);
             }
+        }
 
-            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading was successful." +
-                                 Environment.NewLine);
+        private async Task DownloadFileAsync()
+        {
+            var response = await Client.GetAsync(txtFileUrl.Text);
+
+            var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
+
+            var path = NextAvailableFilename(Path.Combine(txtDestinationFolder.Text, $"{txtFileName.Text}{ext}"));
+
+            using (var fileStream = File.Open(path, FileMode.CreateNew))
+            {
+                await response.Content.CopyToAsync(fileStream);
+            }
         }
 
         private static string NextAvailableFilename(string path)
