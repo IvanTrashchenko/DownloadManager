@@ -8,4 +8,8 @@
     <Company>Kernelics</Company>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediaTypeMap.Core" Version="2.3.3" />
+  </ItemGroup>
+
 </Project>

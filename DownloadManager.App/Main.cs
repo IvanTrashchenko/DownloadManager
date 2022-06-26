@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -17,6 +18,8 @@ namespace DownloadManager.App
 {
     public partial class Main : Form
     {
+        private readonly HttpClient Client;
+
         private static string numberPattern = " ({0})";
 
         private static int workNumber = 0;
@@ -25,6 +28,7 @@ namespace DownloadManager.App
         {
             InitializeComponent();
             cmbDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
+            Client = new HttpClient();
         }
 
         private void btnFolderBrowserDialog_Click(object sender, EventArgs e)
@@ -129,27 +133,29 @@ namespace DownloadManager.App
 
             int currentWorkNumber = Interlocked.Increment(ref workNumber);
 
-            string ext = Path.GetExtension(txtFileUrl.Text);
-            var path = NextAvailableFilename(Path.Combine(txtDestinationFolder.Text, $"{txtFileName.Text}{ext}"));
-            var fileName = Path.GetFileName(path);
-
-            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} has started." +
+            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading has started." +
                                  Environment.NewLine);
 
             try
             {
-                using (WebClient webClient = new WebClient())
+                var response = Client.GetAsync(txtFileUrl.Text).GetAwaiter().GetResult();
+
+                var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
+                
+                var path = NextAvailableFilename(Path.Combine(txtDestinationFolder.Text, $"{txtFileName.Text}{ext}"));
+
+                using (var fileStream = File.Open(path, FileMode.CreateNew))
                 {
-                    webClient.DownloadFile(txtFileUrl.Text, path);
+                    response.Content.CopyToAsync(fileStream).GetAwaiter().GetResult();
                 }
             }
             catch (Exception ex)
             {
-                txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} terminated. Exception: {ex.Message}" +
+                txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading terminated. Exception: {ex.Message}" +
                                      Environment.NewLine);
             }
 
-            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} was successful." +
+            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading was successful." +
                                  Environment.NewLine);
         }
 
