@@ -133,7 +133,7 @@ namespace DownloadManager.App
                     case DownloadMethod.BackgroundWorker:
                         break;
                     case DownloadMethod.Task:
-                        var workTask = DownloadFileAsync();
+                        var workTask = DownloadFileAsync(txtFileUrl.Text, txtFileName.Text, txtDestinationFolder.Text);
                         workTask.ContinueWith(x =>
                         {
                             this.BeginInvoke((MethodInvoker)delegate
@@ -155,13 +155,13 @@ namespace DownloadManager.App
             }
         }
 
-        private async Task DownloadFileAsync()
+        private async Task DownloadFileAsync(string url, string name, string folder)
         {
-            var response = await Client.GetAsync(txtFileUrl.Text);
+            var response = await Client.GetAsync(url);
 
             var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
 
-            var path = NextAvailableFilename(Path.Combine(txtDestinationFolder.Text, $"{txtFileName.Text}{ext}"));
+            var path = NextAvailableFilename(Path.Combine(folder, $"{name}{ext}"));
 
             using (var fileStream = File.Open(path, FileMode.CreateNew))
             {
