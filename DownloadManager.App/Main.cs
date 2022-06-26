@@ -7,16 +7,18 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DownloadManager.App.Enums;
-using DownloadManager.App.Util;
 
 namespace DownloadManager.App
 {
     public partial class Main : Form
     {
+        private static string numberPattern = " ({0})";
+
         private static int workNumber = 0;
 
         public Main()
@@ -43,54 +45,6 @@ namespace DownloadManager.App
             txtResult.Clear();
         }
 
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            if (!IsUrlValid() || !IsDestinationFolderValid()) return;
-
-            //Enum.TryParse(cmbDownloadMethod.Text, out DownloadMethod method);
-
-            //switch (method)
-            //{
-            //    case DownloadMethod.BeginInvoke:
-            //        break;
-            //    case DownloadMethod.Thread:
-            //        break;
-            //    case DownloadMethod.ThreadPool:
-            //        break;
-            //    case DownloadMethod.BackgroundWorker:
-            //        break;
-            //    case DownloadMethod.Task:
-            //        break;
-            //    default:
-            //        throw new NotSupportedException();
-            //}
-
-            int currentWorkNumber = Interlocked.Increment(ref workNumber);
-
-            string ext = Path.GetExtension(txtFileUrl.Text);
-            var fileName = $"{IdCreator.CreateNewId()}{ext}";
-            var path = Path.Combine(txtDestinationFolder.Text, fileName);
-
-            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} has started." +
-                                 Environment.NewLine);
-
-            try
-            {
-                using (WebClient webClient = new WebClient())
-                {
-                    webClient.DownloadFile(txtFileUrl.Text, path);
-                }
-            }
-            catch (Exception ex)
-            {
-                txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} terminated. Exception: {ex.Message}" +
-                                     Environment.NewLine);
-            }
-
-            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} was successful." +
-                                 Environment.NewLine);
-        }
-
         private bool IsUrlValid()
         {
             if (string.IsNullOrWhiteSpace(txtFileUrl.Text))
@@ -103,6 +57,26 @@ namespace DownloadManager.App
                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)))
             {
                 MessageBox.Show("File URL is not valid.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsNameValid()
+        {
+            if (string.IsNullOrWhiteSpace(txtFileName.Text))
+            {
+                MessageBox.Show("File name cannot be empty.");
+                return false;
+            }
+
+            Regex containsABadCharacter = new Regex("["
+                                                    + Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars())) + "]");
+
+            if (containsABadCharacter.IsMatch(txtFileName.Text))
+            {
+                MessageBox.Show("File name contains invalid characters.");
                 return false;
             }
 
@@ -129,6 +103,97 @@ namespace DownloadManager.App
             }
 
             return true;
+        }
+
+        private void btnDownload_Click(object sender, EventArgs e)
+        {
+            if (!IsUrlValid() || !IsNameValid() || !IsDestinationFolderValid()) return;
+
+            //Enum.TryParse(cmbDownloadMethod.Text, out DownloadMethod method);
+
+            //switch (method)
+            //{
+            //    case DownloadMethod.BeginInvoke:
+            //        break;
+            //    case DownloadMethod.Thread:
+            //        break;
+            //    case DownloadMethod.ThreadPool:
+            //        break;
+            //    case DownloadMethod.BackgroundWorker:
+            //        break;
+            //    case DownloadMethod.Task:
+            //        break;
+            //    default:
+            //        throw new NotSupportedException();
+            //}
+
+            int currentWorkNumber = Interlocked.Increment(ref workNumber);
+
+            string ext = Path.GetExtension(txtFileUrl.Text);
+            var path = NextAvailableFilename(Path.Combine(txtDestinationFolder.Text, $"{txtFileName.Text}{ext}"));
+            var fileName = Path.GetFileNameWithoutExtension(path);
+
+            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} has started." +
+                                 Environment.NewLine);
+
+            try
+            {
+                using (WebClient webClient = new WebClient())
+                {
+                    webClient.DownloadFile(txtFileUrl.Text, path);
+                }
+            }
+            catch (Exception ex)
+            {
+                txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} terminated. Exception: {ex.Message}" +
+                                     Environment.NewLine);
+            }
+
+            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading {fileName} was successful." +
+                                 Environment.NewLine);
+        }
+
+        private static string NextAvailableFilename(string path)
+        {
+            // Short-cut if already available
+            if (!File.Exists(path))
+                return path;
+
+            // If path has extension then insert the number pattern just before the extension and return next filename
+            if (Path.HasExtension(path))
+                return GetNextFilename(path.Insert(path.LastIndexOf(Path.GetExtension(path)), numberPattern));
+
+            // Otherwise just append the pattern to the path and return next filename
+            return GetNextFilename(path + numberPattern);
+        }
+
+        private static string GetNextFilename(string pattern)
+        {
+            string tmp = string.Format(pattern, 1);
+            if (tmp == pattern)
+                throw new ArgumentException("The pattern must include an index place-holder");
+
+            if (!File.Exists(tmp))
+                return tmp; // short-circuit if no matches
+
+            int min = 1, max = 2; // min is inclusive, max is exclusive/untested
+
+            while (File.Exists(string.Format(pattern, max)))
+            {
+                min = max;
+                max *= 2;
+            }
+
+            while (max != min + 1)
+            {
+                int pivot = (max + min) / 2;
+                if (File.Exists(string.Format(pattern, pivot)))
+                    min = pivot;
+                else
+                    max = pivot;
+            }
+
+            return string.Format(pattern, max);
         }
     }
 }
