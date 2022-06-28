@@ -57,7 +57,7 @@ namespace DownloadManager.App
                 return false;
             }
 
-            if(!(Uri.TryCreate(txtFileUrl.Text, UriKind.Absolute, out Uri uriResult)
+            if (!(Uri.TryCreate(txtFileUrl.Text, UriKind.Absolute, out Uri uriResult)
                    && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)))
             {
                 MessageBox.Show("File URL is not valid.");
@@ -115,57 +115,77 @@ namespace DownloadManager.App
 
             Enum.TryParse(cmbDownloadMethod.Text, out DownloadMethod method);
 
+            switch (method)
+            {
+                case DownloadMethod.BeginInvoke:
+                    break;
+                case DownloadMethod.Thread:
+                    break;
+                case DownloadMethod.ThreadPool:
+                    break;
+                case DownloadMethod.BackgroundWorker:
+                    break;
+                case DownloadMethod.Task:
+                    new TaskFactory().StartNew(() =>
+                    {
+                        DownloadFile(txtFileUrl.Text, txtFileName.Text, txtDestinationFolder.Text);
+                    });
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+
+        }
+
+        private void DownloadFile(string url, string name, string folder)
+        {
             int currentWorkNumber = Interlocked.Increment(ref workNumber);
 
-            txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading has started." +
-                                 Environment.NewLine);
+            var tId = Thread.CurrentThread.ManagedThreadId;
+
+            string startMessage =
+                $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading has started." +
+                Environment.NewLine;
+
+            this.BeginInvoke((MethodInvoker)delegate
+            {
+                txtResult.AppendText(startMessage);
+            });
 
             try
             {
-                switch (method)
+                var response = Client.GetAsync(url).GetAwaiter().GetResult();
+
+                var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
+
+                lock (this)
                 {
-                    case DownloadMethod.BeginInvoke:
-                        break;
-                    case DownloadMethod.Thread:
-                        break;
-                    case DownloadMethod.ThreadPool:
-                        break;
-                    case DownloadMethod.BackgroundWorker:
-                        break;
-                    case DownloadMethod.Task:
-                        var workTask = DownloadFileAsync(txtFileUrl.Text, txtFileName.Text, txtDestinationFolder.Text);
-                        workTask.ContinueWith(x =>
-                        {
-                            this.BeginInvoke((MethodInvoker)delegate
-                            {
-                                txtResult.AppendText(
-                                    $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading was successful." +
-                                    Environment.NewLine);
-                            });
-                        });
-                        break;
-                    default:
-                        throw new NotSupportedException();
+                    string path = NextAvailableFilename(Path.Combine(folder, $"{name}{ext}"));
+
+                    using (var fileStream = File.Open(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read))
+                    {
+                        response.Content.CopyToAsync(fileStream).GetAwaiter().GetResult();
+                    }
                 }
+
+                string endMessage = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading was successful." +
+                          Environment.NewLine;
+
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    txtResult.AppendText(endMessage);
+                });
             }
             catch (Exception ex)
             {
-                txtResult.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {Thread.CurrentThread.ManagedThreadId} - Downloading terminated. Exception: {ex.Message}" +
-                                     Environment.NewLine);
-            }
-        }
+                string exMessage =
+                    $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading terminated. Exception: {ex.Message}" +
+                    Environment.NewLine;
 
-        private async Task DownloadFileAsync(string url, string name, string folder)
-        {
-            var response = await Client.GetAsync(url);
-
-            var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
-
-            var path = NextAvailableFilename(Path.Combine(folder, $"{name}{ext}"));
-
-            using (var fileStream = File.Open(path, FileMode.CreateNew))
-            {
-                await response.Content.CopyToAsync(fileStream);
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    txtResult.AppendText(exMessage);
+                });
             }
         }
 
