@@ -120,6 +120,14 @@ namespace DownloadManager.App
                 case DownloadMethod.BeginInvoke:
                     break;
                 case DownloadMethod.Thread:
+                    Parameter param = new Parameter
+                    {
+                        Url = txtFileUrl.Text,
+                        Name = txtFileName.Text,
+                        Folder = txtDestinationFolder.Text
+                    };
+                    Thread thread = new Thread(DownloadFile);
+                    thread.Start(param);
                     break;
                 case DownloadMethod.ThreadPool:
                     break;
@@ -134,7 +142,12 @@ namespace DownloadManager.App
                 default:
                     throw new NotSupportedException();
             }
+        }
 
+        private void DownloadFile(object state)
+        {
+            var param = (Parameter)state;
+            DownloadFile(param.Url, param.Name, param.Folder);
         }
 
         private void DownloadFile(string url, string name, string folder)
@@ -230,6 +243,13 @@ namespace DownloadManager.App
             }
 
             return string.Format(pattern, max);
+        }
+
+        private class Parameter
+        {
+            public string Url { get; set; }
+            public string Name { get; set; }
+            public string Folder { get; set; }
         }
     }
 }
