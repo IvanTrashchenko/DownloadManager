@@ -24,11 +24,105 @@ namespace DownloadManager.App
 
         private static int workNumber = 0;
 
+        private delegate void FileDownloading(object state);
+
         public Main()
         {
             InitializeComponent();
             cmbDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
             Client = new HttpClient();
+        }
+
+        private void btnDownload_Click(object sender, EventArgs e)
+        {
+            if (!IsUrlValid() || !IsNameValid() || !IsDestinationFolderValid()) return;
+
+            Enum.TryParse(cmbDownloadMethod.Text, out DownloadMethod method);
+
+            Parameter param = new Parameter
+            {
+                Url = txtFileUrl.Text,
+                Name = txtFileName.Text,
+                Folder = txtDestinationFolder.Text
+            };
+
+            switch (method)
+            {
+                case DownloadMethod.BeginInvoke:
+                    new FileDownloading(DownloadFile).BeginInvoke(param, null, null); // System.PlatformNotSupportedException: Operation is not supported on this platform. :)
+                    break;
+                case DownloadMethod.Thread:
+                    new Thread(DownloadFile).Start(param);
+                    break;
+                case DownloadMethod.ThreadPool:
+                    ThreadPool.QueueUserWorkItem(DownloadFile, param);
+                    break;
+                case DownloadMethod.BackgroundWorker:
+                    break;
+                case DownloadMethod.Task:
+                    Task.Factory.StartNew(DownloadFile, param);
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        private void DownloadFile(object state)
+        {
+            var param = (Parameter)state;
+            DownloadFile(param.Url, param.Name, param.Folder);
+        }
+
+        private void DownloadFile(string url, string name, string folder)
+        {
+            int currentWorkNumber = Interlocked.Increment(ref workNumber);
+
+            var tId = Thread.CurrentThread.ManagedThreadId;
+
+            string startMessage =
+                $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading has started." +
+                Environment.NewLine;
+
+            this.BeginInvoke((MethodInvoker)delegate
+            {
+                txtResult.AppendText(startMessage);
+            });
+
+            try
+            {
+                var response = Client.GetAsync(url).GetAwaiter().GetResult();
+
+                var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
+
+                lock (this)
+                {
+                    string path = NextAvailableFilename(Path.Combine(folder, $"{name}{ext}"));
+
+                    using (var fileStream = File.Open(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read))
+                    {
+                        response.Content.CopyToAsync(fileStream).GetAwaiter().GetResult();
+                    }
+                }
+
+                string endMessage = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading was successful." +
+                          Environment.NewLine;
+
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    txtResult.AppendText(endMessage);
+                });
+            }
+            catch (Exception ex)
+            {
+                string exMessage =
+                    $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading terminated. Exception: {ex.Message}" +
+                    Environment.NewLine;
+
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    txtResult.AppendText(exMessage);
+                });
+            }
         }
 
         private void btnFolderBrowserDialog_Click(object sender, EventArgs e)
@@ -107,97 +201,6 @@ namespace DownloadManager.App
             }
 
             return true;
-        }
-
-        private void btnDownload_Click(object sender, EventArgs e)
-        {
-            if (!IsUrlValid() || !IsNameValid() || !IsDestinationFolderValid()) return;
-
-            Enum.TryParse(cmbDownloadMethod.Text, out DownloadMethod method);
-
-            Parameter param = new Parameter
-            {
-                Url = txtFileUrl.Text,
-                Name = txtFileName.Text,
-                Folder = txtDestinationFolder.Text
-            };
-
-            switch (method)
-            {
-                case DownloadMethod.BeginInvoke:
-                    break;
-                case DownloadMethod.Thread:
-                    new Thread(DownloadFile).Start(param);
-                    break;
-                case DownloadMethod.ThreadPool:
-                    ThreadPool.QueueUserWorkItem(DownloadFile, param);
-                    break;
-                case DownloadMethod.BackgroundWorker:
-                    break;
-                case DownloadMethod.Task:
-                    Task.Factory.StartNew(DownloadFile, param);
-                    break;
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-        private void DownloadFile(object state)
-        {
-            var param = (Parameter)state;
-            DownloadFile(param.Url, param.Name, param.Folder);
-        }
-
-        private void DownloadFile(string url, string name, string folder)
-        {
-            int currentWorkNumber = Interlocked.Increment(ref workNumber);
-
-            var tId = Thread.CurrentThread.ManagedThreadId;
-
-            string startMessage =
-                $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading has started." +
-                Environment.NewLine;
-
-            this.BeginInvoke((MethodInvoker)delegate
-            {
-                txtResult.AppendText(startMessage);
-            });
-
-            try
-            {
-                var response = Client.GetAsync(url).GetAwaiter().GetResult();
-
-                var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
-
-                lock (this)
-                {
-                    string path = NextAvailableFilename(Path.Combine(folder, $"{name}{ext}"));
-
-                    using (var fileStream = File.Open(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read))
-                    {
-                        response.Content.CopyToAsync(fileStream).GetAwaiter().GetResult();
-                    }
-                }
-
-                string endMessage = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading was successful." +
-                          Environment.NewLine;
-
-                this.BeginInvoke((MethodInvoker)delegate
-                {
-                    txtResult.AppendText(endMessage);
-                });
-            }
-            catch (Exception ex)
-            {
-                string exMessage =
-                    $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading terminated. Exception: {ex.Message}" +
-                    Environment.NewLine;
-
-                this.BeginInvoke((MethodInvoker)delegate
-                {
-                    txtResult.AppendText(exMessage);
-                });
-            }
         }
 
         private static string NextAvailableFilename(string path)
