@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -49,7 +48,7 @@ namespace DownloadManager.App
             switch (method)
             {
                 case DownloadMethod.BeginInvoke:
-                    new FileDownloading(DownloadFile).BeginInvoke(param, null, null); // System.PlatformNotSupportedException: Operation is not supported on this platform. :)
+                    new FileDownloading(DownloadFile).BeginInvoke(param, null, null);
                     break;
                 case DownloadMethod.Thread:
                     new Thread(DownloadFile).Start(param);
@@ -189,7 +188,7 @@ namespace DownloadManager.App
                 return false;
             }
 
-            if (!Path.IsPathFullyQualified(txtDestinationFolder.Text))
+            if (!IsPathValid(txtDestinationFolder.Text))
             {
                 MessageBox.Show("Destination folder is not a valid path.");
                 return false;
@@ -201,6 +200,32 @@ namespace DownloadManager.App
             }
 
             return true;
+        }
+
+        private bool IsPathValid(string path, bool allowRelativePaths = false)
+        {
+            bool result = true;
+
+            try
+            {
+                string fullPath = Path.GetFullPath(path);
+
+                if (allowRelativePaths)
+                {
+                    result = Path.IsPathRooted(path);
+                }
+                else
+                {
+                    string root = Path.GetPathRoot(path);
+                    result = string.IsNullOrEmpty(root.Trim(new char[] { '\\', '/' })) == false;
+                }
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+
+            return result;
         }
 
         private static string NextAvailableFilename(string path)

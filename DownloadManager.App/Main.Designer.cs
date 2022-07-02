@@ -4,12 +4,12 @@ namespace DownloadManager.App
     partial class Main
     {
         /// <summary>
-        ///  Required designer variable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -24,26 +24,26 @@ namespace DownloadManager.App
         #region Windows Form Designer generated code
 
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.txtFileUrl = new System.Windows.Forms.TextBox();
+            this.txtFileName = new System.Windows.Forms.TextBox();
+            this.lblFileName = new System.Windows.Forms.Label();
             this.lblFileUrl = new System.Windows.Forms.Label();
+            this.lblDestinationFolder = new System.Windows.Forms.Label();
+            this.lblDownloadMethod = new System.Windows.Forms.Label();
+            this.txtFileUrl = new System.Windows.Forms.TextBox();
+            this.cmbDownloadMethod = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.txtDestinationFolder = new System.Windows.Forms.TextBox();
             this.btnFolderBrowserDialog = new System.Windows.Forms.Button();
-            this.cmbDownloadMethod = new System.Windows.Forms.ComboBox();
-            this.lblDownloadMethod = new System.Windows.Forms.Label();
-            this.lblDestinationFolder = new System.Windows.Forms.Label();
-            this.lblFileName = new System.Windows.Forms.Label();
-            this.txtFileName = new System.Windows.Forms.TextBox();
             this.txtResult = new System.Windows.Forms.TextBox();
             this.btnClear = new System.Windows.Forms.Button();
-            this.btnStart = new System.Windows.Forms.Button();
+            this.btnDownload = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -55,14 +55,14 @@ namespace DownloadManager.App
             this.tableLayoutPanel1.AutoSize = true;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.txtFileUrl, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lblFileUrl, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.cmbDownloadMethod, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.lblDownloadMethod, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.lblDestinationFolder, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.lblFileName, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.txtFileName, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lblFileName, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lblFileUrl, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblDestinationFolder, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.lblDownloadMethod, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.txtFileUrl, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.cmbDownloadMethod, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 5);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(35, 3);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(35);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -79,6 +79,65 @@ namespace DownloadManager.App
             this.tableLayoutPanel1.Size = new System.Drawing.Size(660, 228);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
+            // txtFileName
+            // 
+            this.txtFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtFileName.Location = new System.Drawing.Point(0, 85);
+            this.txtFileName.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.txtFileName.Name = "txtFileName";
+            this.txtFileName.Size = new System.Drawing.Size(660, 23);
+            this.txtFileName.TabIndex = 5;
+            this.txtFileName.Text = "file";
+            // 
+            // lblFileName
+            // 
+            this.lblFileName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblFileName.AutoSize = true;
+            this.lblFileName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblFileName.Location = new System.Drawing.Point(0, 65);
+            this.lblFileName.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
+            this.lblFileName.Name = "lblFileName";
+            this.lblFileName.Size = new System.Drawing.Size(58, 15);
+            this.lblFileName.TabIndex = 1;
+            this.lblFileName.Text = "File name";
+            // 
+            // lblFileUrl
+            // 
+            this.lblFileUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblFileUrl.AutoSize = true;
+            this.lblFileUrl.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblFileUrl.Location = new System.Drawing.Point(0, 9);
+            this.lblFileUrl.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
+            this.lblFileUrl.Name = "lblFileUrl";
+            this.lblFileUrl.Size = new System.Drawing.Size(49, 15);
+            this.lblFileUrl.TabIndex = 0;
+            this.lblFileUrl.Text = "File URL";
+            // 
+            // lblDestinationFolder
+            // 
+            this.lblDestinationFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblDestinationFolder.AutoSize = true;
+            this.lblDestinationFolder.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblDestinationFolder.Location = new System.Drawing.Point(0, 121);
+            this.lblDestinationFolder.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
+            this.lblDestinationFolder.Name = "lblDestinationFolder";
+            this.lblDestinationFolder.Size = new System.Drawing.Size(101, 15);
+            this.lblDestinationFolder.TabIndex = 2;
+            this.lblDestinationFolder.Text = "Destination folder";
+            // 
+            // lblDownloadMethod
+            // 
+            this.lblDownloadMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblDownloadMethod.AutoSize = true;
+            this.lblDownloadMethod.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblDownloadMethod.Location = new System.Drawing.Point(0, 177);
+            this.lblDownloadMethod.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
+            this.lblDownloadMethod.Name = "lblDownloadMethod";
+            this.lblDownloadMethod.Size = new System.Drawing.Size(106, 15);
+            this.lblDownloadMethod.TabIndex = 3;
+            this.lblDownloadMethod.Text = "Download method";
+            // 
             // txtFileUrl
             // 
             this.txtFileUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -87,19 +146,20 @@ namespace DownloadManager.App
             this.txtFileUrl.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.txtFileUrl.Name = "txtFileUrl";
             this.txtFileUrl.Size = new System.Drawing.Size(660, 23);
-            this.txtFileUrl.TabIndex = 5;
+            this.txtFileUrl.TabIndex = 4;
             this.txtFileUrl.Text = "https://i.redd.it/ufxj58wy79w81.jpg";
             // 
-            // lblFileUrl
+            // cmbDownloadMethod
             // 
-            this.lblFileUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblFileUrl.AutoSize = true;
-            this.lblFileUrl.Location = new System.Drawing.Point(0, 9);
-            this.lblFileUrl.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
-            this.lblFileUrl.Name = "lblFileUrl";
-            this.lblFileUrl.Size = new System.Drawing.Size(49, 15);
-            this.lblFileUrl.TabIndex = 2;
-            this.lblFileUrl.Text = "File URL";
+            this.cmbDownloadMethod.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbDownloadMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDownloadMethod.FormattingEnabled = true;
+            this.cmbDownloadMethod.Location = new System.Drawing.Point(0, 197);
+            this.cmbDownloadMethod.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
+            this.cmbDownloadMethod.Name = "cmbDownloadMethod";
+            this.cmbDownloadMethod.Size = new System.Drawing.Size(660, 23);
+            this.cmbDownloadMethod.TabIndex = 6;
             // 
             // tableLayoutPanel2
             // 
@@ -114,7 +174,8 @@ namespace DownloadManager.App
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(660, 28);
             this.tableLayoutPanel2.TabIndex = 7;
             // 
@@ -126,7 +187,7 @@ namespace DownloadManager.App
             this.txtDestinationFolder.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
             this.txtDestinationFolder.Name = "txtDestinationFolder";
             this.txtDestinationFolder.Size = new System.Drawing.Size(594, 23);
-            this.txtDestinationFolder.TabIndex = 10;
+            this.txtDestinationFolder.TabIndex = 0;
             this.txtDestinationFolder.Text = "C:\\DownloadManagerFolder";
             // 
             // btnFolderBrowserDialog
@@ -138,65 +199,10 @@ namespace DownloadManager.App
             this.btnFolderBrowserDialog.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.btnFolderBrowserDialog.Name = "btnFolderBrowserDialog";
             this.btnFolderBrowserDialog.Size = new System.Drawing.Size(61, 25);
-            this.btnFolderBrowserDialog.TabIndex = 11;
+            this.btnFolderBrowserDialog.TabIndex = 1;
             this.btnFolderBrowserDialog.Text = "...";
             this.btnFolderBrowserDialog.UseVisualStyleBackColor = true;
             this.btnFolderBrowserDialog.Click += new System.EventHandler(this.btnFolderBrowserDialog_Click);
-            // 
-            // cmbDownloadMethod
-            // 
-            this.cmbDownloadMethod.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbDownloadMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDownloadMethod.Location = new System.Drawing.Point(0, 197);
-            this.cmbDownloadMethod.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            this.cmbDownloadMethod.Name = "cmbDownloadMethod";
-            this.cmbDownloadMethod.Size = new System.Drawing.Size(660, 23);
-            this.cmbDownloadMethod.TabIndex = 6;
-            // 
-            // lblDownloadMethod
-            // 
-            this.lblDownloadMethod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblDownloadMethod.AutoSize = true;
-            this.lblDownloadMethod.Location = new System.Drawing.Point(0, 177);
-            this.lblDownloadMethod.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
-            this.lblDownloadMethod.Name = "lblDownloadMethod";
-            this.lblDownloadMethod.Size = new System.Drawing.Size(106, 15);
-            this.lblDownloadMethod.TabIndex = 4;
-            this.lblDownloadMethod.Text = "Download method";
-            // 
-            // lblDestinationFolder
-            // 
-            this.lblDestinationFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblDestinationFolder.AutoSize = true;
-            this.lblDestinationFolder.Location = new System.Drawing.Point(0, 121);
-            this.lblDestinationFolder.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
-            this.lblDestinationFolder.Name = "lblDestinationFolder";
-            this.lblDestinationFolder.Size = new System.Drawing.Size(101, 15);
-            this.lblDestinationFolder.TabIndex = 3;
-            this.lblDestinationFolder.Text = "Destination folder";
-            // 
-            // lblFileName
-            // 
-            this.lblFileName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lblFileName.AutoSize = true;
-            this.lblFileName.Location = new System.Drawing.Point(0, 65);
-            this.lblFileName.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
-            this.lblFileName.Name = "lblFileName";
-            this.lblFileName.Size = new System.Drawing.Size(58, 15);
-            this.lblFileName.TabIndex = 2;
-            this.lblFileName.Text = "File name";
-            // 
-            // txtFileName
-            // 
-            this.txtFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFileName.Location = new System.Drawing.Point(0, 85);
-            this.txtFileName.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            this.txtFileName.Name = "txtFileName";
-            this.txtFileName.Size = new System.Drawing.Size(660, 23);
-            this.txtFileName.TabIndex = 5;
-            this.txtFileName.Text = "file";
             // 
             // txtResult
             // 
@@ -209,7 +215,7 @@ namespace DownloadManager.App
             this.txtResult.ReadOnly = true;
             this.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtResult.Size = new System.Drawing.Size(660, 358);
-            this.txtResult.TabIndex = 9;
+            this.txtResult.TabIndex = 1;
             // 
             // btnClear
             // 
@@ -219,33 +225,34 @@ namespace DownloadManager.App
             this.btnClear.Margin = new System.Windows.Forms.Padding(20, 50, 20, 50);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(72, 33);
-            this.btnClear.TabIndex = 11;
+            this.btnClear.TabIndex = 2;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // btnStart
+            // btnDownload
             // 
-            this.btnStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStart.AutoSize = true;
-            this.btnStart.Location = new System.Drawing.Point(528, 604);
-            this.btnStart.Margin = new System.Windows.Forms.Padding(20, 50, 20, 50);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(89, 33);
-            this.btnStart.TabIndex = 10;
-            this.btnStart.Text = "Download";
-            this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnDownload_Click);
+            this.btnDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDownload.AutoSize = true;
+            this.btnDownload.Location = new System.Drawing.Point(528, 604);
+            this.btnDownload.Margin = new System.Windows.Forms.Padding(20, 50, 20, 50);
+            this.btnDownload.Name = "btnDownload";
+            this.btnDownload.Size = new System.Drawing.Size(89, 33);
+            this.btnDownload.TabIndex = 3;
+            this.btnDownload.Text = "Download";
+            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(724, 650);
+            this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.btnClear);
-            this.Controls.Add(this.btnStart);
             this.Controls.Add(this.txtResult);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(550, 550);
             this.Name = "Main";
@@ -264,18 +271,18 @@ namespace DownloadManager.App
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label lblFileUrl;
+        private System.Windows.Forms.Label lblFileName;
         private System.Windows.Forms.Label lblDestinationFolder;
         private System.Windows.Forms.Label lblDownloadMethod;
         private System.Windows.Forms.TextBox txtFileUrl;
-        private System.Windows.Forms.TextBox txtResult;
+        private System.Windows.Forms.TextBox txtFileName;
         private System.Windows.Forms.ComboBox cmbDownloadMethod;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TextBox txtDestinationFolder;
         private System.Windows.Forms.Button btnFolderBrowserDialog;
+        private System.Windows.Forms.TextBox txtResult;
         private System.Windows.Forms.Button btnClear;
-        private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.Label lblFileName;
-        private System.Windows.Forms.TextBox txtFileName;
+        private System.Windows.Forms.Button btnDownload;
     }
 }
 
