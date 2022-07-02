@@ -57,6 +57,9 @@ namespace DownloadManager.App
                     ThreadPool.QueueUserWorkItem(DownloadFile, param);
                     break;
                 case DownloadMethod.BackgroundWorker:
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.DoWork += worker_DoWork;
+                    worker.RunWorkerAsync(param);
                     break;
                 case DownloadMethod.Task:
                     Task.Factory.StartNew(DownloadFile, param);
@@ -141,6 +144,8 @@ namespace DownloadManager.App
         {
             txtResult.Clear();
         }
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e) => DownloadFile(e.Argument);
 
         private bool IsUrlValid()
         {
