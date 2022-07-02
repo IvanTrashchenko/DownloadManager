@@ -135,7 +135,7 @@ namespace DownloadManager.App
                 case DownloadMethod.BackgroundWorker:
                     break;
                 case DownloadMethod.Task:
-                    new TaskFactory().StartNew(DownloadFile, param);
+                    Task.Factory.StartNew(DownloadFile, param);
                     break;
                 default:
                     throw new NotSupportedException();
