@@ -17,13 +17,17 @@ namespace DownloadManager.App
 {
     public partial class Main : Form
     {
+        #region Fields
+
         private readonly HttpClient Client;
 
         private static string numberPattern = " ({0})";
 
         private static int workNumber = 0;
 
-        private delegate void FileDownloading(object state);
+        #endregion
+
+        #region ctor
 
         public Main()
         {
@@ -31,6 +35,10 @@ namespace DownloadManager.App
             cmbDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
             Client = new HttpClient();
         }
+
+        #endregion
+
+        #region Event Handlers
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
@@ -48,7 +56,7 @@ namespace DownloadManager.App
             switch (method)
             {
                 case DownloadMethod.BeginInvoke:
-                    new FileDownloading(DownloadFile).BeginInvoke(param, null, null);
+                    new Action<object>(DownloadFile).BeginInvoke(param, null, null);
                     break;
                 case DownloadMethod.Thread:
                     new Thread(DownloadFile).Start(param);
@@ -68,6 +76,30 @@ namespace DownloadManager.App
                     throw new NotSupportedException();
             }
         }
+
+        private void btnFolderBrowserDialog_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    txtDestinationFolder.Text = fbd.SelectedPath;
+                }
+            }
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtResult.Clear();
+        }
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e) => DownloadFile(e.Argument);
+
+        #endregion
+
+        #region File downloading methods
 
         private void DownloadFile(object state)
         {
@@ -127,25 +159,9 @@ namespace DownloadManager.App
             }
         }
 
-        private void btnFolderBrowserDialog_Click(object sender, EventArgs e)
-        {
-            using (var fbd = new FolderBrowserDialog())
-            {
-                DialogResult result = fbd.ShowDialog();
+        #endregion
 
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
-                {
-                    txtDestinationFolder.Text = fbd.SelectedPath;
-                }
-            }
-        }
-
-        private void btnClear_Click(object sender, EventArgs e)
-        {
-            txtResult.Clear();
-        }
-
-        private void worker_DoWork(object sender, DoWorkEventArgs e) => DownloadFile(e.Argument);
+        #region Validation methods
 
         private bool IsUrlValid()
         {
@@ -233,6 +249,10 @@ namespace DownloadManager.App
             return result;
         }
 
+        #endregion
+
+        #region Next available filename methods
+
         private static string NextAvailableFilename(string path)
         {
             // Short-cut if already available
@@ -276,11 +296,17 @@ namespace DownloadManager.App
             return string.Format(pattern, max);
         }
 
+        #endregion
+
+        #region Nested class
+
         private class Parameter
         {
             public string Url { get; set; }
             public string Name { get; set; }
             public string Folder { get; set; }
         }
+
+        #endregion
     }
 }
