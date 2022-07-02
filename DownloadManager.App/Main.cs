@@ -115,29 +115,27 @@ namespace DownloadManager.App
 
             Enum.TryParse(cmbDownloadMethod.Text, out DownloadMethod method);
 
+            Parameter param = new Parameter
+            {
+                Url = txtFileUrl.Text,
+                Name = txtFileName.Text,
+                Folder = txtDestinationFolder.Text
+            };
+
             switch (method)
             {
                 case DownloadMethod.BeginInvoke:
                     break;
                 case DownloadMethod.Thread:
-                    Parameter param = new Parameter
-                    {
-                        Url = txtFileUrl.Text,
-                        Name = txtFileName.Text,
-                        Folder = txtDestinationFolder.Text
-                    };
-                    Thread thread = new Thread(DownloadFile);
-                    thread.Start(param);
+                    new Thread(DownloadFile).Start(param);
                     break;
                 case DownloadMethod.ThreadPool:
+                    ThreadPool.QueueUserWorkItem(DownloadFile, param);
                     break;
                 case DownloadMethod.BackgroundWorker:
                     break;
                 case DownloadMethod.Task:
-                    new TaskFactory().StartNew(() =>
-                    {
-                        DownloadFile(txtFileUrl.Text, txtFileName.Text, txtDestinationFolder.Text);
-                    });
+                    new TaskFactory().StartNew(DownloadFile, param);
                     break;
                 default:
                     throw new NotSupportedException();
