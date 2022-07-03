@@ -11,7 +11,10 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DownloadManager.App.Enums;
+using DownloadManager.DbAccess.Enums;
+using DownloadManager.DbAccess.Models;
+using DownloadManager.DbAccess.Services;
+using File = System.IO.File;
 
 namespace DownloadManager.App
 {
@@ -50,7 +53,8 @@ namespace DownloadManager.App
             {
                 Url = txtFileUrl.Text,
                 Name = txtFileName.Text,
-                Folder = txtDestinationFolder.Text
+                Folder = txtDestinationFolder.Text,
+                Method = method
             };
 
             switch (method)
@@ -104,10 +108,10 @@ namespace DownloadManager.App
         private void DownloadFile(object state)
         {
             var param = (Parameter)state;
-            DownloadFile(param.Url, param.Name, param.Folder);
+            DownloadFile(param.Url, param.Name, param.Folder, param.Method);
         }
 
-        private void DownloadFile(string url, string name, string folder)
+        private void DownloadFile(string url, string name, string folder, DownloadMethod method)
         {
             int currentWorkNumber = Interlocked.Increment(ref workNumber);
 
@@ -128,9 +132,11 @@ namespace DownloadManager.App
 
                 var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
 
+                string path;
+
                 lock (this)
                 {
-                    string path = NextAvailableFilename(Path.Combine(folder, $"{name}{ext}"));
+                    path = NextAvailableFilename(Path.Combine(folder, $"{name}{ext}"));
 
                     using (var fileStream = File.Open(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read))
                     {
@@ -138,12 +144,24 @@ namespace DownloadManager.App
                     }
                 }
 
+                var endTime = DateTime.Now;
+
+                var finalName = Path.GetFileName(path);
+
                 string endMessage = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading was successful." +
-                          Environment.NewLine;
+                                    Environment.NewLine;
 
                 this.BeginInvoke((MethodInvoker)delegate
                 {
                     txtResult.AppendText(endMessage);
+                });
+
+                FileService.Add(new FileDto()
+                {
+                    FileName = finalName,
+                    FileDownloadDirectory = folder,
+                    FileDownloadMethod = method,
+                    FileDownloadTime = endTime
                 });
             }
             catch (Exception ex)
@@ -305,6 +323,7 @@ namespace DownloadManager.App
             public string Url { get; set; }
             public string Name { get; set; }
             public string Folder { get; set; }
+            public DownloadMethod Method { get; set; }
         }
 
         #endregion
