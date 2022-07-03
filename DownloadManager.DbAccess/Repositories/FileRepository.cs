@@ -80,7 +80,7 @@ namespace DownloadManager.DbAccess.Repositories
 
         public void Update(File file)
         {
-            using (var command = new SqlCommand(_insertQueryString, _connection, _transaction))
+            using (var command = new SqlCommand(_updateFileQueryString, _connection, _transaction))
             {
                 command.Parameters.Add("@FileId", System.Data.SqlDbType.Int).Value = file.FileId;
                 command.Parameters.Add("@FileName", System.Data.SqlDbType.NVarChar, 256).Value = file.FileName;
@@ -94,7 +94,7 @@ namespace DownloadManager.DbAccess.Repositories
 
         public void Update(int id, FileDto fileDto)
         {
-            using (var command = new SqlCommand(_insertQueryString, _connection, _transaction))
+            using (var command = new SqlCommand(_updateFileQueryString, _connection, _transaction))
             {
                 command.Parameters.Add("@FileId", System.Data.SqlDbType.Int).Value = id;
                 command.Parameters.Add("@FileName", System.Data.SqlDbType.NVarChar, 256).Value = fileDto.FileName;
