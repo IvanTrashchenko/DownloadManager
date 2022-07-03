@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.App", "Down
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DownloadManager.Database", "DownloadManager.Database\DownloadManager.Database.sqlproj", "{066EE4E8-66F5-4DC7-8670-88114E7E31AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.DbAccess", "DownloadManager.DbAccess\DownloadManager.DbAccess.csproj", "{AC28F468-7158-431A-A5AC-079410E13D83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{066EE4E8-66F5-4DC7-8670-88114E7E31AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{066EE4E8-66F5-4DC7-8670-88114E7E31AC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{066EE4E8-66F5-4DC7-8670-88114E7E31AC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AC28F468-7158-431A-A5AC-079410E13D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC28F468-7158-431A-A5AC-079410E13D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC28F468-7158-431A-A5AC-079410E13D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC28F468-7158-431A-A5AC-079410E13D83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
