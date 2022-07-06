@@ -12,6 +12,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DownloadManager.Core.Enums;
+using DownloadManager.Data.Dal.Repositories;
+using DownloadManager.Service;
+using DownloadManager.Service.Contract;
+using DownloadManager.Service.Models.Input;
 using File = System.IO.File;
 
 namespace DownloadManager.App
@@ -20,11 +24,13 @@ namespace DownloadManager.App
     {
         #region Fields
 
-        private readonly HttpClient Client;
+        private readonly HttpClient _client;
 
-        private static string numberPattern = " ({0})";
+        private static string _numberPattern = " ({0})";
 
-        private static int workNumber = 0;
+        private static int _workNumber = 0;
+
+        private static IFileService _fileService;
 
         #endregion
 
@@ -34,7 +40,8 @@ namespace DownloadManager.App
         {
             InitializeComponent();
             cmbDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
-            Client = new HttpClient();
+            _client = new HttpClient();
+            _fileService = new FileService(new FileRepository());
         }
 
         #endregion
@@ -111,7 +118,7 @@ namespace DownloadManager.App
 
         private void DownloadFile(string url, string name, string folder, DownloadMethod method)
         {
-            int currentWorkNumber = Interlocked.Increment(ref workNumber);
+            int currentWorkNumber = Interlocked.Increment(ref _workNumber);
 
             var tId = Thread.CurrentThread.ManagedThreadId;
 
@@ -126,7 +133,7 @@ namespace DownloadManager.App
 
             try
             {
-                var response = Client.GetAsync(url).GetAwaiter().GetResult();
+                var response = _client.GetAsync(url).GetAwaiter().GetResult();
 
                 var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
 
@@ -154,13 +161,13 @@ namespace DownloadManager.App
                     txtResult.AppendText(endMessage);
                 });
 
-                //FileService.Add(new FileDto()
-                //{
-                //    FileName = finalName,
-                //    FileDownloadDirectory = folder,
-                //    FileDownloadMethod = method,
-                //    FileDownloadTime = endTime
-                //});
+                _fileService.Add(new FileCreateModel()
+                {
+                    FileName = finalName,
+                    FileDownloadDirectory = folder,
+                    FileDownloadMethod = method,
+                    FileDownloadTime = endTime
+                });
             }
             catch (Exception ex)
             {
@@ -277,10 +284,10 @@ namespace DownloadManager.App
 
             // If path has extension then insert the number pattern just before the extension and return next filename
             if (Path.HasExtension(path))
-                return GetNextFilename(path.Insert(path.LastIndexOf(Path.GetExtension(path)), numberPattern));
+                return GetNextFilename(path.Insert(path.LastIndexOf(Path.GetExtension(path)), _numberPattern));
 
             // Otherwise just append the pattern to the path and return next filename
-            return GetNextFilename(path + numberPattern);
+            return GetNextFilename(path + _numberPattern);
         }
 
         private static string GetNextFilename(string pattern)

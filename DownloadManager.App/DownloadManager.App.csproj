@@ -115,6 +115,22 @@
       <Project>{70352C30-1B36-49E3-88D7-85D9972B42AA}</Project>
       <Name>DownloadManager.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DownloadManager.Data.Dal.Contract\DownloadManager.Data.Dal.Contract.csproj">
+      <Project>{02d6c16f-e8c1-4eda-98c5-3037369f63cd}</Project>
+      <Name>DownloadManager.Data.Dal.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DownloadManager.Data.Dal\DownloadManager.Data.Dal.csproj">
+      <Project>{E6145694-687F-4280-A6B6-166F39DFB9F0}</Project>
+      <Name>DownloadManager.Data.Dal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DownloadManager.Service.Contract\DownloadManager.Service.Contract.csproj">
+      <Project>{EB168A5D-D4DD-41DB-9973-0955B1CDCA62}</Project>
+      <Name>DownloadManager.Service.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DownloadManager.Service\DownloadManager.Service.csproj">
+      <Project>{A6021642-B9BF-47B4-B9C6-5B48BAB71618}</Project>
+      <Name>DownloadManager.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
