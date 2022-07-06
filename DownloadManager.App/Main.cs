@@ -11,9 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using DownloadManager.DbAccess.Enums;
-using DownloadManager.DbAccess.Models;
-using DownloadManager.DbAccess.Services;
+using DownloadManager.Core.Enums;
 using File = System.IO.File;
 
 namespace DownloadManager.App
@@ -156,13 +154,13 @@ namespace DownloadManager.App
                     txtResult.AppendText(endMessage);
                 });
 
-                FileService.Add(new FileDto()
-                {
-                    FileName = finalName,
-                    FileDownloadDirectory = folder,
-                    FileDownloadMethod = method,
-                    FileDownloadTime = endTime
-                });
+                //FileService.Add(new FileDto()
+                //{
+                //    FileName = finalName,
+                //    FileDownloadDirectory = folder,
+                //    FileDownloadMethod = method,
+                //    FileDownloadTime = endTime
+                //});
             }
             catch (Exception ex)
             {
