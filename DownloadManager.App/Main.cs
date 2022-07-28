@@ -32,9 +32,13 @@ namespace DownloadManager.App
 
         private static IFileService _fileService;
 
+        private int _userId;
+
+        private Form _callingForm = null;
+
         #endregion
 
-        #region ctor
+        #region ctors
 
         public Main()
         {
@@ -42,6 +46,12 @@ namespace DownloadManager.App
             cmbDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
             _client = new HttpClient();
             _fileService = new FileService(new FileRepository());
+        }
+        public Main(int userId, string username, Form callingForm) : this()
+        {
+            _userId = userId;
+            lblAuth.Text = $"Hello, {username}.";
+            _callingForm = callingForm;
         }
 
         #endregion
@@ -166,7 +176,8 @@ namespace DownloadManager.App
                     FileName = finalName,
                     FileDownloadDirectory = folder,
                     FileDownloadMethod = method,
-                    FileDownloadTime = endTime
+                    FileDownloadTime = endTime,
+                    UserId = _userId
                 });
             }
             catch (Exception ex)
@@ -179,6 +190,14 @@ namespace DownloadManager.App
                 {
                     txtResult.AppendText(exMessage);
                 });
+            }
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this._callingForm != null)
+            {
+                _callingForm.Close();
             }
         }
 
