@@ -5,5 +5,7 @@
 	[FileDownloadDirectory] NVARCHAR(MAX) NOT NULL, 
     [FileDownloadMethod] INT NOT NULL, 
     [FileDownloadTime] DATETIME2 NOT NULL, 
-    CONSTRAINT [PK_File] PRIMARY KEY ([FileId])
+    [UserId] INT NOT NULL, 
+    CONSTRAINT [PK_File] PRIMARY KEY ([FileId]),
+	CONSTRAINT [FK_File_User] FOREIGN KEY ([UserId]) REFERENCES [User]([UserId])
 )
