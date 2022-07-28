@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DownloadManager.Data.Dal.Contract.Dto;
 using DownloadManager.Data.Dal.Contract.Repositories;
 using DownloadManager.Domain.Entities;
@@ -126,6 +127,16 @@ namespace DownloadManager.Service
             throw new NotImplementedException();
         }
 
+        public IEnumerable<IFileReportsModel> GetFiltered(IFileFilterModel filterModel)
+        {
+            if (filterModel == null)
+            {
+                throw new ArgumentNullException(nameof(filterModel));
+            }
+
+            return _fileRepository.GetFiltered(Map(filterModel)).Select(Map);
+        }
+
         #endregion
 
         #region Mapping methods
@@ -149,6 +160,29 @@ namespace DownloadManager.Service
                 FileDownloadMethod = fileCreateModel.FileDownloadMethod,
                 FileDownloadTime = fileCreateModel.FileDownloadTime,
                 UserId = fileCreateModel.UserId
+            };
+
+        private FileFilterDto Map(IFileFilterModel filterModel) =>
+            new FileFilterDto()
+            {
+                FileName = filterModel.FileName,
+                FileDownloadDirectory = filterModel.FileDownloadDirectory,
+                FileId = filterModel.FileId,
+                FileDownloadMethod = filterModel.FileDownloadMethod,
+                FileDownloadTimeStart = filterModel.FileDownloadTimeStart,
+                FileDownloadTimeEnd = filterModel.FileDownloadTimeEnd,
+                Username = filterModel.Username
+            };
+
+        private IFileReportsModel Map(ReportDto dto) =>
+            new FileReportsModel()
+            {
+                FileId = dto.FileId,
+                FileDownloadDirectory = dto.FileDownloadDirectory,
+                FileDownloadMethod = dto.FileDownloadMethod,
+                FileDownloadTime = dto.FileDownloadTime,
+                FileName = dto.FileName,
+                Username = dto.Username
             };
 
         #endregion

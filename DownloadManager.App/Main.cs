@@ -142,6 +142,12 @@ namespace DownloadManager.App
             }
         }
 
+        private void btnReports_Click(object sender, EventArgs e)
+        {
+            var reportsForm = new Reports();
+            reportsForm.Show();
+        }
+
         #endregion
 
         #region File downloading methods
@@ -159,7 +165,7 @@ namespace DownloadManager.App
             var tId = Thread.CurrentThread.ManagedThreadId;
 
             string startMessage =
-                $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading has started." +
+                $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading has started." +
                 Environment.NewLine;
 
             this.BeginInvoke((MethodInvoker)delegate
@@ -185,11 +191,11 @@ namespace DownloadManager.App
                     }
                 }
 
-                var endTime = DateTime.Now;
+                var endTime = DateTime.UtcNow;
 
                 var finalName = Path.GetFileName(path);
 
-                string endMessage = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading was successful." +
+                string endMessage = $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading was successful." +
                                     Environment.NewLine;
 
                 this.BeginInvoke((MethodInvoker)delegate
@@ -209,7 +215,7 @@ namespace DownloadManager.App
             catch (Exception ex)
             {
                 string exMessage =
-                    $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading terminated. Exception: {ex.Message}" +
+                    $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading terminated. Exception: {ex.Message}" +
                     Environment.NewLine;
 
                 this.BeginInvoke((MethodInvoker)delegate

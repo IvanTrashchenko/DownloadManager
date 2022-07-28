@@ -46,6 +46,7 @@ namespace DownloadManager.App
             this.btnDownload = new System.Windows.Forms.Button();
             this.lblAuth = new System.Windows.Forms.Label();
             this.linkLogout = new System.Windows.Forms.LinkLabel();
+            this.btnReports = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -270,11 +271,25 @@ namespace DownloadManager.App
             this.linkLogout.Text = "Logout";
             this.linkLogout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLogout_LinkClicked);
             // 
+            // btnReports
+            // 
+            this.btnReports.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnReports.AutoSize = true;
+            this.btnReports.Location = new System.Drawing.Point(37, 629);
+            this.btnReports.Margin = new System.Windows.Forms.Padding(20, 50, 20, 50);
+            this.btnReports.Name = "btnReports";
+            this.btnReports.Size = new System.Drawing.Size(84, 33);
+            this.btnReports.TabIndex = 6;
+            this.btnReports.Text = "Reports";
+            this.btnReports.UseVisualStyleBackColor = true;
+            this.btnReports.Click += new System.EventHandler(this.btnReports_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(724, 694);
+            this.Controls.Add(this.btnReports);
             this.Controls.Add(this.linkLogout);
             this.Controls.Add(this.lblAuth);
             this.Controls.Add(this.btnDownload);
@@ -315,6 +330,7 @@ namespace DownloadManager.App
         private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.Label lblAuth;
         private System.Windows.Forms.LinkLabel linkLogout;
+        private System.Windows.Forms.Button btnReports;
     }
 }
 

@@ -8,11 +8,9 @@ namespace DownloadManager.Service.Contract.Models.Input
         int? FileId { get; set; }
         string FileName { get; set; }
         string FileDownloadDirectory { get; set; }
-        DownloadMethod FileDownloadMethod { get; set; }
+        DownloadMethod? FileDownloadMethod { get; set; }
         DateTimeOffset? FileDownloadTimeStart { get; set; }
         DateTimeOffset? FileDownloadTimeEnd { get; set; }
         string Username { get; set; }
-        string OrderBy { get; set; }
-        string Direction { get; set; }
     }
 }

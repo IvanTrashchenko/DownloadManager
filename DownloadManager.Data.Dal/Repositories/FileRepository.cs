@@ -129,6 +129,11 @@ namespace DownloadManager.Data.Dal.Repositories
             throw new NotImplementedException();
         }
 
+        public IEnumerable<ReportDto> GetFiltered(FileFilterDto filterDto)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Query strings

@@ -141,7 +141,7 @@ namespace DownloadManager.LoadTester
                         }
                     }
 
-                    var endTime = DateTime.Now;
+                    var endTime = DateTime.UtcNow;
 
                     var finalName = Path.GetFileName(path);
 
@@ -157,7 +157,7 @@ namespace DownloadManager.LoadTester
                 catch (Exception ex)
                 {
                     string exMessage =
-                        $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - Thread {param.ThreadNumber} (TId {Thread.CurrentThread.ManagedThreadId}) - Execution {i + 1} terminated. Exception: {ex.Message}" +
+                        $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - Thread {param.ThreadNumber} (TId {Thread.CurrentThread.ManagedThreadId}) - Execution {i + 1} terminated. Exception: {ex.Message}" +
                         Environment.NewLine;
                     txtResult.BeginInvoke((MethodInvoker)delegate
                     {
@@ -168,7 +168,7 @@ namespace DownloadManager.LoadTester
                 if (success && ((i % param.ExecutionResultsDisplayFrequency == 0) || i == param.ExecutionsCount - 1))
                 {
                     string message =
-                        $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - Thread {param.ThreadNumber} (TId {Thread.CurrentThread.ManagedThreadId}) - Execution {i + 1} finished." +
+                        $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - Thread {param.ThreadNumber} (TId {Thread.CurrentThread.ManagedThreadId}) - Execution {i + 1} finished." +
                         Environment.NewLine;
                     txtResult.BeginInvoke((MethodInvoker)delegate
                     {

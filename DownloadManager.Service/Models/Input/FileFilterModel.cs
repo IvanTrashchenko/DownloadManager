@@ -1,9 +1,10 @@
 ﻿using System;
 using DownloadManager.Core.Enums;
+using DownloadManager.Service.Contract.Models.Input;
 
-namespace DownloadManager.Data.Dal.Contract.Dto
+namespace DownloadManager.Service.Models.Input
 {
-    public class FileFilterDto
+    public class FileFilterModel : IFileFilterModel
     {
         public int? FileId { get; set; }
         public string FileName { get; set; }
@@ -12,7 +13,5 @@ namespace DownloadManager.Data.Dal.Contract.Dto
         public DateTimeOffset? FileDownloadTimeStart { get; set; }
         public DateTimeOffset? FileDownloadTimeEnd { get; set; }
         public string Username { get; set; }
-        public string OrderBy { get; set; }
-        public string Direction { get; set; }
     }
 }
