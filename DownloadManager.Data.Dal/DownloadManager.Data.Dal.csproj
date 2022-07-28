@@ -46,7 +46,6 @@
     <Compile Include="Repositories\FileRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Util\ConnectionString.cs" />
-    <Compile Include="Util\UserAuthentication.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DownloadManager.Core\DownloadManager.Core.csproj">
