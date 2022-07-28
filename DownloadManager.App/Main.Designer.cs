@@ -45,6 +45,7 @@ namespace DownloadManager.App
             this.btnClear = new System.Windows.Forms.Button();
             this.btnDownload = new System.Windows.Forms.Button();
             this.lblAuth = new System.Windows.Forms.Label();
+            this.linkLogout = new System.Windows.Forms.LinkLabel();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -251,15 +252,30 @@ namespace DownloadManager.App
             this.lblAuth.BackColor = System.Drawing.SystemColors.ControlDark;
             this.lblAuth.Location = new System.Drawing.Point(0, 0);
             this.lblAuth.Name = "lblAuth";
+            this.lblAuth.Padding = new System.Windows.Forms.Padding(35, 0, 0, 0);
             this.lblAuth.Size = new System.Drawing.Size(728, 28);
             this.lblAuth.TabIndex = 4;
-            this.lblAuth.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblAuth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // linkLogout
+            // 
+            this.linkLogout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkLogout.AutoSize = true;
+            this.linkLogout.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.linkLogout.Location = new System.Drawing.Point(638, 7);
+            this.linkLogout.Name = "linkLogout";
+            this.linkLogout.Size = new System.Drawing.Size(45, 15);
+            this.linkLogout.TabIndex = 5;
+            this.linkLogout.TabStop = true;
+            this.linkLogout.Text = "Logout";
+            this.linkLogout.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLogout_LinkClicked);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(724, 694);
+            this.Controls.Add(this.linkLogout);
             this.Controls.Add(this.lblAuth);
             this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.btnClear);
@@ -298,6 +314,7 @@ namespace DownloadManager.App
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.Label lblAuth;
+        private System.Windows.Forms.LinkLabel linkLogout;
     }
 }
 

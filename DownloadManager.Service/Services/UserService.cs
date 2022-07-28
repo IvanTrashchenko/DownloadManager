@@ -16,15 +16,6 @@ namespace DownloadManager.Service.Services
     {
         #region Private fields
 
-        // 5 Minutes seems a good time span to allow access for already verified users.
-        private static readonly TimeSpan TimeSpanSkipVerificationForVerified = new TimeSpan(0, 5, 0);
-
-        // 5 Seconds should be ok to reduce load by denial of service attacks, but not too long to wait when a password was fixed.
-        private static readonly TimeSpan TimeSpanSkipVerificationForUnverified = new TimeSpan(0, 0, 5);
-
-        // cache
-        private static readonly Dictionary<string, VerificationInfo> UserInfos = new Dictionary<string, VerificationInfo>();
-
         private readonly IUserRepository _userRepository;
 
         #endregion
@@ -67,12 +58,6 @@ namespace DownloadManager.Service.Services
             };
 
             _userRepository.Add(user);
-
-            lock (UserInfos)
-            {
-                DateTime skipVerificationUntil = DateTime.Now.Add(TimeSpanSkipVerificationForVerified);
-                UserInfos[model.Username] = new VerificationInfo(true, skipVerificationUntil);
-            }
         }
 
         public bool CheckCredentials(IUserCredentialsModel model)
@@ -92,39 +77,12 @@ namespace DownloadManager.Service.Services
                 throw new ArgumentNullException(nameof(model.Username));
             }
 
-            lock (UserInfos)
-            {
-                bool isUserCached = UserInfos.TryGetValue(model.Username, out VerificationInfo userInfo);
-
-                if (isUserCached)
-                {
-                    if (userInfo.SkipVerificationUntil > DateTime.Now)
-                    {
-                        // We verified this user shortly. Skip verification for performance reasons. Give or deny access as cached.
-                        return userInfo.Verified;
-                    }
-                    else
-                    {
-                        // Cached but (positive or negative) verification outdated.
-                        // Remove from cache and proceed.
-                        UserInfos.Remove(model.Username);
-                    }
-                }
-            }
-
             // User not cached (either from beginning or no more, because not verified).
             // Get data user info from DB.
             User user = _userRepository.GetByUsername(model.Username);
 
             // User is verified if known in DB and has correct credentials.
             bool userIsVerified = null != user && PasswordHasher.VerifyPasswordHash(model.Password, Convert.FromBase64String(user.PasswordHash), Convert.FromBase64String(user.PasswordSalt));
-
-            // Put user verification info into cache.
-            lock (UserInfos)
-            {
-                DateTime skipVerificationUntil = DateTime.Now.Add(userIsVerified ? TimeSpanSkipVerificationForVerified : TimeSpanSkipVerificationForUnverified);
-                UserInfos[model.Username] = new VerificationInfo(userIsVerified, skipVerificationUntil);
-            }
 
             return userIsVerified;
         }
@@ -144,22 +102,6 @@ namespace DownloadManager.Service.Services
             }
 
             return user.UserId;
-        }
-
-        #endregion
-
-        #region Nested class
-
-        private class VerificationInfo
-        {
-            public readonly bool Verified;
-            public readonly DateTime SkipVerificationUntil;
-
-            public VerificationInfo(bool verified, DateTime skipVerificationUntil)
-            {
-                Verified = verified;
-                SkipVerificationUntil = skipVerificationUntil;
-            }
         }
 
         #endregion

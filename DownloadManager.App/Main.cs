@@ -33,9 +33,7 @@ namespace DownloadManager.App
         private static IFileService _fileService;
 
         private int _userId;
-
-        private Form _callingForm = null;
-
+        
         #endregion
 
         #region ctors
@@ -47,11 +45,21 @@ namespace DownloadManager.App
             _client = new HttpClient();
             _fileService = new FileService(new FileRepository());
         }
-        public Main(int userId, string username, Form callingForm) : this()
+
+        public Main(int userId, string username, Form loginForm) : this()
         {
             _userId = userId;
             lblAuth.Text = $"Hello, {username}.";
-            _callingForm = callingForm;
+            this.LoginForm = loginForm;
+        }
+
+        #endregion
+
+        #region Properties
+
+        internal Form LoginForm
+        {
+            get;
         }
 
         #endregion
@@ -115,6 +123,24 @@ namespace DownloadManager.App
         }
 
         private void worker_DoWork(object sender, DoWorkEventArgs e) => DownloadFile(e.Argument);
+
+        private void linkLogout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            LoginForm.Show();
+            this.txtDestinationFolder.Text = string.Empty;
+            this.txtFileName.Text = string.Empty;
+            this.txtFileUrl.Text = string.Empty;
+            this.txtResult.Clear();
+            this.Hide();
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.LoginForm != null)
+            {
+                LoginForm.Close();
+            }
+        }
 
         #endregion
 
@@ -190,14 +216,6 @@ namespace DownloadManager.App
                 {
                     txtResult.AppendText(exMessage);
                 });
-            }
-        }
-
-        private void Main_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (this._callingForm != null)
-            {
-                _callingForm.Close();
             }
         }
 

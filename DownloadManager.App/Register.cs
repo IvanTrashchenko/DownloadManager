@@ -16,8 +16,6 @@ namespace DownloadManager.App
 {
     public partial class Register : Form
     {
-        private Form _callingForm = null;
-
         private IUserService _userService;
 
         public Register()
@@ -26,14 +24,19 @@ namespace DownloadManager.App
             _userService = new UserService(new UserRepository());
         }
 
-        public Register(Form callingForm) : this()
+        public Register(Form loginForm) : this()
         {
-            this._callingForm = callingForm;
+            this.LoginForm = loginForm;
+        }
+
+        internal Form LoginForm
+        {
+            get;
         }
 
         private void linkLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            _callingForm.Show();
+            LoginForm.Show();
             this.txtUsername.Text = string.Empty;
             this.txtPassword.Text = string.Empty;
             this.txtConfirmPassword.Text = string.Empty;
@@ -42,9 +45,9 @@ namespace DownloadManager.App
 
         private void Register_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (this._callingForm != null)
+            if (this.LoginForm != null)
             {
-                _callingForm.Close();
+                LoginForm.Close();
             }
         }
 
@@ -91,7 +94,7 @@ namespace DownloadManager.App
 
                 int userId = _userService.GetUserIdByUsername(txtUsername.Text);
 
-                var main = new Main(userId, txtUsername.Text, this);
+                var main = new Main(userId, txtUsername.Text, LoginForm);
                 main.Show();
                 this.txtUsername.Text = string.Empty;
                 this.txtPassword.Text = string.Empty;
