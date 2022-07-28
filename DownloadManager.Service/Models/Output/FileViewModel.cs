@@ -11,5 +11,6 @@ namespace DownloadManager.Service.Models.Output
         public string FileDownloadDirectory { get; set; }
         public DownloadMethod FileDownloadMethod { get; set; }
         public DateTime FileDownloadTime { get; set; }
+        public int UserId { get; set; }
     }
 }

@@ -61,6 +61,11 @@ namespace DownloadManager.Service
                 throw new ArgumentNullException(nameof(fileCreateModel.FileDownloadDirectory));
             }
 
+            if (fileCreateModel.UserId < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(fileCreateModel.UserId));
+            }
+
             _fileRepository.Add(Map(fileCreateModel));
         }
 
@@ -103,6 +108,16 @@ namespace DownloadManager.Service
                 file.FileDownloadTime = fileUpdateModel.FileDownloadTime.Value;
             }
 
+            if (fileUpdateModel.UserId != null)
+            {
+                if (fileUpdateModel.UserId.Value < 1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(id));
+                }
+
+                file.UserId = fileUpdateModel.UserId.Value;
+            }
+
             _fileRepository.Update(file);
         }
 
@@ -122,7 +137,8 @@ namespace DownloadManager.Service
                 FileName = file.FileName,
                 FileDownloadDirectory = file.FileDownloadDirectory,
                 FileDownloadMethod = file.FileDownloadMethod,
-                FileDownloadTime = file.FileDownloadTime
+                FileDownloadTime = file.FileDownloadTime,
+                UserId = file.UserId
             };
 
         private FileDto Map(IFileCreateModel fileCreateModel) =>
@@ -131,7 +147,8 @@ namespace DownloadManager.Service
                 FileName = fileCreateModel.FileName,
                 FileDownloadDirectory = fileCreateModel.FileDownloadDirectory,
                 FileDownloadMethod = fileCreateModel.FileDownloadMethod,
-                FileDownloadTime = fileCreateModel.FileDownloadTime
+                FileDownloadTime = fileCreateModel.FileDownloadTime,
+                UserId = fileCreateModel.UserId
             };
 
         #endregion

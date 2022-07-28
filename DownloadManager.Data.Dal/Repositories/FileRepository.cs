@@ -47,7 +47,8 @@ namespace DownloadManager.Data.Dal.Repositories
                                     FileName = reader.GetFieldValue<string>(1),
                                     FileDownloadDirectory = reader.GetFieldValue<string>(2),
                                     FileDownloadMethod = (DownloadMethod)reader.GetFieldValue<int>(3),
-                                    FileDownloadTime = reader.GetFieldValue<DateTime>(4)
+                                    FileDownloadTime = reader.GetFieldValue<DateTime>(4),
+                                    UserId = reader.GetFieldValue<int>(5)
                                 };
 
                                 reader.Close();
@@ -83,6 +84,7 @@ namespace DownloadManager.Data.Dal.Repositories
                         command.Parameters.Add("@FileDownloadDirectory", System.Data.SqlDbType.NVarChar, -1).Value = fileDto.FileDownloadDirectory;
                         command.Parameters.Add("@FileDownloadMethod", System.Data.SqlDbType.Int).Value = (int)fileDto.FileDownloadMethod;
                         command.Parameters.Add("@FileDownloadTime", System.Data.SqlDbType.DateTime2, 7).Value = fileDto.FileDownloadTime;
+                        command.Parameters.Add("@UserId", System.Data.SqlDbType.Int).Value = fileDto.UserId;
 
                         command.ExecuteNonQuery();
                     }
@@ -113,6 +115,7 @@ namespace DownloadManager.Data.Dal.Repositories
                         command.Parameters.Add("@FileDownloadDirectory", System.Data.SqlDbType.NVarChar, -1).Value = file.FileDownloadDirectory;
                         command.Parameters.Add("@FileDownloadMethod", System.Data.SqlDbType.Int).Value = (int)file.FileDownloadMethod;
                         command.Parameters.Add("@FileDownloadTime", System.Data.SqlDbType.DateTime2, 7).Value = file.FileDownloadTime;
+                        command.Parameters.Add("@UserId", System.Data.SqlDbType.Int).Value = file.UserId;
 
                         command.ExecuteNonQuery();
                     }
@@ -137,6 +140,7 @@ namespace DownloadManager.Data.Dal.Repositories
                            + "    ,[FileDownloadDirectory]" + Environment.NewLine
                            + "    ,[FileDownloadMethod]" + Environment.NewLine
                            + "    ,[FileDownloadTime]" + Environment.NewLine
+                           + "    ,[UserId]" + Environment.NewLine
                            + " FROM [dbo].[File]" + Environment.NewLine
                            + " WHERE [FileId] = @FileId";
 
@@ -146,6 +150,7 @@ namespace DownloadManager.Data.Dal.Repositories
                                          + "    ,[FileDownloadDirectory] = @FileDownloadDirectory" + Environment.NewLine
                                          + "    ,[FileDownloadMethod] = @FileDownloadMethod" + Environment.NewLine
                                          + "    ,[FileDownloadTime] = @FileDownloadTime" + Environment.NewLine
+                                         + "    ,[UserId] = @UserId" + Environment.NewLine
                                          + " WHERE [FileId] = @FileId";
 
         private static readonly string _insertQueryString =
@@ -153,12 +158,14 @@ namespace DownloadManager.Data.Dal.Repositories
                                          + "    [FileName]" + Environment.NewLine
                                             + "    ,[FileDownloadDirectory]" + Environment.NewLine
                                             + "    ,[FileDownloadMethod]" + Environment.NewLine
-                                            + "    ,[FileDownloadTime])" + Environment.NewLine
+                                            + "    ,[FileDownloadTime]" + Environment.NewLine
+                                            + "    ,[UserId])" + Environment.NewLine
                                             + " VALUES (" + Environment.NewLine
                                             + "    @FileName" + Environment.NewLine
                                             + "    ,@FileDownloadDirectory" + Environment.NewLine
                                             + "    ,@FileDownloadMethod" + Environment.NewLine
-                                            + "    ,@FileDownloadTime)";
+                                            + "    ,@FileDownloadTime" + Environment.NewLine
+                                            + "    ,@UserId)";
 
         #endregion
     }

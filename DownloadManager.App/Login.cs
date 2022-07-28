@@ -21,8 +21,8 @@ namespace DownloadManager.App
         {
             var registerForm = new Register(this);
             registerForm.Show();
-            this.txtUsername.Text = String.Empty;
-            this.txtPassword.Text = String.Empty;
+            this.txtUsername.Text = string.Empty;
+            this.txtPassword.Text = string.Empty;
             this.Hide();
         }
     }

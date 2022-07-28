@@ -26,9 +26,9 @@ namespace DownloadManager.App
         private void linkLogin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             callingForm.Show();
-            this.txtUsername.Text = String.Empty;
-            this.txtPassword.Text = String.Empty;
-            this.txtConfirmPassword.Text = String.Empty;
+            this.txtUsername.Text = string.Empty;
+            this.txtPassword.Text = string.Empty;
+            this.txtConfirmPassword.Text = string.Empty;
             this.Hide();
         }
 
