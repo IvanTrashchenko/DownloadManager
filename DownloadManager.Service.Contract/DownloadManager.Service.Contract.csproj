@@ -42,8 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Input\IFileCreateModel.cs" />
+    <Compile Include="Models\Input\IFileFilterModel.cs" />
     <Compile Include="Models\Input\IFileUpdateModel.cs" />
     <Compile Include="Models\Input\IUserCredentialsModel.cs" />
+    <Compile Include="Models\Output\IFileReportsModel.cs" />
     <Compile Include="Models\Output\IFileViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IFileService.cs" />
