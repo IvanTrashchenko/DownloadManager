@@ -103,7 +103,14 @@ namespace DownloadManager.App
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error occured. Message: {ex.Message}. Stacktrace: {ex.StackTrace}");
+                if (ex.Message == $"User with name {txtUsername.Text} already exists.")
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                else
+                {
+                    MessageBox.Show($"Error occured. Message: {ex.Message}. Stacktrace: {ex.StackTrace}");
+                }
             }
         }
     }

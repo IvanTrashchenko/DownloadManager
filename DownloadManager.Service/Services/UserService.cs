@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 using DownloadManager.Core;
 using DownloadManager.Data.Dal.Contract.Dto;
 using DownloadManager.Data.Dal.Contract.Repositories;
@@ -57,7 +54,20 @@ namespace DownloadManager.Service.Services
                 PasswordSalt = Convert.ToBase64String(passwordSalt)
             };
 
-            _userRepository.Add(user);
+            try
+            {
+                _userRepository.Add(user);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.Contains("Violation of UNIQUE KEY constraint \'UC_Username\'. Cannot insert duplicate key"))
+                {
+                    throw new InvalidOperationException(
+                        $"User with name {model.Username} already exists.");
+                }
+
+                throw;
+            }
         }
 
         public bool CheckCredentials(IUserCredentialsModel model)
