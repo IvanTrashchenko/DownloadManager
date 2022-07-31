@@ -24,10 +24,6 @@ namespace DownloadManager.App
     {
         #region Fields
 
-        private readonly HttpClient _client;
-
-        private static string _numberPattern = " ({0})";
-
         private static int _workNumber = 0;
 
         private static IFileService _fileService;
@@ -40,7 +36,6 @@ namespace DownloadManager.App
         {
             InitializeComponent();
             cmbDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
-            _client = new HttpClient();
             _fileService = new FileService(new FileRepository());
         }
 
@@ -133,25 +128,13 @@ namespace DownloadManager.App
 
             try
             {
-                var response = _client.GetAsync(url).GetAwaiter().GetResult();
-
-                var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
-
-                string path;
-
-                lock (this)
+                _fileService.DownloadFile(new FileDownloadModel()
                 {
-                    path = NextAvailableFilename(Path.Combine(folder, $"{name}{ext}"));
-
-                    using (var fileStream = File.Open(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read))
-                    {
-                        response.Content.CopyToAsync(fileStream).GetAwaiter().GetResult();
-                    }
-                }
-
-                var endTime = DateTime.Now;
-
-                var finalName = Path.GetFileName(path);
+                    FileDownloadDirectory = folder,
+                    FileDownloadMethod = method,
+                    FileName = name,
+                    Url = url
+                });
 
                 string endMessage = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading was successful." +
                                     Environment.NewLine;
@@ -159,14 +142,6 @@ namespace DownloadManager.App
                 this.BeginInvoke((MethodInvoker)delegate
                 {
                     txtResult.AppendText(endMessage);
-                });
-
-                _fileService.Add(new FileCreateModel()
-                {
-                    FileName = finalName,
-                    FileDownloadDirectory = folder,
-                    FileDownloadMethod = method,
-                    FileDownloadTime = endTime
                 });
             }
             catch (Exception ex)
@@ -270,53 +245,6 @@ namespace DownloadManager.App
             }
 
             return result;
-        }
-
-        #endregion
-
-        #region Next available filename methods
-
-        private static string NextAvailableFilename(string path)
-        {
-            // Short-cut if already available
-            if (!File.Exists(path))
-                return path;
-
-            // If path has extension then insert the number pattern just before the extension and return next filename
-            if (Path.HasExtension(path))
-                return GetNextFilename(path.Insert(path.LastIndexOf(Path.GetExtension(path)), _numberPattern));
-
-            // Otherwise just append the pattern to the path and return next filename
-            return GetNextFilename(path + _numberPattern);
-        }
-
-        private static string GetNextFilename(string pattern)
-        {
-            string tmp = string.Format(pattern, 1);
-            if (tmp == pattern)
-                throw new ArgumentException("The pattern must include an index place-holder");
-
-            if (!File.Exists(tmp))
-                return tmp; // short-circuit if no matches
-
-            int min = 1, max = 2; // min is inclusive, max is exclusive/untested
-
-            while (File.Exists(string.Format(pattern, max)))
-            {
-                min = max;
-                max *= 2;
-            }
-
-            while (max != min + 1)
-            {
-                int pivot = (max + min) / 2;
-                if (File.Exists(string.Format(pattern, pivot)))
-                    min = pivot;
-                else
-                    max = pivot;
-            }
-
-            return string.Format(pattern, max);
         }
 
         #endregion
