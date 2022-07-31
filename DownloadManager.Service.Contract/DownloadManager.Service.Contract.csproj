@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Input\IFileCreateModel.cs" />
+    <Compile Include="Models\Input\IFileDownloadModel.cs" />
     <Compile Include="Models\Input\IFileFilterModel.cs" />
     <Compile Include="Models\Input\IFileUpdateModel.cs" />
     <Compile Include="Models\Input\IUserCredentialsModel.cs" />

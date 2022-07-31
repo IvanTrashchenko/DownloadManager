@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using DownloadManager.Data.Dal.Contract.Dto;
 using DownloadManager.Data.Dal.Contract.Repositories;
-using DownloadManager.Domain.Entities;
 using DownloadManager.Service.Contract;
 using DownloadManager.Service.Contract.Models.Input;
 using DownloadManager.Service.Contract.Models.Output;
 using DownloadManager.Service.Models.Output;
+using File = System.IO.File;
 
 namespace DownloadManager.Service
 {
     public class FileService : IFileService
     {
         #region Private fields
+        
+        private readonly HttpClient _client;
+
+        private static string _numberPattern = " ({0})";
 
         private readonly IFileRepository _fileRepository;
 
@@ -24,18 +30,14 @@ namespace DownloadManager.Service
         public FileService(IFileRepository fileRepository)
         {
             _fileRepository = fileRepository ?? throw new ArgumentNullException(nameof(fileRepository));
+            _client = new HttpClient();
         }
 
         #endregion
 
         #region Public methods
 
-        public IEnumerable<IFileViewModel> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IFileViewModel GetById(int id)
+        public IFileViewModel GetFileInfoById(int id)
         {
             if (id < 1)
             {
@@ -45,32 +47,64 @@ namespace DownloadManager.Service
             return Map(_fileRepository.GetById(id));
         }
 
-        public void Add(IFileCreateModel fileCreateModel)
+        public void DownloadFile(IFileDownloadModel fileDownloadModel)
         {
-            if (fileCreateModel == null)
+            if (fileDownloadModel == null)
             {
-                throw new ArgumentNullException(nameof(fileCreateModel));
+                throw new ArgumentNullException(nameof(fileDownloadModel));
             }
 
-            if (fileCreateModel.FileName == null)
+            if (fileDownloadModel.FileName == null)
             {
-                throw new ArgumentNullException(nameof(fileCreateModel.FileName));
+                throw new ArgumentNullException(nameof(fileDownloadModel.FileName));
             }
 
-            if (fileCreateModel.FileDownloadDirectory == null)
+            if (fileDownloadModel.FileDownloadDirectory == null)
             {
-                throw new ArgumentNullException(nameof(fileCreateModel.FileDownloadDirectory));
+                throw new ArgumentNullException(nameof(fileDownloadModel.FileDownloadDirectory));
             }
 
-            if (fileCreateModel.UserId < 1)
+            if (fileDownloadModel.Url == null)
             {
-                throw new ArgumentOutOfRangeException(nameof(fileCreateModel.UserId));
+                throw new ArgumentNullException(nameof(fileDownloadModel.Url));
             }
 
-            _fileRepository.Add(Map(fileCreateModel));
+            if (fileDownloadModel.UserId < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(fileDownloadModel.UserId));
+            }
+
+            var response = _client.GetAsync(fileDownloadModel.Url).GetAwaiter().GetResult();
+
+            var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
+
+            string path;
+
+            lock (this)
+            {
+                path = NextAvailableFilename(Path.Combine(fileDownloadModel.FileDownloadDirectory, $"{fileDownloadModel.FileName}{ext}"));
+
+                using (var fileStream = File.Open(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read))
+                {
+                    response.Content.CopyToAsync(fileStream).GetAwaiter().GetResult();
+                }
+            }
+
+            var finalName = Path.GetFileName(path);
+
+            var endTime = DateTime.Now;
+
+            _fileRepository.Add(new FileDto()
+            {
+                FileName = finalName,
+                FileDownloadDirectory = fileDownloadModel.FileDownloadDirectory,
+                FileDownloadMethod = fileDownloadModel.FileDownloadMethod,
+                FileDownloadTime = endTime,
+                UserId = fileDownloadModel.UserId
+            });
         }
 
-        public void Update(int id, IFileUpdateModel fileUpdateModel)
+        public void UpdateFileInfo(int id, IFileUpdateModel fileUpdateModel)
         {
             if (id < 1)
             {
@@ -122,11 +156,6 @@ namespace DownloadManager.Service
             _fileRepository.Update(file);
         }
 
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<IFileReportsModel> GetFiltered(IFileFilterModel filterModel)
         {
             if (filterModel == null)
@@ -147,9 +176,52 @@ namespace DownloadManager.Service
 
         #endregion
 
-        #region Mapping methods
+        #region Private methods
 
-        private IFileViewModel Map(File file) =>
+        private static string NextAvailableFilename(string path)
+        {
+            // Short-cut if already available
+            if (!File.Exists(path))
+                return path;
+
+            // If path has extension then insert the number pattern just before the extension and return next filename
+            if (Path.HasExtension(path))
+                return GetNextFilename(path.Insert(path.LastIndexOf(Path.GetExtension(path)), _numberPattern));
+
+            // Otherwise just append the pattern to the path and return next filename
+            return GetNextFilename(path + _numberPattern);
+        }
+
+        private static string GetNextFilename(string pattern)
+        {
+            string tmp = string.Format(pattern, 1);
+            if (tmp == pattern)
+                throw new ArgumentException("The pattern must include an index place-holder");
+
+            if (!File.Exists(tmp))
+                return tmp; // short-circuit if no matches
+
+            int min = 1, max = 2; // min is inclusive, max is exclusive/untested
+
+            while (File.Exists(string.Format(pattern, max)))
+            {
+                min = max;
+                max *= 2;
+            }
+
+            while (max != min + 1)
+            {
+                int pivot = (max + min) / 2;
+                if (File.Exists(string.Format(pattern, pivot)))
+                    min = pivot;
+                else
+                    max = pivot;
+            }
+
+            return string.Format(pattern, max);
+        }
+
+        private IFileViewModel Map(DownloadManager.Domain.Entities.File file) =>
             new FileViewModel()
             {
                 FileId = file.FileId,
@@ -158,16 +230,6 @@ namespace DownloadManager.Service
                 FileDownloadMethod = file.FileDownloadMethod,
                 FileDownloadTime = file.FileDownloadTime,
                 UserId = file.UserId
-            };
-
-        private FileDto Map(IFileCreateModel fileCreateModel) =>
-            new FileDto()
-            {
-                FileName = fileCreateModel.FileName,
-                FileDownloadDirectory = fileCreateModel.FileDownloadDirectory,
-                FileDownloadMethod = fileCreateModel.FileDownloadMethod,
-                FileDownloadTime = fileCreateModel.FileDownloadTime,
-                UserId = fileCreateModel.UserId
             };
 
         private FileFilterDto Map(IFileFilterModel filterModel) =>
