@@ -155,7 +155,7 @@ namespace DownloadManager.Data.Dal.Repositories
                               JOIN [dbo].[User] u on f.UserId = u.UserId
                               WHERE 1 = 1
                               {filterQuery}
-                              ORDER BY f.[FileDownloadTime] DESC";
+                              ORDER BY f.[FileId] DESC";
 
             using (var connection = new SqlConnection(connString))
             {
