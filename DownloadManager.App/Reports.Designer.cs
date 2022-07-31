@@ -47,6 +47,7 @@ namespace DownloadManager.App
             this.dateFileDownloadTimeEnd = new System.Windows.Forms.DateTimePicker();
             this.btnFilter = new System.Windows.Forms.Button();
             this.dataGridViewResults = new System.Windows.Forms.DataGridView();
+            this.lblAmountOfRows = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
             this.SuspendLayout();
@@ -263,17 +264,27 @@ namespace DownloadManager.App
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewResults.Location = new System.Drawing.Point(18, 173);
+            this.dataGridViewResults.Location = new System.Drawing.Point(18, 189);
             this.dataGridViewResults.Name = "dataGridViewResults";
             this.dataGridViewResults.ReadOnly = true;
-            this.dataGridViewResults.Size = new System.Drawing.Size(629, 339);
+            this.dataGridViewResults.Size = new System.Drawing.Size(629, 323);
             this.dataGridViewResults.TabIndex = 1;
+            this.dataGridViewResults.DataSourceChanged += new System.EventHandler(this.dataGridViewResults_DataSourceChanged);
+            // 
+            // lblAmountOfRows
+            // 
+            this.lblAmountOfRows.AutoSize = true;
+            this.lblAmountOfRows.Location = new System.Drawing.Point(18, 171);
+            this.lblAmountOfRows.Name = "lblAmountOfRows";
+            this.lblAmountOfRows.Size = new System.Drawing.Size(0, 15);
+            this.lblAmountOfRows.TabIndex = 2;
             // 
             // Reports
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(665, 530);
+            this.Controls.Add(this.lblAmountOfRows);
             this.Controls.Add(this.dataGridViewResults);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -288,6 +299,7 @@ namespace DownloadManager.App
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -310,5 +322,6 @@ namespace DownloadManager.App
         private System.Windows.Forms.CheckBox cbxFileDownloadMethod;
         private System.Windows.Forms.CheckBox cbxFileDownloadDirectory;
         private System.Windows.Forms.CheckBox cbxFileName;
+        private System.Windows.Forms.Label lblAmountOfRows;
     }
 }

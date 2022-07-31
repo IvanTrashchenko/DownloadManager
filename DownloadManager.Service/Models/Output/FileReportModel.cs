@@ -4,7 +4,7 @@ using DownloadManager.Service.Contract.Models.Output;
 
 namespace DownloadManager.Service.Models.Output
 {
-    public class FileReportsModel : IFileReportsModel
+    public class FileReportModel : IFileReportModel
     {
         public int FileId { get; set; }
         public string FileName { get; set; }

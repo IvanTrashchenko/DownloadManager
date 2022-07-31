@@ -44,6 +44,7 @@
     <Compile Include="Dto\FileDto.cs" />
     <Compile Include="Dto\FileFilterDto.cs" />
     <Compile Include="Dto\ReportDto.cs" />
+    <Compile Include="Dto\ReportsPageDto.cs" />
     <Compile Include="Dto\UserDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IFileRepository.cs" />

@@ -6,7 +6,7 @@ namespace DownloadManager.Data.Dal.Contract.Repositories
 {
     public interface IFileRepository
     {
-        IEnumerable<ReportDto> GetFiltered(FileFilterDto filterDto);
+        ReportsPageDto GetFiltered(FileFilterDto filterDto);
         IEnumerable<File> Get();
         File GetById(int id);
         void Add(FileDto fileDto);

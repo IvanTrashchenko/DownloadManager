@@ -132,7 +132,7 @@ namespace DownloadManager.Data.Dal.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<ReportDto> GetFiltered(FileFilterDto filterDto)
+        public ReportsPageDto GetFiltered(FileFilterDto filterDto)
         {
             string connString = ConnectionString.Get();
 
@@ -145,21 +145,33 @@ namespace DownloadManager.Data.Dal.Repositories
 
             var filterQuery = BuildFilterValuesQuery(filterDto, parameter);
 
-            string sql = $@"SELECT f.[FileId]
+            string sql = $@"SELECT COUNT(*)
+                            FROM [dbo].[File] f
+                            JOIN [dbo].[User] u on f.UserId = u.UserId
+                            WHERE 1 = 1
+                            {filterQuery};
+                            SELECT f.[FileId]
                                   ,f.[FileName]
                                   ,f.[FileDownloadDirectory]
                                   ,f.[FileDownloadMethod]
                                   ,f.[FileDownloadTime]
                                   ,u.[Username]
-                              FROM [dbo].[File] f
-                              JOIN [dbo].[User] u on f.UserId = u.UserId
-                              WHERE 1 = 1
-                              {filterQuery}
-                              ORDER BY f.[FileId] DESC";
+                            FROM [dbo].[File] f
+                            JOIN [dbo].[User] u on f.UserId = u.UserId
+                            WHERE 1 = 1
+                            {filterQuery}
+                            ORDER BY f.[FileId] DESC";
 
             using (var connection = new SqlConnection(connString))
             {
-                return connection.Query<ReportDto>(sql, parameter, commandTimeout: connection.ConnectionTimeout);
+                using (var multi = connection.QueryMultiple(sql, parameter, commandTimeout: connection.ConnectionTimeout))
+                {
+                    return new ReportsPageDto()
+                    {
+                        Total = multi.ReadFirstOrDefault<int>(),
+                        Items = multi.Read<ReportDto>()
+                    };
+                }
             }
         }
 

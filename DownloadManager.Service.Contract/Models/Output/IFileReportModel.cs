@@ -3,7 +3,7 @@ using DownloadManager.Core.Enums;
 
 namespace DownloadManager.Service.Contract.Models.Output
 {
-    public interface IFileReportsModel
+    public interface IFileReportModel
     {
         int FileId { get; set; }
         string FileName { get; set; }

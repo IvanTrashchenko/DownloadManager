@@ -22,6 +22,8 @@ namespace DownloadManager.App
 
         private static IFileService _fileService;
 
+        private int _currentAmountOfRows;
+
         #endregion
 
         #region ctor
@@ -38,7 +40,9 @@ namespace DownloadManager.App
 
         private void Reports_Load(object sender, EventArgs e)
         {
-            dataGridViewResults.DataSource = _fileService.GetFiltered(new FileFilterModel()).ToList();
+            var result = _fileService.GetFiltered(new FileFilterModel());
+            _currentAmountOfRows = result.Total;
+            dataGridViewResults.DataSource = result.Items.ToList();
         }
 
         private void cbxFileId_CheckedChanged(object sender, EventArgs e)
@@ -129,7 +133,9 @@ namespace DownloadManager.App
         {
             if (!AreControlsValid()) return;
 
-            dataGridViewResults.DataSource = _fileService.GetFiltered(CreateFilterModel()).ToList();
+            var result = _fileService.GetFiltered(CreateFilterModel());
+            _currentAmountOfRows = result.Total;
+            dataGridViewResults.DataSource = result.Items.ToList();
         }
 
         private void txtFileId_KeyPress(object sender, KeyPressEventArgs e)
@@ -138,6 +144,10 @@ namespace DownloadManager.App
             {
                 e.Handled = true;
             }
+        }
+        private void dataGridViewResults_DataSourceChanged(object sender, EventArgs e)
+        {
+            lblAmountOfRows.Text = $"Amount of rows: {_currentAmountOfRows}";
         }
 
         #endregion

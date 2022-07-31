@@ -156,7 +156,7 @@ namespace DownloadManager.Service
             _fileRepository.Update(file);
         }
 
-        public IEnumerable<IFileReportsModel> GetFiltered(IFileFilterModel filterModel)
+        public IFileReportsPageModel GetFiltered(IFileFilterModel filterModel)
         {
             if (filterModel == null)
             {
@@ -171,12 +171,12 @@ namespace DownloadManager.Service
                 }
             }
 
-            return _fileRepository.GetFiltered(Map(filterModel)).Select(Map);
+            return Map(_fileRepository.GetFiltered(Map(filterModel)));
         }
 
         #endregion
 
-        #region Private methods
+        #region NextAvailableFilename methods
 
         private static string NextAvailableFilename(string path)
         {
@@ -221,6 +221,10 @@ namespace DownloadManager.Service
             return string.Format(pattern, max);
         }
 
+        #endregion
+
+        #region Mapping methods
+
         private IFileViewModel Map(DownloadManager.Domain.Entities.File file) =>
             new FileViewModel()
             {
@@ -244,8 +248,8 @@ namespace DownloadManager.Service
                 Username = filterModel.Username
             };
 
-        private IFileReportsModel Map(ReportDto dto) =>
-            new FileReportsModel()
+        private IFileReportModel Map(ReportDto dto) =>
+            new FileReportModel()
             {
                 FileId = dto.FileId,
                 FileDownloadDirectory = dto.FileDownloadDirectory,
@@ -254,6 +258,15 @@ namespace DownloadManager.Service
                 FileName = dto.FileName,
                 Username = dto.Username
             };
+
+        private IFileReportsPageModel Map(ReportsPageDto dto)
+        {
+            return new FileReportsPageModel
+            {
+                Total = dto.Total,
+                Items = dto.Items?.Select(Map)
+            };
+        }
 
         #endregion
     }
