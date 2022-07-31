@@ -87,11 +87,8 @@ namespace DownloadManager.Service.Services
                 throw new ArgumentNullException(nameof(model.Username));
             }
 
-            // User not cached (either from beginning or no more, because not verified).
-            // Get data user info from DB.
             User user = _userRepository.GetByUsername(model.Username);
-
-            // User is verified if known in DB and has correct credentials.
+            
             bool userIsVerified = null != user && PasswordHasher.VerifyPasswordHash(model.Password, Convert.FromBase64String(user.PasswordHash), Convert.FromBase64String(user.PasswordSalt));
 
             return userIsVerified;
