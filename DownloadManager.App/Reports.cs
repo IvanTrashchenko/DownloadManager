@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DownloadManager.Core.Enums;
 
 namespace DownloadManager.App
 {
@@ -15,7 +16,7 @@ namespace DownloadManager.App
         public Reports()
         {
             InitializeComponent();
-            cmbFileDownloadMethod.SelectedItem = "None";
+            cmbFileDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
         }
 
         #region Event handlers
