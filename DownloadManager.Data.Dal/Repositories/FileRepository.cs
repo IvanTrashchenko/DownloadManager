@@ -180,13 +180,13 @@ namespace DownloadManager.Data.Dal.Repositories
             if (!string.IsNullOrWhiteSpace(filterDto.FileName))
             {
                 parameter.Add("@FileName", filterDto.FileName, DbType.StringFixedLength);
-                query.AppendLine($"AND f.[FileName] = @FileName");
+                query.AppendLine($"AND f.[FileName] LIKE \'%\' + @FileName + \'%\'");
             }
 
             if (!string.IsNullOrWhiteSpace(filterDto.FileDownloadDirectory))
             {
                 parameter.Add("@FileDownloadDirectory", filterDto.FileDownloadDirectory, DbType.String);
-                query.AppendLine($"AND f.[FileDownloadDirectory] = @FileDownloadDirectory");
+                query.AppendLine($"AND f.[FileDownloadDirectory] LIKE \'%\' + @FileDownloadDirectory + \'%\'");
             }
 
             if (filterDto.FileDownloadMethod.HasValue)
