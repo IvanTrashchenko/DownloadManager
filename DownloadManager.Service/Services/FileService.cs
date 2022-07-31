@@ -92,7 +92,7 @@ namespace DownloadManager.Service
 
             var finalName = Path.GetFileName(path);
 
-            var endTime = DateTime.Now;
+            var endTime = DateTime.UtcNow;
 
             _fileRepository.Add(new FileDto()
             {
