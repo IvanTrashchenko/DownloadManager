@@ -184,6 +184,7 @@ namespace DownloadManager.App
             this.txtFileId.Name = "txtFileId";
             this.txtFileId.Size = new System.Drawing.Size(152, 23);
             this.txtFileId.TabIndex = 1;
+            this.txtFileId.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtFileId_KeyPress);
             // 
             // txtFileName
             // 
@@ -253,6 +254,7 @@ namespace DownloadManager.App
             this.btnFilter.TabIndex = 10;
             this.btnFilter.Text = "Filter";
             this.btnFilter.UseVisualStyleBackColor = true;
+            this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
             // 
             // dataGridViewResults
             // 

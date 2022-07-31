@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DownloadManager.Core.Enums;
@@ -122,6 +123,124 @@ namespace DownloadManager.App
             {
                 dateFileDownloadTimeEnd.Enabled = false;
             }
+        }
+
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            if (!AreControlsValid()) return;
+
+            dataGridViewResults.DataSource = _fileService.GetFiltered(CreateFilterModel()).ToList();
+        }
+
+        private void txtFileId_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private bool AreControlsValid()
+        {
+            if (cbxFileId.Checked)
+            {
+                if (string.IsNullOrWhiteSpace(txtFileId.Text))
+                {
+                    MessageBox.Show("FileId cannot be empty.");
+                    return false;
+                }
+
+                if (int.Parse(txtFileId.Text) < 1)
+                {
+                    MessageBox.Show("FileId cannot be zero.");
+                    return false;
+                }
+            }
+
+            if (cbxFileName.Checked)
+            {
+                if (string.IsNullOrWhiteSpace(txtFileName.Text))
+                {
+                    MessageBox.Show("FileName cannot be empty.");
+                    return false;
+                }
+
+                Regex containsABadCharacter = new Regex("["
+                                                        + Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars())) + "]");
+
+                if (containsABadCharacter.IsMatch(txtFileName.Text))
+                {
+                    MessageBox.Show("File name contains invalid characters.");
+                    return false;
+                }
+            }
+
+            if (cbxFileDownloadDirectory.Checked)
+            {
+                if (string.IsNullOrWhiteSpace(txtFileDownloadDirectory.Text))
+                {
+                    MessageBox.Show("FileDownloadDirectory cannot be empty.");
+                    return false;
+                }
+            }
+
+            if (cbxUsername.Checked)
+            {
+                if (string.IsNullOrWhiteSpace(txtUsername.Text))
+                {
+                    MessageBox.Show("Username cannot be empty.");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private FileFilterModel CreateFilterModel()
+        {
+            var model = new FileFilterModel();
+
+            if (cbxFileId.Checked)
+            {
+                model.FileId = int.Parse(txtFileId.Text);
+            }
+
+            if (cbxFileName.Checked)
+            {
+                model.FileName = txtFileName.Text;
+            }
+
+            if (cbxFileDownloadDirectory.Checked)
+            {
+                model.FileDownloadDirectory = txtFileDownloadDirectory.Text;
+            }
+
+            if (cbxFileDownloadMethod.Checked)
+            {
+                Enum.TryParse(cmbFileDownloadMethod.Text, out DownloadMethod method);
+                model.FileDownloadMethod = method;
+            }
+
+            if (cbxUsername.Checked)
+            {
+                model.Username = txtUsername.Text;
+            }
+
+            if (cbxFileDownloadTimeStart.Checked)
+            {
+                model.FileDownloadTimeStart = dateFileDownloadTimeStart.Value;
+            }
+
+            if (cbxFileDownloadTimeEnd.Checked)
+            {
+                model.FileDownloadTimeEnd = dateFileDownloadTimeEnd.Value;
+            }
+
+            return model;
         }
 
         #endregion

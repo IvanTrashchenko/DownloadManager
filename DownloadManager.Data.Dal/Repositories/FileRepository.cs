@@ -179,7 +179,7 @@ namespace DownloadManager.Data.Dal.Repositories
 
             if (!string.IsNullOrWhiteSpace(filterDto.FileName))
             {
-                parameter.Add("@FileName", filterDto.FileName, DbType.StringFixedLength);
+                parameter.Add("@FileName", filterDto.FileName, DbType.String);
                 query.AppendLine($"AND f.[FileName] LIKE \'%\' + @FileName + \'%\'");
             }
 
