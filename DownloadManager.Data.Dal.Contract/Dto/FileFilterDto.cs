@@ -12,7 +12,5 @@ namespace DownloadManager.Data.Dal.Contract.Dto
         public DateTimeOffset? FileDownloadTimeStart { get; set; }
         public DateTimeOffset? FileDownloadTimeEnd { get; set; }
         public string Username { get; set; }
-        public string OrderBy { get; set; }
-        public string Direction { get; set; }
     }
 }

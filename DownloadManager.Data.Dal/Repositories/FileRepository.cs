@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Text;
+using Dapper;
 using DownloadManager.Core.Enums;
 using DownloadManager.Data.Dal.Contract.Dto;
 using DownloadManager.Data.Dal.Contract.Repositories;
@@ -131,7 +134,85 @@ namespace DownloadManager.Data.Dal.Repositories
 
         public IEnumerable<ReportDto> GetFiltered(FileFilterDto filterDto)
         {
-            throw new NotImplementedException();
+            string connString = ConnectionString.Get();
+
+            if (string.IsNullOrWhiteSpace(connString))
+            {
+                throw new InvalidOperationException("Failed to obtain connection string.");
+            }
+
+            DynamicParameters parameter = new DynamicParameters();
+
+            var filterQuery = BuildFilterValuesQuery(filterDto, parameter);
+
+            string sql = $@"SELECT f.[FileId]
+                                  ,f.[FileName]
+                                  ,f.[FileDownloadDirectory]
+                                  ,f.[FileDownloadMethod]
+                                  ,f.[FileDownloadTime]
+                                  ,u.[Username]
+                              FROM [dbo].[File] f
+                              JOIN [dbo].[User] u on f.UserId = u.UserId
+                              WHERE 1 = 1
+                              {filterQuery}";
+
+            using (var connection = new SqlConnection(connString))
+            {
+                return connection.Query<ReportDto>(sql, parameter, commandTimeout: connection.ConnectionTimeout);
+            }
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private string BuildFilterValuesQuery(FileFilterDto filterDto, DynamicParameters parameter)
+        {
+            var query = new StringBuilder();
+
+            if (filterDto.FileId.HasValue)
+            {
+                parameter.Add("@FileId", filterDto.FileId.Value, DbType.Int32);
+                query.AppendLine($"AND f.[FileId] = @FileId");
+            }
+
+            if (!string.IsNullOrWhiteSpace(filterDto.FileName))
+            {
+                parameter.Add("@FileName", filterDto.FileName, DbType.StringFixedLength);
+                query.AppendLine($"AND f.[FileName] = @FileName");
+            }
+
+            if (!string.IsNullOrWhiteSpace(filterDto.FileDownloadDirectory))
+            {
+                parameter.Add("@FileDownloadDirectory", filterDto.FileDownloadDirectory, DbType.String);
+                query.AppendLine($"AND f.[FileDownloadDirectory] = @FileDownloadDirectory");
+            }
+
+            if (filterDto.FileDownloadMethod.HasValue)
+            {
+                parameter.Add("@FileDownloadMethod", (int)filterDto.FileDownloadMethod.Value, DbType.Int32);
+                query.AppendLine($"AND f.[FileDownloadMethod] = @FileDownloadMethod");
+            }
+
+            if (filterDto.FileDownloadTimeStart.HasValue)
+            {
+                parameter.Add("@FileDownloadTimeStart", filterDto.FileDownloadTimeStart.Value, DbType.DateTimeOffset);
+                query.AppendLine($"AND f.[FileDownloadTime] > @FileDownloadTimeStart");
+            }
+
+            if (filterDto.FileDownloadTimeEnd.HasValue)
+            {
+                parameter.Add("@FileDownloadTimeEnd", filterDto.FileDownloadTimeEnd.Value, DbType.DateTimeOffset);
+                query.AppendLine($"AND f.[FileDownloadTime] < @FileDownloadTimeEnd");
+            }
+
+            if (!string.IsNullOrWhiteSpace(filterDto.Username))
+            {
+                parameter.Add("@Username", filterDto.Username, DbType.StringFixedLength);
+                query.AppendLine($"AND u.[Username] = @Username");
+            }
+
+            return query.ToString();
         }
 
         #endregion

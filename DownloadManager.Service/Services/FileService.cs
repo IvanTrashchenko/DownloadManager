@@ -134,6 +134,14 @@ namespace DownloadManager.Service
                 throw new ArgumentNullException(nameof(filterModel));
             }
 
+            if (filterModel.FileId != null)
+            {
+                if (filterModel.FileId.Value < 1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(filterModel.FileId));
+                }
+            }
+
             return _fileRepository.GetFiltered(Map(filterModel)).Select(Map);
         }
 
