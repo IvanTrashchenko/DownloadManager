@@ -8,18 +8,37 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DownloadManager.Core.Enums;
+using DownloadManager.Data.Dal.Repositories;
+using DownloadManager.Service;
+using DownloadManager.Service.Contract;
+using DownloadManager.Service.Models.Input;
 
 namespace DownloadManager.App
 {
     public partial class Reports : Form
     {
-        public Reports()
+        #region Private fields
+
+        private static IFileService _fileService;
+
+        #endregion
+
+        #region ctor
+        public Reports(IFileService fileService)
         {
             InitializeComponent();
             cmbFileDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
+            _fileService = fileService;
         }
 
+        #endregion
+
         #region Event handlers
+
+        private void Reports_Load(object sender, EventArgs e)
+        {
+            dataGridViewResults.DataSource = _fileService.GetFiltered(new FileFilterModel()).ToList();
+        }
 
         private void cbxFileId_CheckedChanged(object sender, EventArgs e)
         {

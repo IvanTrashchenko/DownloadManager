@@ -144,7 +144,7 @@ namespace DownloadManager.App
 
         private void btnReports_Click(object sender, EventArgs e)
         {
-            var reportsForm = new Reports();
+            var reportsForm = new Reports(_fileService);
             reportsForm.Show();
         }
 
