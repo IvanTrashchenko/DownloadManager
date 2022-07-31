@@ -229,19 +229,23 @@ namespace DownloadManager.App
             // 
             this.dateFileDownloadTimeStart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dateFileDownloadTimeStart.Enabled = false;
+            this.dateFileDownloadTimeStart.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.dateFileDownloadTimeStart.Location = new System.Drawing.Point(161, 117);
             this.dateFileDownloadTimeStart.Name = "dateFileDownloadTimeStart";
             this.dateFileDownloadTimeStart.Size = new System.Drawing.Size(152, 23);
             this.dateFileDownloadTimeStart.TabIndex = 8;
+            this.dateFileDownloadTimeStart.Value = new System.DateTime(2022, 7, 31, 6, 0, 0, 0);
             // 
             // dateFileDownloadTimeEnd
             // 
             this.dateFileDownloadTimeEnd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dateFileDownloadTimeEnd.Enabled = false;
+            this.dateFileDownloadTimeEnd.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.dateFileDownloadTimeEnd.Location = new System.Drawing.Point(319, 117);
             this.dateFileDownloadTimeEnd.Name = "dateFileDownloadTimeEnd";
             this.dateFileDownloadTimeEnd.Size = new System.Drawing.Size(152, 23);
             this.dateFileDownloadTimeEnd.TabIndex = 9;
+            this.dateFileDownloadTimeEnd.Value = new System.DateTime(2022, 7, 31, 6, 0, 0, 0);
             // 
             // btnFilter
             // 

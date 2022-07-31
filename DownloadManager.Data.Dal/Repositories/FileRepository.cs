@@ -209,13 +209,13 @@ namespace DownloadManager.Data.Dal.Repositories
 
             if (filterDto.FileDownloadTimeStart.HasValue)
             {
-                parameter.Add("@FileDownloadTimeStart", filterDto.FileDownloadTimeStart.Value, DbType.DateTimeOffset);
+                parameter.Add("@FileDownloadTimeStart", filterDto.FileDownloadTimeStart.Value, DbType.DateTime);
                 query.AppendLine($"AND f.[FileDownloadTime] > @FileDownloadTimeStart");
             }
 
             if (filterDto.FileDownloadTimeEnd.HasValue)
             {
-                parameter.Add("@FileDownloadTimeEnd", filterDto.FileDownloadTimeEnd.Value, DbType.DateTimeOffset);
+                parameter.Add("@FileDownloadTimeEnd", filterDto.FileDownloadTimeEnd.Value, DbType.DateTime);
                 query.AppendLine($"AND f.[FileDownloadTime] < @FileDownloadTimeEnd");
             }
 
