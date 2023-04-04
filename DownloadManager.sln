@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.Data.Dal", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.Data.Dal.Contract", "DownloadManager.Data.Dal.Contract\DownloadManager.Data.Dal.Contract.csproj", "{02D6C16F-E8C1-4EDA-98C5-3037369F63CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.Web", "DownloadManager.Web\DownloadManager.Web.csproj", "{D8E26EE3-9821-47F8-8783-ABC637545935}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{02D6C16F-E8C1-4EDA-98C5-3037369F63CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02D6C16F-E8C1-4EDA-98C5-3037369F63CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02D6C16F-E8C1-4EDA-98C5-3037369F63CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8E26EE3-9821-47F8-8783-ABC637545935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8E26EE3-9821-47F8-8783-ABC637545935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8E26EE3-9821-47F8-8783-ABC637545935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8E26EE3-9821-47F8-8783-ABC637545935}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{A6021642-B9BF-47B4-B9C6-5B48BAB71618} = {A0F3C1AC-34AA-4BB8-BD29-05CD408758FB}
 		{E6145694-687F-4280-A6B6-166F39DFB9F0} = {0BD52AD8-3A85-4217-88F4-ECAA06345F62}
 		{02D6C16F-E8C1-4EDA-98C5-3037369F63CD} = {0BD52AD8-3A85-4217-88F4-ECAA06345F62}
+		{D8E26EE3-9821-47F8-8783-ABC637545935} = {91CE4C39-19E7-4B02-A582-DF70E795D93E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {949CF967-C6E4-4BE6-A425-40AE1060779A}
