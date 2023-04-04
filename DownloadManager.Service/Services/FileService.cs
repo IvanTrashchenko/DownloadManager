@@ -34,10 +34,10 @@ namespace DownloadManager.Service
 
         #region ctor
 
-        public FileService(IFileRepository fileRepository, ILogger logger)
+        public FileService(IFileRepository fileRepository, ILogger logger = null)
         {
             _fileRepository = fileRepository ?? throw new ArgumentNullException(nameof(fileRepository));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = logger;
             _client = new HttpClient();
         }
 
@@ -190,7 +190,10 @@ namespace DownloadManager.Service
                 $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading has started." +
                 Environment.NewLine;
 
-            _logger.Log(startMessage);
+            if (_logger != null)
+            {
+                _logger.Log(startMessage);
+            }
 
             try
             {
@@ -228,7 +231,10 @@ namespace DownloadManager.Service
                 string endMessage = $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading was successful." +
                                     Environment.NewLine;
 
-                _logger.Log(endMessage);
+                if (_logger != null)
+                {
+                    _logger.Log(endMessage);
+                }
             }
             catch (Exception ex)
             {
@@ -236,7 +242,10 @@ namespace DownloadManager.Service
                     $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading terminated. Exception: {ex.Message}" +
                     Environment.NewLine;
 
-                _logger.Log(exMessage);
+                if (_logger != null)
+                {
+                    _logger.Log(exMessage);
+                }
             }
         }
 
