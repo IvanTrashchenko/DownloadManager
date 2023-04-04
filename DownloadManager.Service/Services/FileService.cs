@@ -1,8 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
+using System.Threading;
+using DownloadManager.Core.Enums;
 using DownloadManager.Data.Dal.Contract.Dto;
 using DownloadManager.Data.Dal.Contract.Repositories;
 using DownloadManager.Service.Contract;
@@ -16,20 +19,25 @@ namespace DownloadManager.Service
     public class FileService : IFileService
     {
         #region Private fields
-        
+
         private readonly HttpClient _client;
 
         private static string _numberPattern = " ({0})";
 
         private readonly IFileRepository _fileRepository;
 
+        private readonly ILogger _logger;
+
+        private static int _workNumber = 0;
+
         #endregion
 
         #region ctor
 
-        public FileService(IFileRepository fileRepository)
+        public FileService(IFileRepository fileRepository, ILogger logger)
         {
             _fileRepository = fileRepository ?? throw new ArgumentNullException(nameof(fileRepository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _client = new HttpClient();
         }
 
@@ -74,34 +82,28 @@ namespace DownloadManager.Service
                 throw new ArgumentOutOfRangeException(nameof(fileDownloadModel.UserId));
             }
 
-            var response = _client.GetAsync(fileDownloadModel.Url).GetAwaiter().GetResult();
-
-            var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
-
-            string path;
-
-            lock (this)
+            switch (fileDownloadModel.FileDownloadMethod)
             {
-                path = NextAvailableFilename(Path.Combine(fileDownloadModel.FileDownloadDirectory, $"{fileDownloadModel.FileName}{ext}"));
-
-                using (var fileStream = File.Open(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read))
-                {
-                    response.Content.CopyToAsync(fileStream).GetAwaiter().GetResult();
-                }
+                case DownloadMethod.BeginInvoke:
+                    new Action<object>(DownloadFileInner).BeginInvoke(fileDownloadModel, null, null);
+                    break;
+                case DownloadMethod.Thread:
+                    new Thread(DownloadFileInner).Start(fileDownloadModel);
+                    break;
+                case DownloadMethod.ThreadPool:
+                    ThreadPool.QueueUserWorkItem(DownloadFileInner, fileDownloadModel);
+                    break;
+                case DownloadMethod.BackgroundWorker:
+                    BackgroundWorker worker = new BackgroundWorker();
+                    worker.DoWork += (sender, args) => DownloadFileInner(args.Argument);
+                    worker.RunWorkerAsync(fileDownloadModel);
+                    break;
+                case DownloadMethod.Task:
+                    Task.Factory.StartNew(DownloadFileInner, fileDownloadModel);
+                    break;
+                default:
+                    throw new NotSupportedException();
             }
-
-            var finalName = Path.GetFileName(path);
-
-            var endTime = DateTime.UtcNow;
-
-            _fileRepository.Add(new FileDto()
-            {
-                FileName = finalName,
-                FileDownloadDirectory = fileDownloadModel.FileDownloadDirectory,
-                FileDownloadMethod = fileDownloadModel.FileDownloadMethod,
-                FileDownloadTime = endTime,
-                UserId = fileDownloadModel.UserId
-            });
         }
 
         public void UpdateFileInfo(int id, IFileUpdateModel fileUpdateModel)
@@ -175,6 +177,68 @@ namespace DownloadManager.Service
         }
 
         #endregion
+
+        #region Private methods
+
+        private void DownloadFileInner(object state)
+        {
+            int currentWorkNumber = Interlocked.Increment(ref _workNumber);
+
+            var tId = Thread.CurrentThread.ManagedThreadId;
+
+            string startMessage =
+                $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading has started." +
+                Environment.NewLine;
+
+            _logger.Log(startMessage);
+
+            try
+            {
+                var fileDownloadModel = (IFileDownloadModel)state;
+
+                var response = _client.GetAsync(fileDownloadModel.Url).GetAwaiter().GetResult();
+
+                var ext = MimeTypes.MimeTypeMap.GetExtension(response.Content.Headers.ContentType.MediaType);
+
+                string path;
+
+                lock (this)
+                {
+                    path = NextAvailableFilename(Path.Combine(fileDownloadModel.FileDownloadDirectory, $"{fileDownloadModel.FileName}{ext}"));
+
+                    using (var fileStream = File.Open(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read))
+                    {
+                        response.Content.CopyToAsync(fileStream).GetAwaiter().GetResult();
+                    }
+                }
+
+                var finalName = Path.GetFileName(path);
+
+                var endTime = DateTime.UtcNow;
+
+                _fileRepository.Add(new FileDto()
+                {
+                    FileName = finalName,
+                    FileDownloadDirectory = fileDownloadModel.FileDownloadDirectory,
+                    FileDownloadMethod = fileDownloadModel.FileDownloadMethod,
+                    FileDownloadTime = endTime,
+                    UserId = fileDownloadModel.UserId
+                });
+
+                string endMessage = $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading was successful." +
+                                    Environment.NewLine;
+
+                _logger.Log(endMessage);
+            }
+            catch (Exception ex)
+            {
+                string exMessage =
+                    $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading terminated. Exception: {ex.Message}" +
+                    Environment.NewLine;
+
+                _logger.Log(exMessage);
+            }
+        }
 
         #region NextAvailableFilename methods
 
@@ -267,6 +331,8 @@ namespace DownloadManager.Service
                 Items = dto.Items?.Select(Map)
             };
         }
+
+        #endregion
 
         #endregion
     }

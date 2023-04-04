@@ -1,30 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using DownloadManager.App.Logging;
 using DownloadManager.Core.Enums;
 using DownloadManager.Data.Dal.Repositories;
 using DownloadManager.Service;
 using DownloadManager.Service.Contract;
 using DownloadManager.Service.Models.Input;
-using File = System.IO.File;
 
 namespace DownloadManager.App
 {
     public partial class Main : Form
     {
         #region Fields
-
-        private static int _workNumber = 0;
 
         private static IFileService _fileService;
 
@@ -38,7 +27,7 @@ namespace DownloadManager.App
         {
             InitializeComponent();
             cmbDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
-            _fileService = new FileService(new FileRepository());
+            _fileService = new FileService(new FileRepository(), new TextBoxLogger(this));
         }
 
         public Main(int userId, string username, Form loginForm) : this()
@@ -57,6 +46,8 @@ namespace DownloadManager.App
             get;
         }
 
+        internal TextBox TxtResult => txtResult;
+
         #endregion
 
         #region Event Handlers
@@ -67,36 +58,14 @@ namespace DownloadManager.App
 
             Enum.TryParse(cmbDownloadMethod.Text, out DownloadMethod method);
 
-            Parameter param = new Parameter
+            _fileService.DownloadFile(new FileDownloadModel()
             {
+                FileName = txtFileName.Text,
+                FileDownloadDirectory = txtDestinationFolder.Text,
+                FileDownloadMethod = method,
                 Url = txtFileUrl.Text,
-                Name = txtFileName.Text,
-                Folder = txtDestinationFolder.Text,
-                Method = method
-            };
-
-            switch (method)
-            {
-                case DownloadMethod.BeginInvoke:
-                    new Action<object>(DownloadFile).BeginInvoke(param, null, null);
-                    break;
-                case DownloadMethod.Thread:
-                    new Thread(DownloadFile).Start(param);
-                    break;
-                case DownloadMethod.ThreadPool:
-                    ThreadPool.QueueUserWorkItem(DownloadFile, param);
-                    break;
-                case DownloadMethod.BackgroundWorker:
-                    BackgroundWorker worker = new BackgroundWorker();
-                    worker.DoWork += worker_DoWork;
-                    worker.RunWorkerAsync(param);
-                    break;
-                case DownloadMethod.Task:
-                    Task.Factory.StartNew(DownloadFile, param);
-                    break;
-                default:
-                    throw new NotSupportedException();
-            }
+                UserId = _userId
+            });
         }
 
         private void btnFolderBrowserDialog_Click(object sender, EventArgs e)
@@ -116,8 +85,6 @@ namespace DownloadManager.App
         {
             txtResult.Clear();
         }
-
-        private void worker_DoWork(object sender, DoWorkEventArgs e) => DownloadFile(e.Argument);
 
         private void linkLogout_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -141,63 +108,6 @@ namespace DownloadManager.App
         {
             var reportsForm = new Reports(_fileService);
             reportsForm.Show();
-        }
-
-        #endregion
-
-        #region File downloading methods
-
-        private void DownloadFile(object state)
-        {
-            var param = (Parameter)state;
-            DownloadFile(param.Url, param.Name, param.Folder, param.Method);
-        }
-
-        private void DownloadFile(string url, string name, string folder, DownloadMethod method)
-        {
-            int currentWorkNumber = Interlocked.Increment(ref _workNumber);
-
-            var tId = Thread.CurrentThread.ManagedThreadId;
-
-            string startMessage =
-                $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading has started." +
-                Environment.NewLine;
-
-            this.BeginInvoke((MethodInvoker)delegate
-            {
-                txtResult.AppendText(startMessage);
-            });
-
-            try
-            {
-                _fileService.DownloadFile(new FileDownloadModel()
-                {
-                    FileName = name,
-                    FileDownloadDirectory = folder,
-                    FileDownloadMethod = method,
-                    Url = url,
-                    UserId = _userId
-                });
-
-                string endMessage = $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading was successful." +
-                                    Environment.NewLine;
-
-                this.BeginInvoke((MethodInvoker)delegate
-                {
-                    txtResult.AppendText(endMessage);
-                });
-            }
-            catch (Exception ex)
-            {
-                string exMessage =
-                    $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}: Work {currentWorkNumber} - TId {tId} - Downloading terminated. Exception: {ex.Message}" +
-                    Environment.NewLine;
-
-                this.BeginInvoke((MethodInvoker)delegate
-                {
-                    txtResult.AppendText(exMessage);
-                });
-            }
         }
 
         #endregion
@@ -288,18 +198,6 @@ namespace DownloadManager.App
             }
 
             return result;
-        }
-
-        #endregion
-
-        #region Nested class
-
-        private class Parameter
-        {
-            public string Url { get; set; }
-            public string Name { get; set; }
-            public string Folder { get; set; }
-            public DownloadMethod Method { get; set; }
         }
 
         #endregion
