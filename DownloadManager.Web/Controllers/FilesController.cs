@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using System.Web.Mvc;
+﻿using System;using System.Web.Http;
+using System.Web.Http.Description;
 using DownloadManager.Service.Contract;
-using DownloadManager.Service.Contract.Models.Input;
 using DownloadManager.Service.Contract.Models.Output;
 using DownloadManager.Service.Models.Input;
 
@@ -31,14 +25,14 @@ namespace DownloadManager.Web.Controllers
 
         #region Public methods
 
-        [System.Web.Http.HttpPost]
+        [HttpPost(), Route("api/files/download")]
         public IHttpActionResult Download([FromBody] FileDownloadModel model)
         {
             _fileService.DownloadFile(model);
             return Ok();
         }
 
-        [System.Web.Http.HttpGet]
+        [HttpGet(), Route("api/files"), ResponseType(typeof(IFileReportsPageModel))]
         public IHttpActionResult Get([FromBody] FileFilterModel model)
         {
             IFileReportsPageModel result;
