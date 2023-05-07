@@ -12,6 +12,7 @@ using DownloadManager.Core.Enums;
 using DownloadManager.Data.Dal.Repositories;
 using DownloadManager.Service;
 using DownloadManager.Service.Contract;
+using DownloadManager.Service.Contract.Models.Output;
 using DownloadManager.Service.Models.Input;
 
 namespace DownloadManager.App
@@ -20,16 +21,19 @@ namespace DownloadManager.App
     {
         #region Private fields
 
-        private static IFileService _fileService;
+        private IFileService _fileService;
 
         private int _currentAmountOfRows;
 
         #endregion
 
         #region ctor
+
         public Reports(IFileService fileService)
         {
             InitializeComponent();
+            dateFileDownloadTimeStart.Value = DateTime.UtcNow;
+            dateFileDownloadTimeEnd.Value = DateTime.UtcNow;
             cmbFileDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
             _fileService = fileService;
         }
@@ -131,9 +135,16 @@ namespace DownloadManager.App
 
         private void btnFilter_Click(object sender, EventArgs e)
         {
-            if (!AreControlsValid()) return;
-
-            var result = _fileService.GetFiltered(CreateFilterModel());
+            IFileReportsPageModel result;
+            try
+            {
+                result = _fileService.GetFiltered(CreateFilterModel());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
             _currentAmountOfRows = result.Total;
             dataGridViewResults.DataSource = result.Items.ToList();
         }
@@ -154,69 +165,16 @@ namespace DownloadManager.App
 
         #region Private methods
 
-        private bool AreControlsValid()
-        {
-            if (cbxFileId.Checked)
-            {
-                if (string.IsNullOrWhiteSpace(txtFileId.Text))
-                {
-                    MessageBox.Show("FileId cannot be empty.");
-                    return false;
-                }
-
-                if (int.Parse(txtFileId.Text) < 1)
-                {
-                    MessageBox.Show("FileId cannot be zero.");
-                    return false;
-                }
-            }
-
-            if (cbxFileName.Checked)
-            {
-                if (string.IsNullOrWhiteSpace(txtFileName.Text))
-                {
-                    MessageBox.Show("FileName cannot be empty.");
-                    return false;
-                }
-
-                Regex containsABadCharacter = new Regex("["
-                                                        + Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars())) + "]");
-
-                if (containsABadCharacter.IsMatch(txtFileName.Text))
-                {
-                    MessageBox.Show("File name contains invalid characters.");
-                    return false;
-                }
-            }
-
-            if (cbxFileDownloadDirectory.Checked)
-            {
-                if (string.IsNullOrWhiteSpace(txtFileDownloadDirectory.Text))
-                {
-                    MessageBox.Show("FileDownloadDirectory cannot be empty.");
-                    return false;
-                }
-            }
-
-            if (cbxUsername.Checked)
-            {
-                if (string.IsNullOrWhiteSpace(txtUsername.Text))
-                {
-                    MessageBox.Show("Username cannot be empty.");
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         private FileFilterModel CreateFilterModel()
         {
             var model = new FileFilterModel();
 
             if (cbxFileId.Checked)
             {
-                model.FileId = int.Parse(txtFileId.Text);
+                if (!string.IsNullOrWhiteSpace(txtFileId.Text))
+                {
+                    model.FileId = int.Parse(txtFileId.Text);
+                }
             }
 
             if (cbxFileName.Checked)

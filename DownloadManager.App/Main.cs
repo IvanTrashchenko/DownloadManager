@@ -27,7 +27,7 @@ namespace DownloadManager.App
         {
             InitializeComponent();
             cmbDownloadMethod.DataSource = Enum.GetValues(typeof(DownloadMethod));
-            _fileService = new FileService(new FileRepository(), new TextBoxLogger(this));
+            _fileService = new FileService(new FileRepository(), new UserRepository(), new TextBoxLogger(this));
         }
 
         public Main(int userId, string username, Form loginForm) : this()
