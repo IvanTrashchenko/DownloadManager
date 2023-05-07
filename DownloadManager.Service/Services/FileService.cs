@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading;
 using DownloadManager.Core.Enums;
@@ -13,6 +14,7 @@ using DownloadManager.Service.Contract.Models.Input;
 using DownloadManager.Service.Contract.Models.Output;
 using DownloadManager.Service.Models.Output;
 using File = System.IO.File;
+using DownloadManager.Service.Models.Input;
 
 namespace DownloadManager.Service
 {
@@ -26,6 +28,8 @@ namespace DownloadManager.Service
 
         private readonly IFileRepository _fileRepository;
 
+        private readonly IUserRepository _userRepository;
+
         private readonly ILogger _logger;
 
         private static int _workNumber = 0;
@@ -34,9 +38,10 @@ namespace DownloadManager.Service
 
         #region ctor
 
-        public FileService(IFileRepository fileRepository, ILogger logger = null)
+        public FileService(IFileRepository fileRepository, IUserRepository userRepository, ILogger logger = null)
         {
             _fileRepository = fileRepository ?? throw new ArgumentNullException(nameof(fileRepository));
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _logger = logger;
             _client = new HttpClient();
         }
@@ -49,10 +54,17 @@ namespace DownloadManager.Service
         {
             if (id < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(id));
+                throw new ArgumentException($"Invalid FileId {id}.");
             }
 
-            return Map(_fileRepository.GetById(id));
+            var resultFile = _fileRepository.GetById(id);
+
+            if (resultFile == null)
+            {
+                throw new InvalidOperationException($"File with id {id} was not found.");
+            }
+
+            return Map(resultFile);
         }
 
         public void DownloadFile(IFileDownloadModel fileDownloadModel)
@@ -62,24 +74,39 @@ namespace DownloadManager.Service
                 throw new ArgumentNullException(nameof(fileDownloadModel));
             }
 
-            if (fileDownloadModel.FileName == null)
+            if (string.IsNullOrWhiteSpace(fileDownloadModel.FileName))
             {
                 throw new ArgumentNullException(nameof(fileDownloadModel.FileName));
             }
 
-            if (fileDownloadModel.FileDownloadDirectory == null)
+            Regex containsABadCharacter = new Regex("["
+                                                    + Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars())) + "]");
+
+            if (containsABadCharacter.IsMatch(fileDownloadModel.FileName))
+            {
+                throw new ArgumentException($"File name contains invalid characters.");
+            }
+
+            if (string.IsNullOrWhiteSpace(fileDownloadModel.FileDownloadDirectory))
             {
                 throw new ArgumentNullException(nameof(fileDownloadModel.FileDownloadDirectory));
             }
 
-            if (fileDownloadModel.Url == null)
+            if (string.IsNullOrWhiteSpace(fileDownloadModel.Url))
             {
                 throw new ArgumentNullException(nameof(fileDownloadModel.Url));
             }
 
             if (fileDownloadModel.UserId < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(fileDownloadModel.UserId));
+                throw new ArgumentException($"Invalid UserId {fileDownloadModel.UserId}.");
+            }
+
+            var user = _userRepository.GetById(fileDownloadModel.UserId);
+
+            if (user == null)
+            {
+                throw new ArgumentException($"User with id {fileDownloadModel.UserId} was not found.");
             }
 
             switch (fileDownloadModel.FileDownloadMethod)
@@ -102,7 +129,7 @@ namespace DownloadManager.Service
                     Task.Factory.StartNew(DownloadFileInner, fileDownloadModel);
                     break;
                 default:
-                    throw new NotSupportedException();
+                    throw new NotSupportedException($"DownloadMethod {fileDownloadModel.FileDownloadMethod} is not supported.");
             }
         }
 
@@ -110,7 +137,7 @@ namespace DownloadManager.Service
         {
             if (id < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(id));
+                throw new ArgumentException($"Invalid FileId {id}.");
             }
 
             if (fileUpdateModel == null)
@@ -125,18 +152,19 @@ namespace DownloadManager.Service
                 throw new InvalidOperationException($"File with id {id} was not found.");
             }
 
-            if (fileUpdateModel.FileName != null)
+            if (!string.IsNullOrWhiteSpace(fileUpdateModel.FileName))
             {
                 file.FileName = fileUpdateModel.FileName;
             }
 
-            if (fileUpdateModel.FileDownloadDirectory != null)
+            if (!string.IsNullOrWhiteSpace(fileUpdateModel.FileDownloadDirectory))
             {
                 file.FileDownloadDirectory = fileUpdateModel.FileDownloadDirectory;
             }
 
             if (fileUpdateModel.FileDownloadMethod != null)
             {
+                //check if valid
                 file.FileDownloadMethod = fileUpdateModel.FileDownloadMethod.Value;
             }
 
@@ -149,7 +177,14 @@ namespace DownloadManager.Service
             {
                 if (fileUpdateModel.UserId.Value < 1)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(id));
+                    throw new ArgumentException($"Invalid UserId {fileUpdateModel.UserId}.");
+                }
+
+                var user = _userRepository.GetById(fileUpdateModel.UserId.Value);
+
+                if (user == null)
+                {
+                    throw new ArgumentException($"User with id {fileUpdateModel.UserId.Value} was not found.");
                 }
 
                 file.UserId = fileUpdateModel.UserId.Value;
@@ -162,15 +197,7 @@ namespace DownloadManager.Service
         {
             if (filterModel == null)
             {
-                throw new ArgumentNullException(nameof(filterModel));
-            }
-
-            if (filterModel.FileId != null)
-            {
-                if (filterModel.FileId.Value < 1)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(filterModel.FileId));
-                }
+                filterModel = new FileFilterModel();
             }
 
             return Map(_fileRepository.GetFiltered(Map(filterModel)));

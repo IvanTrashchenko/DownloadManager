@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using DownloadManager.Core;
 using DownloadManager.Data.Dal.Contract.Dto;
 using DownloadManager.Data.Dal.Contract.Repositories;
@@ -45,6 +44,13 @@ namespace DownloadManager.Service.Services
                 throw new ArgumentNullException(nameof(model.Username));
             }
 
+            var existingUser = _userRepository.GetByUsername(model.Username);
+
+            if (existingUser != null)
+            {
+                throw new InvalidOperationException($"User with name {model.Username} already exists.");
+            }
+
             PasswordHasher.CreatePasswordHash(model.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             UserDto user = new UserDto()
@@ -54,20 +60,7 @@ namespace DownloadManager.Service.Services
                 PasswordSalt = Convert.ToBase64String(passwordSalt)
             };
 
-            try
-            {
-                _userRepository.Add(user);
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Message.Contains("Violation of UNIQUE KEY constraint \'UC_Username\'. Cannot insert duplicate key"))
-                {
-                    throw new InvalidOperationException(
-                        $"User with name {model.Username} already exists.");
-                }
-
-                throw;
-            }
+            _userRepository.Add(user);
         }
 
         public bool CheckCredentials(IUserCredentialsModel model)
