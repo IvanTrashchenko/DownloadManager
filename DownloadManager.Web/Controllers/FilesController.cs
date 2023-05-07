@@ -27,6 +27,10 @@ namespace DownloadManager.Web.Controllers
 
         #region Public methods
 
+        /// <summary>
+        /// Downloads the file.
+        /// </summary>
+        /// <param name="model">A JSON model containing the information about the download.</param>
         [HttpPost(), Route("api/files/download")]
         public IHttpActionResult Download([FromBody] FileDownloadModel model)
         {
@@ -42,10 +46,16 @@ namespace DownloadManager.Web.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Gets filtered report about downloaded files.
+        /// </summary>
+        /// <param name="model">The filter data.</param>
+        /// <returns>A JSON object representing the report model.</returns>
         [HttpGet(), Route("api/files"), ResponseType(typeof(IFileReportsPageModel))]
-        public IHttpActionResult Get([FromBody] FileFilterModel model)
+        public IHttpActionResult GetReport([FromUri] FileFilterModel model)
         {
             IFileReportsPageModel result;
+
             try
             {
                 result = _fileService.GetFiltered(model);
