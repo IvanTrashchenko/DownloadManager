@@ -1,5 +1,7 @@
-﻿using System;using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Http.Results;
 using DownloadManager.Service.Contract;
 using DownloadManager.Service.Contract.Models.Output;
 using DownloadManager.Service.Models.Input;
@@ -28,7 +30,15 @@ namespace DownloadManager.Web.Controllers
         [HttpPost(), Route("api/files/download")]
         public IHttpActionResult Download([FromBody] FileDownloadModel model)
         {
-            _fileService.DownloadFile(model);
+            try
+            {
+                _fileService.DownloadFile(model);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+
             return Ok();
         }
 
