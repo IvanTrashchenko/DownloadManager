@@ -5,9 +5,8 @@ namespace DownloadManager.Data.Dal.Util
 {
     public static class ConnectionString
     {
-        private static string s_SqlConnString = GetConnectionStringInitial();
-
         private static string s_SqlConnStringError = null;
+        private static string s_SqlConnString = GetConnectionStringInitial();
 
         private static string GetConnectionStringInitial()
         {
