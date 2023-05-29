@@ -1,26 +1,31 @@
 ﻿using System;
+using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Http.Results;
 using DownloadManager.Service.Contract;
 using DownloadManager.Service.Contract.Models.Output;
 using DownloadManager.Service.Models.Input;
+using DownloadManager.Web.Filter;
+using DownloadManager.Web.Models;
 
 namespace DownloadManager.Web.Controllers
 {
+    [BasicAuthentication]
     public class FilesController : ApiController
     {
         #region Private fields
 
         private readonly IFileService _fileService;
+        private readonly IUserService _userService;
 
         #endregion
 
         #region ctor
 
-        public FilesController(IFileService fileService)
+        public FilesController(IFileService fileService, IUserService userService)
         {
             _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
         }
 
         #endregion
@@ -32,11 +37,29 @@ namespace DownloadManager.Web.Controllers
         /// </summary>
         /// <param name="model">A JSON model containing the information about the download.</param>
         [HttpPost(), Route("api/files/download")]
-        public IHttpActionResult Download([FromBody] FileDownloadModel model)
+        public IHttpActionResult Download([FromBody] DownloadModel model)
         {
             try
             {
-                _fileService.DownloadFile(model);
+                var userName = Thread.CurrentPrincipal.Identity.Name;
+
+                if (string.IsNullOrWhiteSpace(userName))
+                {
+                    throw new InvalidOperationException("No Username found.");
+                }
+
+                var userId = _userService.GetUserIdByUsername(userName);
+
+                var serviceModel = new FileDownloadModel()
+                {
+                    FileName = model.FileName,
+                    FileDownloadDirectory = model.FileDownloadDirectory,
+                    FileDownloadMethod = model.FileDownloadMethod,
+                    Url = model.Url,
+                    UserId = userId
+                };
+
+                _fileService.DownloadFile(serviceModel);
             }
             catch (Exception ex)
             {

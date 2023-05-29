@@ -6,6 +6,9 @@ using DownloadManager.Service;
 using System.Web.Http;
 using Unity;
 using Unity.WebApi;
+using DownloadManager.Web.FilterProvider;
+using System.Linq;
+using System.Web.Http.Filters;
 
 namespace DownloadManager.Web
 {
@@ -21,6 +24,12 @@ namespace DownloadManager.Web
             container.RegisterType<IUserService, UserService>(TypeLifetime.Scoped);
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
+
+            // Register my Custom Filter Provider in order to use dependecy injection in auth filter
+            var providers = GlobalConfiguration.Configuration.Services.GetFilterProviders().ToList();
+            GlobalConfiguration.Configuration.Services.Add(typeof(System.Web.Http.Filters.IFilterProvider), new UnityFilterAttributeFilterProvider(container));
+            var defaultprovider = providers.First(i => i is ActionDescriptorFilterProvider);
+            GlobalConfiguration.Configuration.Services.Remove(typeof(System.Web.Http.Filters.IFilterProvider), defaultprovider);
         }
     }
 }

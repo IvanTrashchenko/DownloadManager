@@ -152,9 +152,12 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\FilesController.cs" />
+    <Compile Include="FilterProvider\UnityFilterAttributeFilterProvider.cs" />
+    <Compile Include="Filter\BasicAuthenticationAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -201,7 +204,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
-    <Folder Include="Models\" />
     <Folder Include="Views\Files\" />
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +278,10 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DownloadManager.Core\DownloadManager.Core.csproj">
+      <Project>{70352C30-1B36-49E3-88D7-85D9972B42AA}</Project>
+      <Name>DownloadManager.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DownloadManager.Data.Dal.Contract\DownloadManager.Data.Dal.Contract.csproj">
       <Project>{02D6C16F-E8C1-4EDA-98C5-3037369F63CD}</Project>
       <Name>DownloadManager.Data.Dal.Contract</Name>
