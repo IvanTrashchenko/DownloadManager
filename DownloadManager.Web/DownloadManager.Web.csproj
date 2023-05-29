@@ -153,6 +153,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="FilterProvider\UnityFilterAttributeFilterProvider.cs" />
+    <Compile Include="Filter\AddAuthorizationHeaderParameterOperationFilter.cs" />
     <Compile Include="Filter\BasicAuthenticationAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
