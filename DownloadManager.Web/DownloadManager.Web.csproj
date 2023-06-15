@@ -152,6 +152,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\FilesController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="FilterProvider\UnityFilterAttributeFilterProvider.cs" />
     <Compile Include="Filter\AddAuthorizationHeaderParameterOperationFilter.cs" />
     <Compile Include="Filter\BasicAuthenticationAttribute.cs" />
@@ -206,6 +207,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
     <Folder Include="Views\Files\" />
+    <Folder Include="Views\Users\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\bootstrap.min.js.map" />

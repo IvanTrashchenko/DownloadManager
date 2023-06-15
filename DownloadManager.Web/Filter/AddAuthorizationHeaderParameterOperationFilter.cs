@@ -12,6 +12,9 @@ namespace DownloadManager.Web.Filter
     {
         public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
+            if (apiDescription.ActionDescriptor.ControllerDescriptor.ControllerName != "Files")
+                return;
+
             operation.parameters.Add(new Parameter
             {
                 name = "Authorization",
