@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -26,13 +26,17 @@ export class BaseService {
     protected post<T>(url: string, model: any, params: any = null): Observable<T> {
         this.clearHttpParams(params);
         const body = JSON.stringify(model);
-        return this.httpClient.post<T>(`${this.baseApiUrl}${url}`, body, {params: params});
+        const headers = { 'content-type': 'application/json' }
+        const httpOptions = { headers: new HttpHeaders(headers), params: params };
+        return this.httpClient.post<T>(`${this.baseApiUrl}${url}`, body, httpOptions);
     }
 
     protected put<T>(url: string, model: any, params: any = null): Observable<T> {
         this.clearHttpParams(params);
         const body = JSON.stringify(model);
-        return this.httpClient.put<T>(`${this.baseApiUrl}${url}`, body, {params: params});
+        const headers = { 'content-type': 'application/json' }
+        const httpOptions = { headers: new HttpHeaders(headers), params: params };
+        return this.httpClient.put<T>(`${this.baseApiUrl}${url}`, body, httpOptions);
     }
 
     protected delete<T>(url: string, params: any = null): Observable<T> {
@@ -43,7 +47,9 @@ export class BaseService {
     protected patch<T>(url: string, model: any, params: any = null): Observable<T> {
         this.clearHttpParams(params);
         const body = JSON.stringify(model);
-        return this.httpClient.patch<T>(`${this.baseApiUrl}${url}`, body, {params: params});
+        const headers = { 'content-type': 'application/json' }
+        const httpOptions = { headers: new HttpHeaders(headers), params: params };
+        return this.httpClient.patch<T>(`${this.baseApiUrl}${url}`, body, httpOptions);
     }
 
     private clearHttpParams(params: any): void {
