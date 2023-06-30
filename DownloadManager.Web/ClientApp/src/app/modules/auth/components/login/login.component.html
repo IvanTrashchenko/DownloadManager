@@ -1,8 +1,23 @@
-<form [formGroup]="loginForm" (ngSubmit)="login()">
-  <label for="username">Username:</label><br>
-  <input id="username" type="text" formControlName="username"><br>
-  <label for="password">Password:</label><br>
-  <input id="password" type="password" formControlName="password"><br>
-  <input type="submit" value="Login">
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-</form>
+<div class="container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Download Manager</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-content">
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <mat-form-field class="full-width-input">
+          <mat-label>Username</mat-label>
+          <input matInput type="text" formControlName="username" required>
+          <mat-error *ngIf="loginForm.controls.username.invalid">Field is required.</mat-error>
+        </mat-form-field>
+        <mat-form-field class="full-width-input">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" required>
+          <mat-error *ngIf="loginForm.controls.password.invalid">Field is required.</mat-error>
+        </mat-form-field>
+        <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid" class="login-button">Login</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

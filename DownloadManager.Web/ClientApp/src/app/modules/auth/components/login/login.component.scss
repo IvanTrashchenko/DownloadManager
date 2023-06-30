@@ -1,3 +1,32 @@
-.error-message {
-  color: red;
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  mat-card {
+    width: 100%;
+    max-width: 400px;
+    margin: 2em auto;
+  }
+
+  .error-message {
+    color: #f44336;
+    margin: 1em 0;
+  }
+
+  .full-width-input {
+    width: 100%;
+  }
+
+  .login-button {
+    display: block;
+    margin: 0 auto;
+  }
+
+  mat-card-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
 }
