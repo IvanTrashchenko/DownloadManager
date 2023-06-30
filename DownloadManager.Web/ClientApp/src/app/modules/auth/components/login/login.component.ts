@@ -31,25 +31,28 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe(
-        (response) => {
-          this.errorMessage = null;
-          let username = this.loginForm.get('username')?.value;
-          let password = this.loginForm.get('password')?.value;
-          localStorage.setItem('authHeader', 'Basic ' + btoa(username + ':' + password));
-          // later in service calls : const headers = new HttpHeaders({ Authorization:  localStorage.getItem('authHeader')});
-          //maybe save as this.authenticationService.tokenValue.accessToken ?
-          this.router.navigate(['/app']);
-        },
-        (error) => {
-          // Handle error. You can set an error message to be displayed in the template.
-          this.errorMessage = 'Invalid username or password.';
-        }
-      );
-    }
-    else {
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      return;
     }
+
+    this.authService.login(this.loginForm.value).subscribe(
+      (response) => {
+        this.errorMessage = null;
+        this.router.navigate(['/app']);
+      },
+      (error) => {
+        if (error.status === 401 || error.status === 400) {
+          // Handle 401 error. This typically means the username or password was incorrect.
+          this.errorMessage = 'Invalid username or password.';
+        } else if (error.status === 500) {
+          // Handle 500 error. This typically means there was a server error.
+          this.errorMessage = 'An error occurred on the server. Please try again later.';
+        } else {
+          // Handle all other errors.
+          this.errorMessage = 'An unknown error occurred. Please try again.';
+        }
+      }
+    );
   }
 }
