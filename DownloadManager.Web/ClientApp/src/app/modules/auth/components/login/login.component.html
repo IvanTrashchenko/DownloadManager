@@ -16,8 +16,10 @@
           <mat-error *ngIf="loginForm.controls.password.invalid">Field is required.</mat-error>
         </mat-form-field>
         <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid" class="login-button">Login</button>
-        <a routerLink="/login/register">Register</a>
+        <div class="buttons">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid" class="login-button">Login</button>
+          <a routerLink="/login/register">Register</a>
+        </div>
       </form>
     </mat-card-content>
   </mat-card>
