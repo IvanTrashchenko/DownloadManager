@@ -17,7 +17,7 @@
         </mat-form-field>
         <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
         <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid" class="login-button">Login</button>
-        <a routerLink="/register">Register</a>
+        <a routerLink="/login/register">Register</a>
       </form>
     </mat-card-content>
   </mat-card>

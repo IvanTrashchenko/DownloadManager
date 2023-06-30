@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './components/login/login.component';
 import { AuthRoutingModule } from './auth-routing.module';
-import { AuthService } from './services/auth.service';
 import { RegisterComponent } from './components/register/register.component';
 
 
@@ -16,9 +15,6 @@ import { RegisterComponent } from './components/register/register.component';
     AuthRoutingModule,
     SharedModule,
     CommonModule
-  ],
-  providers: [
-    AuthService
   ]
 })
 export class AuthModule { }

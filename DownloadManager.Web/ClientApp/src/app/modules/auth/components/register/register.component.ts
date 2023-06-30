@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { AuthModel } from '../../models/auth.model';
@@ -57,7 +57,7 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(model).subscribe(
       (response) => {
-        this.router.navigate(['/app']);
+        this.router.navigate(['/']);
       },
       (error) => {
         if (error.status === 409) {
