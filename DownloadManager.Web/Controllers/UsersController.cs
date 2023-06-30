@@ -2,6 +2,7 @@
 using System;
 using System.Web.Http;
 using DownloadManager.Service.Models.Input;
+using System.Net;
 
 namespace DownloadManager.Web.Controllers
 {
@@ -39,7 +40,18 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                if (e is ArgumentException)
+                {
+                    return BadRequest(e.Message);
+                }
+                else if (e is InvalidOperationException)
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    return InternalServerError(e);
+                }
             }
         }
 
@@ -49,7 +61,7 @@ namespace DownloadManager.Web.Controllers
         /// <param name="model">The login model containing the user's username and password.</param>
         /// <returns>A response indicating the success or failure of the authentication.</returns>
         [HttpPost(), Route("api/users/login")]
-        public IHttpActionResult Login([FromBody] UserCredentialsModel model)
+        public IHttpActionResult CheckCredentials([FromBody] UserCredentialsModel model)
         {
             try
             {
@@ -66,7 +78,14 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
-                return InternalServerError(e);
+                if (e is ArgumentException)
+                {
+                    return BadRequest(e.Message);
+                }
+                else
+                {
+                    return InternalServerError(e);
+                }
             }
         }
 

@@ -77,7 +77,7 @@ namespace DownloadManager.Service.Services
 
             if (string.IsNullOrWhiteSpace(model.Password))
             {
-                throw new ArgumentNullException(nameof(model.Username));
+                throw new ArgumentNullException(nameof(model.Password));
             }
 
             User user = _userRepository.GetByUsername(model.Username);
