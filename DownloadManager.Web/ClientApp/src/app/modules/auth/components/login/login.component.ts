@@ -32,6 +32,8 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
+    this.errorMessage = null;
+    
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -39,7 +41,6 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.loginForm.value).subscribe(
       (response) => {
-        this.errorMessage = null;
         this.router.navigate(['/app']);
       },
       (error) => {

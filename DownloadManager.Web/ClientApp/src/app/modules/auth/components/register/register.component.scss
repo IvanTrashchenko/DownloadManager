@@ -1,0 +1,38 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('/assets/images/login-register.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+  
+    mat-card {
+      width: 100%;
+      max-width: 400px;
+      margin: 2em auto;
+    }
+  
+    .error-message {
+      color: #f44336;
+      margin: 1em 0;
+    }
+  
+    .full-width-input {
+      width: 100%;
+    }
+  
+    .register-button {
+      display: block;
+      margin: 0 auto;
+    }
+  
+    mat-card-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+  

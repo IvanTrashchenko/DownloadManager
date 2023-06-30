@@ -29,4 +29,21 @@ export class AuthService extends BaseService {
       })
     );
   }
+
+  register(model: AuthModel): Observable<any> {
+    return this.post('register', model).pipe(
+      tap((response) => {
+        if (response) {
+          this.authHeader = 'Basic ' + btoa(model.username + ':' + model.password);
+        }
+      }),
+      catchError((error) => {
+        return throwError(error);
+      })
+    );
+  }
+
+  logout(): void {
+    this.authHeader = null;
+  }
 }
