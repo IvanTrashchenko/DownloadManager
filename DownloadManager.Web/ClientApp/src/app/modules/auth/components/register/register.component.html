@@ -23,7 +23,7 @@
           <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
           <div class="buttons">
             <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid" class="register-button">Register</button>
-            <a routerLink="/login">Already have an account?</a>
+            <a routerLink="/auth/login">Already have an account?</a>
           </div>
         </form>
       </mat-card-content>

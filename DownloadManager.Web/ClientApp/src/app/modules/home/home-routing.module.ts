@@ -7,21 +7,8 @@ const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    pathMatch: 'full',
     canActivate: [AuthGuard]
-  },
-  //{
-  // path: 'login',
-  //  canActivate: [AuthGuard],
-  //  redirectTo: '',
-  //  pathMatch: 'full'
-  //},
-  //{
-  //  path: 'register',
-  //  canActivate: [AuthGuard],
-  //  redirectTo: '',
-  //  pathMatch: 'full'
-  //}
+  }
 ];
 
 @NgModule({
