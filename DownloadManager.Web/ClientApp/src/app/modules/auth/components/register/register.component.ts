@@ -46,7 +46,7 @@ export class RegisterComponent implements OnInit {
     let confirmPassword = this.registerForm.controls.confirmPassword.value;
 
     if (password !== confirmPassword) {
-      this.errorMessage = "Password don't match."
+      this.errorMessage = "Passwords don't match."
       return;
     }
 
