@@ -61,16 +61,12 @@ export class RegisterComponent implements OnInit {
       },
       (error) => {
         if (error.status === 409) {
-          // Handle 409 error. This typically means the user already exists.
           this.errorMessage = 'User with these credentials already exists.';
         } else if (error.status === 400) {
-          // Handle 400 error. This typically means the username or password was incorrect.
           this.errorMessage = 'Invalid username or password.';
         } else if (error.status === 500) {
-          // Handle 500 error. This typically means there was a server error.
           this.errorMessage = 'An error occurred on the server. Please try again later.';
         } else {
-          // Handle all other errors.
           this.errorMessage = 'An unknown error occurred. Please try again.';
         }
       }

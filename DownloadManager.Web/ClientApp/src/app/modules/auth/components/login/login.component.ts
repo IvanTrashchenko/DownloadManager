@@ -45,13 +45,10 @@ export class LoginComponent implements OnInit {
       },
       (error) => {
         if (error.status === 401 || error.status === 400) {
-          // Handle 401 error. This typically means the username or password was incorrect.
           this.errorMessage = 'Invalid username or password.';
         } else if (error.status === 500) {
-          // Handle 500 error. This typically means there was a server error.
           this.errorMessage = 'An error occurred on the server. Please try again later.';
         } else {
-          // Handle all other errors.
           this.errorMessage = 'An unknown error occurred. Please try again.';
         }
       }
