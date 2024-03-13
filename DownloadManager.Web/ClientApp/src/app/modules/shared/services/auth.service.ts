@@ -16,7 +16,6 @@ export class AuthService extends BaseService {
   }
 
   public get isLoggedIn(): boolean {
-    debugger
     const header = localStorage.getItem('auth_header');
     if (header !== null) {
       return true;
