@@ -4,8 +4,13 @@
   <a mat-button routerLink="/download" routerLinkActive="active-link">Download</a>
   <a mat-button routerLink="/reports" routerLinkActive="active-link">Reports</a>
   
-  <button mat-button style="color: red;" (click)="logout()">Logout</button>
-    
+  <button mat-button [matMenuTriggerFor]="menu">
+    {{authService.auth_username}} 
+    <mat-icon>more_vert</mat-icon> 
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item style="color: red;" (click)="logout()">Logout</button>
+  </mat-menu>
 </mat-toolbar>
   
 <mat-card class="content-card">

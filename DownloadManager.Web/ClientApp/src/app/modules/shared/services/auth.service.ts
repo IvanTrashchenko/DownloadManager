@@ -27,8 +27,16 @@ export class AuthService extends BaseService {
     return localStorage.getItem('auth_header');
   }
 
+  public get auth_username(): string {
+    return localStorage.getItem('auth_username');
+  }
+
   private setAuthHeader(value: string) {
     localStorage.setItem('auth_header', value);
+  }
+
+  private setAuthUsername(value: string) {
+    localStorage.setItem('auth_username', value);
   }
 
   login(model: AuthModel): Observable<any> {
@@ -36,6 +44,7 @@ export class AuthService extends BaseService {
       tap((response) => {
         let authHeader = 'Basic ' + btoa(model.username + ':' + model.password);
         this.setAuthHeader(authHeader);
+        this.setAuthUsername(model.username);
       }),
       catchError((error) => {
         return throwError(error);
@@ -48,6 +57,7 @@ export class AuthService extends BaseService {
       tap((response) => {
         let authHeader = 'Basic ' + btoa(model.username + ':' + model.password);
         this.setAuthHeader(authHeader);
+        this.setAuthUsername(model.username);
       }),
       catchError((error) => {
         return throwError(error);
@@ -57,5 +67,6 @@ export class AuthService extends BaseService {
 
   logout(): void {
     localStorage.removeItem('auth_header');
+    localStorage.removeItem('auth_username');
   }
 }
