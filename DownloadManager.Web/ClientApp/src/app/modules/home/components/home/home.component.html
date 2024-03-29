@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <span>DownloadManager</span>
+  <span class="toolbar-spacer"></span>
+  <a mat-button routerLink="/download" routerLinkActive="active-link">Download</a>
+  <a mat-button routerLink="/reports" routerLinkActive="active-link">Reports</a>
+  
+  <button mat-button style="color: red;" (click)="logout()">Logout</button>
+    
+</mat-toolbar>
+  
+<mat-card class="content-card">
+  <router-outlet></router-outlet>
+</mat-card>

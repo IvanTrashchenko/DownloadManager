@@ -3,8 +3,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 const modules: any[] = [
+  MatToolbarModule,
   MatCardModule,
   MatInputModule,
   MatButtonModule,
