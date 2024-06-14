@@ -1,0 +1,22 @@
+.full-width-input {
+    width: 100%;
+  }
+
+  .download-button {
+    margin-bottom: 12px;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .error-message {
+    color: #f44336;
+    margin: 1em 0;
+  }
+
+  .log-messages {
+    margin-top: 20px;
+  }
