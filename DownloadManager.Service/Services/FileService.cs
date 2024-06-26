@@ -44,6 +44,7 @@ namespace DownloadManager.Service
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _logger = logger;
             _client = new HttpClient();
+            _client.DefaultRequestHeaders.Add("Origin", "http://localhost:4200");
         }
 
         #endregion
