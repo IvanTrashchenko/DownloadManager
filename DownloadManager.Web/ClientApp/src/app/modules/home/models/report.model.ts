@@ -1,8 +1,10 @@
+import { DownloadMethod } from "../enum/download-method.enum";
+
 export interface FileReportModel {
     fileId: number;
     fileName: string;
     fileDownloadDirectory: string;
-    fileDownloadMethod: number;
+    fileDownloadMethod: DownloadMethod;
     fileDownloadTime: Date;
-    userName: string;
+    username: string;
 }

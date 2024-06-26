@@ -1,0 +1,64 @@
+.full-width-input {
+    width: 100%;
+}
+
+.filter-button {
+    margin-bottom: 12px;
+    margin-right: 12px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.error-message {
+    color: #f44336;
+    margin: 1em 0;
+}
+
+.content-card {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 800px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    display: block;
+}
+
+.table-container {
+    max-height: 480px;
+    overflow-y: auto;
+}
+
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: baseline;
+}
+
+.file-id-column {
+    flex: 1 1 15%;
+}
+
+.file-name-column {
+    flex: 1 1 20%;
+}
+
+.file-download-directory-column {
+    flex: 1 1 40%; 
+}
+
+.file-download-method-column {
+    flex: 1 1 20%;
+}
+
+.username-column {
+    flex: 1 1 20%;
+}
+
+.file-download-time-column {
+    flex: 1 1 35%;
+}

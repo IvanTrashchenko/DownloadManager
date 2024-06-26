@@ -5,5 +5,5 @@ export interface FileFilterModel {
     fileDownloadMethod?: number;
     fileDownloadTimeStart?: Date;
     fileDownloadTimeEnd?: Date;
-    userName?: string;
+    username?: string;
 }
