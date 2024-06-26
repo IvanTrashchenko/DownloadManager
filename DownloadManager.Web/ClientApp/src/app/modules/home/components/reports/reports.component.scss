@@ -33,10 +33,20 @@
 }
 
 .filter-form {
+    flex-flow: wrap;
+    box-sizing: border-box;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: baseline;
+    align-self: center;
+}
+
+.filter-field {
+    flex: 1 1 25%;
+    box-sizing: border-box;
+    max-width: 25%;
+}
+
+.filter-time {
+    width: auto;
 }
 
 .file-id-column {
@@ -48,7 +58,7 @@
 }
 
 .file-download-directory-column {
-    flex: 1 1 40%; 
+    flex: 1 1 40%;
 }
 
 .file-download-method-column {

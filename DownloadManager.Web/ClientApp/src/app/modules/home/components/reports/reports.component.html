@@ -2,7 +2,7 @@
     <mat-card-content class="card-content">
         <form [formGroup]="form" (ngSubmit)="filter()">
             <div class="filter-form" fxLayout="row wrap" fxFlexAlign="center">
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>File ID</mat-label>
                         <input matInput formControlName="fileId" />
@@ -12,7 +12,7 @@
                         </button>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>File Name</mat-label>
                         <input matInput formControlName="fileName" />
@@ -22,7 +22,7 @@
                         </button>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>File Download Directory</mat-label>
                         <input matInput formControlName="fileDownloadDirectory" />
@@ -32,7 +32,7 @@
                         </button>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>File Download Method</mat-label>
                         <mat-select formControlName="fileDownloadMethod">
@@ -42,7 +42,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>User Name</mat-label>
                         <input matInput formControlName="username" />
@@ -52,7 +52,7 @@
                         </button>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>File Download Start</mat-label>
                         <input matInput formControlName="fileDownloadStart" [matDatepicker]="pickerStart">
@@ -64,7 +64,7 @@
                         <mat-datepicker #pickerStart></mat-datepicker>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>File Download End</mat-label>
                         <input matInput formControlName="fileDownloadEnd" [matDatepicker]="pickerEnd">
@@ -76,7 +76,7 @@
                         <mat-datepicker #pickerEnd></mat-datepicker>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10">
+                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
                     <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid"
                         class="filter-button">Filter</button>
                 </div>
@@ -123,7 +123,8 @@
 
         <!-- FileDownloadTime Column -->
         <ng-container matColumnDef="fileDownloadTime">
-            <mat-header-cell *matHeaderCellDef ngClass="file-download-time-column"> File Download Time </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef ngClass="file-download-time-column"> File Download Time
+            </mat-header-cell>
             <mat-cell *matCellDef="let entry" ngClass="file-download-time-column"> {{entry.FileDownloadTime |
                 date:'yyyy-MM-dd HH:mm:ss.SSS'}} </mat-cell>
         </ng-container>
