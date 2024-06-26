@@ -12,8 +12,13 @@ namespace DownloadManager.Web.Filter
     {
         public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
         {
-            if (apiDescription.ActionDescriptor.ControllerDescriptor.ControllerName != "Files")
+            if (apiDescription.ActionDescriptor.ControllerDescriptor.ControllerName == "Users")
                 return;
+
+            if(operation.parameters == null)
+            {
+                operation.parameters = new List<Parameter>();
+            }
 
             operation.parameters.Add(new Parameter
             {

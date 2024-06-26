@@ -1,39 +1,63 @@
-<mat-card-content class="card-content">
-    <form [formGroup]="form" (ngSubmit)="download()">
-        <mat-form-field class="full-width-input">
-            <mat-label>File URL</mat-label>
-            <input matInput type="url" formControlName="fileUrl" required>
-            <mat-error *ngIf="form.controls.fileUrl.invalid">Field is required.</mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width-input">
-            <mat-label>File name</mat-label>
-            <input matInput type="text" formControlName="fileName" required>
-            <mat-error *ngIf="form.controls.fileName.invalid">Field is required.</mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width-input">
-            <mat-label>Destination folder</mat-label>
-            <input matInput type="text" formControlName="destinationFolder" required>
-            <mat-error *ngIf="form.controls.destinationFolder.invalid">Field is required.</mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width-input">
-            <mat-label>Download method</mat-label>
-            <mat-select formControlName="downloadMethod">
-                <mat-option *ngFor="let option of downloadMethodOptions" [value]="option.value">
-                    {{ option.name }}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.controls.downloadMethod.invalid">Field is required.</mat-error>
-        </mat-form-field>
-        <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-        <div class="buttons">
-            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid"
-                class="download-button">Download</button>
-        </div>
-        <!--<div class="log-messages">
-            <h3>Logs:</h3>
-            <ul>
-              <li *ngFor="let message of signalRService.messages">{{ message }}</li>
-            </ul>
-        </div>-->
-    </form>
-</mat-card-content>
+<mat-card class="content-card">
+    <mat-card-content class="card-content">
+        <form [formGroup]="form" (ngSubmit)="download()">
+            <mat-form-field class="full-width-input">
+                <mat-label>File URL</mat-label>
+                <input matInput type="url" formControlName="fileUrl" required>
+                <mat-error *ngIf="form.controls.fileUrl.invalid">Field is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width-input">
+                <mat-label>File name</mat-label>
+                <input matInput type="text" formControlName="fileName" required>
+                <mat-error *ngIf="form.controls.fileName.invalid">Field is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width-input">
+                <mat-label>Destination folder</mat-label>
+                <input matInput type="text" formControlName="destinationFolder" required>
+                <mat-error *ngIf="form.controls.destinationFolder.invalid">Field is required.</mat-error>
+            </mat-form-field>
+            <mat-form-field class="full-width-input">
+                <mat-label>Download method</mat-label>
+                <mat-select formControlName="downloadMethod">
+                    <mat-option *ngFor="let option of downloadMethodOptions" [value]="option.value">
+                        {{ option.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.controls.downloadMethod.invalid">Field is required.</mat-error>
+            </mat-form-field>
+            <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+            <div class="buttons">
+                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid"
+                    class="download-button">Download</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+<mat-table [dataSource]="logEntries" class="content-card">
+    <!-- Date Column -->
+    <ng-container matColumnDef="datetime">
+        <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
+        <mat-cell *matCellDef="let log"> {{log.Datetime | date:'yyyy-MM-dd HH:mm:ss.SSS'}} </mat-cell>
+    </ng-container>
+
+    <!-- Work Number Column -->
+    <ng-container matColumnDef="worknumber">
+        <mat-header-cell *matHeaderCellDef> Work Number </mat-header-cell>
+        <mat-cell *matCellDef="let log"> {{log.WorkNumber}} </mat-cell>
+    </ng-container>
+
+    <!-- Thread ID Column -->
+    <ng-container matColumnDef="threadId">
+        <mat-header-cell *matHeaderCellDef> Thread ID </mat-header-cell>
+        <mat-cell *matCellDef="let log"> {{log.ThreadId}} </mat-cell>
+    </ng-container>
+
+    <!-- Message Column -->
+    <ng-container matColumnDef="message">
+        <mat-header-cell *matHeaderCellDef> Message </mat-header-cell>
+        <mat-cell *matCellDef="let log"> {{log.Message}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

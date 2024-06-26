@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DownloadMethod, DownloadMethodLabel } from '../../enum/download-method.enum';
 import OptionModel from 'src/app/modules/shared/models/option.model';
@@ -7,13 +7,16 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/modules/shared/services/auth.service';
 import { FilesService } from '../../services/home.service';
 import { DownloadModel } from '../../models/download.model';
+import { LogService } from '../../services/log.service';
+import { Subscription } from 'rxjs';
+import { LogEntry } from '../../models/log.model';
 
 @Component({
   selector: 'app-download',
   templateUrl: './download.component.html',
   styleUrls: ['./download.component.scss']
 })
-export class DownloadComponent implements OnInit {
+export class DownloadComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public errorMessage: string;
   public downloadMethodLabel = DownloadMethodLabel;
@@ -39,18 +42,31 @@ export class DownloadComponent implements OnInit {
       value: DownloadMethod.Task
     }
   ];
+
+  private logSubscription: Subscription;
+  public logEntries: LogEntry[] = [];
+  public displayedColumns: string[] = ['datetime', 'worknumber', 'threadId', 'message'];
+
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private router: Router,
     private titleService: Title,
     private filesService: FilesService,
-    //public signalRService: SignalRService
+    public logService: LogService
   ) { }
+  ngOnDestroy(): void {
+    if (this.logSubscription) {
+      this.logSubscription.unsubscribe();
+    }
+  }
 
   ngOnInit(): void {
     this.titleService.setTitle('Download');
     this.initForm();
+    this.logSubscription = this.logService.getLogs().subscribe(logs => {
+      this.logEntries = logs;
+    });
   }
 
   initForm(): void {

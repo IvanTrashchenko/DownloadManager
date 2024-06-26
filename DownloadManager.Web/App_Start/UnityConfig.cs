@@ -9,6 +9,7 @@ using Unity.WebApi;
 using DownloadManager.Web.FilterProvider;
 using System.Linq;
 using System.Web.Http.Filters;
+using DownloadManager.Web.Logging;
 
 namespace DownloadManager.Web
 {
@@ -16,12 +17,13 @@ namespace DownloadManager.Web
     {
         public static void RegisterComponents()
         {
-			var container = new UnityContainer();
+            var container = new UnityContainer();
 
             container.RegisterType<IFileRepository, FileRepository>(TypeLifetime.Scoped);
             container.RegisterType<IUserRepository, UserRepository>(TypeLifetime.Scoped);
             container.RegisterType<IFileService, FileService>(TypeLifetime.Scoped);
             container.RegisterType<IUserService, UserService>(TypeLifetime.Scoped);
+            container.RegisterType<ILogger, InMemoryLogger>(TypeLifetime.Scoped);
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
 

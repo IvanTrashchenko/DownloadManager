@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
 
 const modules: any[] = [
   CommonModule,
@@ -18,7 +19,8 @@ const modules: any[] = [
   MatInputModule,
   MatSelectModule,
   MatButtonModule,
-  MatFormFieldModule
+  MatFormFieldModule,
+  MatTableModule
 ]
 
 @NgModule({

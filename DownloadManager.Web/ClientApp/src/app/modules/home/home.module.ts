@@ -5,6 +5,8 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './components/home/home.component';
 import { DownloadComponent } from './components/download/download.component';
 import { ReportsComponent } from './components/reports/reports.component';
+import { FilesService } from './services/home.service';
+import { LogService } from './services/log.service';
 
 
 @NgModule({
@@ -17,6 +19,10 @@ import { ReportsComponent } from './components/reports/reports.component';
     HomeRoutingModule,
     CommonModule,
     SharedModule
+  ],
+  providers: [
+    FilesService,
+    LogService
   ]
 })
 export class HomeModule { }

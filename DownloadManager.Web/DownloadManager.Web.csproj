@@ -158,6 +158,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\FilesController.cs" />
+    <Compile Include="Controllers\LogsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="FilterProvider\UnityFilterAttributeFilterProvider.cs" />
     <Compile Include="Filter\AddAuthorizationHeaderParameterOperationFilter.cs" />
@@ -165,7 +166,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Logging\InMemoryLogger.cs" />
     <Compile Include="Models\DownloadModel.cs" />
+    <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -213,6 +216,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
     <Folder Include="Views\Files\" />
+    <Folder Include="Views\Logs\" />
     <Folder Include="Views\Users\" />
   </ItemGroup>
   <ItemGroup>
