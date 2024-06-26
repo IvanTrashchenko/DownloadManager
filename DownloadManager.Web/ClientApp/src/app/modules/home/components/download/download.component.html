@@ -36,31 +36,34 @@
         </form>
     </mat-card-content>
 </mat-card>
-<mat-table [dataSource]="dataSource" class="content-card" *ngIf="dataSource.data.length !== 0">
-    <!-- Date Column -->
-    <ng-container matColumnDef="datetime">
-        <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
-        <mat-cell *matCellDef="let log"> {{log.Datetime | date:'yyyy-MM-dd HH:mm:ss.SSS'}} </mat-cell>
-    </ng-container>
+<div class="table-container content-card" *ngIf="dataSource.data.length !== 0">
+    <mat-table [dataSource]="dataSource">
+        <!-- Date Column -->
+        <ng-container matColumnDef="datetime">
+            <mat-header-cell *matHeaderCellDef ngClass="date-column"> Date </mat-header-cell>
+            <mat-cell *matCellDef="let log" ngClass="date-column"> {{log.Datetime | date:'yyyy-MM-dd HH:mm:ss.SSS'}}
+            </mat-cell>
+        </ng-container>
 
-    <!-- Work Number Column -->
-    <ng-container matColumnDef="worknumber">
-        <mat-header-cell *matHeaderCellDef> Work Number </mat-header-cell>
-        <mat-cell *matCellDef="let log"> {{log.WorkNumber}} </mat-cell>
-    </ng-container>
+        <!-- Work Number Column -->
+        <ng-container matColumnDef="worknumber">
+            <mat-header-cell *matHeaderCellDef ngClass="worknumber-column"> Work Number </mat-header-cell>
+            <mat-cell *matCellDef="let log" ngClass="worknumber-column"> {{log.WorkNumber}} </mat-cell>
+        </ng-container>
 
-    <!-- Thread ID Column -->
-    <ng-container matColumnDef="threadId">
-        <mat-header-cell *matHeaderCellDef> Thread ID </mat-header-cell>
-        <mat-cell *matCellDef="let log"> {{log.ThreadId}} </mat-cell>
-    </ng-container>
+        <!-- Thread ID Column -->
+        <ng-container matColumnDef="threadId">
+            <mat-header-cell *matHeaderCellDef ngClass="threadid-column"> Thread ID </mat-header-cell>
+            <mat-cell *matCellDef="let log" ngClass="threadid-column"> {{log.ThreadId}} </mat-cell>
+        </ng-container>
 
-    <!-- Message Column -->
-    <ng-container matColumnDef="message">
-        <mat-header-cell *matHeaderCellDef> Message </mat-header-cell>
-        <mat-cell *matCellDef="let log"> {{log.Message}} </mat-cell>
-    </ng-container>
+        <!-- Message Column -->
+        <ng-container matColumnDef="message">
+            <mat-header-cell *matHeaderCellDef ngClass="message-column"> Message </mat-header-cell>
+            <mat-cell *matCellDef="let log" ngClass="message-column"> {{log.Message}} </mat-cell>
+        </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-</mat-table>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+</div>
