@@ -45,6 +45,20 @@ namespace DownloadManager.Web.Controllers
             }
         }
 
+        [HttpDelete(), Route("api/logs")]
+        public IHttpActionResult Clear()
+        {
+            try
+            {
+                _logger.Clear();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return InternalServerError(e);
+            }
+        }
+
         #endregion
     }
 }

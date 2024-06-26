@@ -29,11 +29,13 @@
             <div class="buttons">
                 <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid"
                     class="download-button">Download</button>
+                <button mat-raised-button type="button" color="warn" [disabled]="dataSource.data.length === 0" (click)="clear()">Clear
+                    logs</button>
             </div>
         </form>
     </mat-card-content>
 </mat-card>
-<mat-table [dataSource]="logEntries" class="content-card">
+<mat-table [dataSource]="dataSource" class="content-card" *ngIf="dataSource.data.length !== 0">
     <!-- Date Column -->
     <ng-container matColumnDef="datetime">
         <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>

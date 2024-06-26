@@ -25,4 +25,10 @@ export class LogService {
             })
         );
     }
+
+    clear(): Observable<any> {
+        const authHeader = localStorage.getItem('auth_header') || '';
+        const headers = new HttpHeaders().set('Authorization', authHeader);
+        return this.http.delete(this.apiUrl, { headers: headers });
+    }
 }

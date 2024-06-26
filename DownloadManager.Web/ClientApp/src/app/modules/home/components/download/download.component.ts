@@ -10,6 +10,7 @@ import { DownloadModel } from '../../models/download.model';
 import { LogService } from '../../services/log.service';
 import { Subscription } from 'rxjs';
 import { LogEntry } from '../../models/log.model';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-download',
@@ -44,7 +45,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
   ];
 
   private logSubscription: Subscription;
-  public logEntries: LogEntry[] = [];
+  public dataSource = new MatTableDataSource<LogEntry>();
   public displayedColumns: string[] = ['datetime', 'worknumber', 'threadId', 'message'];
 
   constructor(
@@ -65,7 +66,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
     this.titleService.setTitle('Download');
     this.initForm();
     this.logSubscription = this.logService.getLogs().subscribe(logs => {
-      this.logEntries = logs;
+      this.dataSource.data = logs;
     });
   }
 
@@ -93,18 +94,22 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
     this.filesService.download(model).subscribe(
       (response) => {
-        //console.log(response);
+        this.errorMessage = null;
       },
       (error) => {
         console.log(error);
         if (error.status === 400) {
           this.errorMessage = 'Invalid form.';
-        } else if (error.status === 500) {
-          this.errorMessage = 'An error occurred on the server. Please try again later.';
         } else {
-          this.errorMessage = 'An unknown error occurred. Please try again.';
+          this.errorMessage = error.message;
         }
       }
     );
+  }
+
+  clear() {
+    this.logService.clear().subscribe(() => {
+      this.dataSource.data = [];
+    });
   }
 }
