@@ -9,7 +9,6 @@ using Unity.WebApi;
 using DownloadManager.Web.FilterProvider;
 using System.Linq;
 using System.Web.Http.Filters;
-using DownloadManager.Web.Logging;
 
 namespace DownloadManager.Web
 {
@@ -23,7 +22,6 @@ namespace DownloadManager.Web
             container.RegisterType<IUserRepository, UserRepository>(TypeLifetime.Scoped);
             container.RegisterType<IFileService, FileService>(TypeLifetime.Scoped);
             container.RegisterType<IUserService, UserService>(TypeLifetime.Scoped);
-            container.RegisterType<ILogger, SignalRLogger>(TypeLifetime.Scoped);
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
 

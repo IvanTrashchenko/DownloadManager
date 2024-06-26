@@ -63,14 +63,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                if (ex is ArgumentException)
-                {
-                    return BadRequest(ex.Message);
-                }
-                else
-                {
-                    return InternalServerError(ex);
-                }
+                return InternalServerError(ex);
             }
 
             return Ok();
