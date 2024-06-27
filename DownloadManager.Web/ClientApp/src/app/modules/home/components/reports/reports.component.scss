@@ -3,8 +3,12 @@
 }
 
 .filter-button {
-    margin-bottom: 12px;
-    margin-right: 12px;
+    height: 51.25px;
+}
+
+.filter-button-container {
+    padding-bottom: 18.8px;
+    margin: 3.5px 0;
 }
 
 .buttons {
@@ -37,16 +41,27 @@
     box-sizing: border-box;
     display: flex;
     align-self: center;
+    gap: 16px; /* Add gap between elements */
 }
 
 .filter-field {
-    flex: 1 1 25%;
+    flex: 1 1 100%;
     box-sizing: border-box;
-    max-width: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.filter-time {
-    width: auto;
+@media (min-width: 600px) {
+    .filter-field {
+        flex: 1 1 48%; /* Adjust for two columns layout */
+    }
+}
+
+@media (min-width: 960px) {
+    .filter-field {
+        flex: 1 1 31%; /* Adjust for three columns layout */
+    }
 }
 
 .file-id-column {
