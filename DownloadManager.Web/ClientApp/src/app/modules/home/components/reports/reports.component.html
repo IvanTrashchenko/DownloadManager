@@ -1,9 +1,9 @@
 <mat-card class="content-card">
     <mat-card-content class="card-content">
         <form [formGroup]="form" (ngSubmit)="filter()">
-            <div class="filter-form" fxLayout="row wrap" fxFlexAlign="center">
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
-                    <mat-form-field appearance="outline" class="w-100">
+            <div class="filter-form">
+                <div class="filter-field">
+                    <mat-form-field appearance="outline">
                         <mat-label>File ID</mat-label>
                         <input matInput formControlName="fileId" />
                         <button *ngIf="!isControlEmpty('fileId')" matSuffix mat-icon-button aria-label="Clear"
@@ -12,8 +12,8 @@
                         </button>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
-                    <mat-form-field appearance="outline" class="w-100">
+                <div class="filter-field">
+                    <mat-form-field appearance="outline">
                         <mat-label>File Name</mat-label>
                         <input matInput formControlName="fileName" />
                         <button *ngIf="!isControlEmpty('fileName')" matSuffix mat-icon-button aria-label="Clear"
@@ -22,8 +22,8 @@
                         </button>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
-                    <mat-form-field appearance="outline" class="w-100">
+                <div class="filter-field">
+                    <mat-form-field appearance="outline">
                         <mat-label>File Download Directory</mat-label>
                         <input matInput formControlName="fileDownloadDirectory" />
                         <button *ngIf="!isControlEmpty('fileDownloadDirectory')" matSuffix mat-icon-button
@@ -32,8 +32,8 @@
                         </button>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
-                    <mat-form-field appearance="outline" class="w-100">
+                <div class="filter-field">
+                    <mat-form-field appearance="outline">
                         <mat-label>File Download Method</mat-label>
                         <mat-select formControlName="fileDownloadMethod">
                             <mat-option *ngFor="let option of downloadMethodOptions" [value]="option.value">
@@ -42,8 +42,8 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
-                    <mat-form-field appearance="outline" class="w-100">
+                <div class="filter-field">
+                    <mat-form-field appearance="outline">
                         <mat-label>User Name</mat-label>
                         <input matInput formControlName="username" />
                         <button *ngIf="!isControlEmpty('username')" matSuffix mat-icon-button aria-label="Clear"
@@ -52,8 +52,8 @@
                         </button>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
-                    <mat-form-field appearance="outline" class="w-100">
+                <div class="filter-field">
+                    <mat-form-field appearance="outline">
                         <mat-label>File Download Start</mat-label>
                         <input matInput formControlName="fileDownloadStart" [matDatepicker]="pickerStart">
                         <button *ngIf="!isControlEmpty('fileDownloadStart')" matSuffix mat-icon-button
@@ -64,8 +64,8 @@
                         <mat-datepicker #pickerStart></mat-datepicker>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
-                    <mat-form-field appearance="outline" class="w-100">
+                <div class="filter-field">
+                    <mat-form-field appearance="outline">
                         <mat-label>File Download End</mat-label>
                         <input matInput formControlName="fileDownloadEnd" [matDatepicker]="pickerEnd">
                         <button *ngIf="!isControlEmpty('fileDownloadEnd')" matSuffix mat-icon-button aria-label="Clear"
@@ -76,7 +76,7 @@
                         <mat-datepicker #pickerEnd></mat-datepicker>
                     </mat-form-field>
                 </div>
-                <div fxFlex.gt-sm="25" fxFlex="100" class="p-10 filter-field">
+                <div class="filter-field">
                     <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid"
                         class="filter-button">Filter</button>
                 </div>
