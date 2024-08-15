@@ -56,26 +56,26 @@
                 </div>
                 <div class="filter-field">
                     <mat-form-field appearance="outline">
-                        <mat-label>File Download Time From</mat-label>
-                        <input matInput formControlName="fileDownloadTimeStart" [matDatepicker]="pickerStart">
+                        <mat-label>File Download Time From (UTC)</mat-label>
+                        <input matInput formControlName="fileDownloadTimeStart" [ngxMatDatetimePicker]="pickerStart">
                         <button *ngIf="!isControlEmpty('fileDownloadTimeStart')" matSuffix mat-icon-button
                             aria-label="Clear" (click)="resetControl('fileDownloadTimeStart')">
                             <mat-icon>close</mat-icon>
                         </button>
-                        <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerStart></mat-datepicker>
+                        <mat-datepicker-toggle matSuffix [for]="pickerStart" ></mat-datepicker-toggle>
+                        <ngx-mat-datetime-picker #pickerStart [showSeconds]="true"></ngx-mat-datetime-picker>
                     </mat-form-field>
                 </div>
                 <div class="filter-field">
                     <mat-form-field appearance="outline">
-                        <mat-label>File Download Time To</mat-label>
-                        <input matInput formControlName="fileDownloadTimeEnd" [matDatepicker]="pickerEnd">
+                        <mat-label>File Download Time To (UTC)</mat-label>
+                        <input matInput formControlName="fileDownloadTimeEnd" [ngxMatDatetimePicker]="pickerEnd">
                         <button *ngIf="!isControlEmpty('fileDownloadTimeEnd')" matSuffix mat-icon-button
                             aria-label="Clear" (click)="resetControl('fileDownloadTimeEnd')">
                             <mat-icon>close</mat-icon>
                         </button>
-                        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerEnd></mat-datepicker>
+                        <mat-datepicker-toggle matSuffix [for]="pickerEnd" ></mat-datepicker-toggle>
+                        <ngx-mat-datetime-picker #pickerEnd [showSeconds]="true"></ngx-mat-datetime-picker>
                     </mat-form-field>
                 </div>
                 <div class="filter-field filter-button-container">

@@ -42,7 +42,7 @@
     box-sizing: border-box;
     display: flex;
     align-self: center;
-    gap: 16px; /* Add gap between elements */
+    gap: 16px;
 }
 
 .filter-field {
@@ -55,13 +55,13 @@
 
 @media (min-width: 600px) {
     .filter-field {
-        flex: 1 1 48%; /* Adjust for two columns layout */
+        flex: 1 1 48%;
     }
 }
 
 @media (min-width: 960px) {
     .filter-field {
-        flex: 1 1 31%; /* Adjust for three columns layout */
+        flex: 1 1 31%;
     }
 }
 

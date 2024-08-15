@@ -10,8 +10,10 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { NgxMatDatetimePickerModule } from '@angular-material-components/datetime-picker';
+import { NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 
 const modules: any[] = [
   CommonModule,
@@ -26,7 +28,9 @@ const modules: any[] = [
   MatTableModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  NgScrollbarModule
+  NgScrollbarModule,
+  NgxMatDatetimePickerModule,
+  NgxMatMomentModule,
 ]
 
 @NgModule({
@@ -35,7 +39,20 @@ const modules: any[] = [
     ...modules
   ],
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    {
+        provide: MAT_DATE_FORMATS, useValue: {
+            parse: {
+                dateInput: 'l, HH:mm:ss'
+            },
+            display: {
+                dateInput: 'l, HH:mm:ss',
+                monthYearLabel: 'MMM YYYY',
+                dateA11yLabel: 'LL',
+                monthYearA11yLabel: 'MMMM YYYY',
+            }
+        }
+    },
   ],
   exports: [
     ...modules
