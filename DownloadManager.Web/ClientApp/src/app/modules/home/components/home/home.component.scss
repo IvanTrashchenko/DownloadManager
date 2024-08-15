@@ -1,15 +1,22 @@
 mat-toolbar {
-    .toolbar-spacer {
-      flex: 1 1 auto;
-    }
-  
-    a.active-link, button:focus {
-      font-weight: bold;
-    }
+  .toolbar-spacer {
+    flex: 1 1 auto;
   }
 
-  ::ng-deep .mat-menu-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  } 
+  a.active-link,
+  button:focus {
+    font-weight: bold;
+  }
+}
+
+::ng-deep .mat-menu-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
