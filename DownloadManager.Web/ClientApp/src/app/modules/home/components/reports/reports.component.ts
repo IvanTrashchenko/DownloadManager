@@ -78,8 +78,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
       fileDownloadDirectory: [''],
       fileDownloadMethod: [''],
       username: [''],
-      fileDownloadStart: [''],
-      fileDownloadEnd: ['']
+      fileDownloadTimeStart: [''],
+      fileDownloadTimeEnd: ['']
     });
   }
 
@@ -101,10 +101,11 @@ export class ReportsComponent implements OnInit, OnDestroy {
       fileName: this.form.controls.fileName.value,
       fileDownloadDirectory: this.form.controls.fileDownloadDirectory.value,
       fileDownloadMethod: this.form.controls.fileDownloadMethod.value,
-      fileDownloadTimeStart: this.form.controls.fileDownloadStart.value,
-      fileDownloadTimeEnd: this.form.controls.fileDownloadEnd.value,
+      fileDownloadTimeStart: this.form.controls.fileDownloadTimeStart.value ? this.form.controls.fileDownloadTimeStart.value.toISOString() : null,
+      fileDownloadTimeEnd: this.form.controls.fileDownloadTimeEnd.value ? this.form.controls.fileDownloadTimeEnd.value.toISOString() : null,
       username: this.form.controls.username.value
     };
+    debugger
 
     this.subscription = this.filesService.getReport(model).subscribe(
       (response) => {
