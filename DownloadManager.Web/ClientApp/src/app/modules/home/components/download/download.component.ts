@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { DownloadMethod, DownloadMethodLabel } from '../../enum/download-method.enum';
 import OptionModel from 'src/app/modules/shared/models/option.model';
 import { Title } from '@angular/platform-browser';
@@ -56,6 +56,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
     private filesService: FilesService,
     public logService: LogService
   ) { }
+
   ngOnDestroy(): void {
     if (this.logSubscription) {
       this.logSubscription.unsubscribe();
@@ -72,9 +73,9 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
   initForm(): void {
     this.form = this.formBuilder.group({
-      fileUrl: ['https://i.redd.it/ufxj58wy79w81.jpg', Validators.required],
-      fileName: ['file', Validators.required],
-      destinationFolder: ['C:\\DownloadManagerFolder', Validators.required],
+      fileUrl: ['https://i.redd.it/ufxj58wy79w81.jpg', [Validators.required, this.urlValidator]],
+      fileName: ['file', [Validators.required, this.fileNameValidator]],
+      destinationFolder: ['C:\\DownloadManagerFolder', [Validators.required, this.windowsPathValidator]],
       downloadMethod: [DownloadMethod.BeginInvoke, Validators.required]
     });
   }
@@ -111,5 +112,20 @@ export class DownloadComponent implements OnInit, OnDestroy {
     this.logService.clear().subscribe(() => {
       this.dataSource.data = [];
     });
+  }
+
+  private urlValidator(control: AbstractControl): ValidationErrors | null {
+    const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+    return urlPattern.test(control.value) ? null : { invalidUrl: true };
+  }
+
+  private fileNameValidator(control: AbstractControl): ValidationErrors | null {
+    const invalidChars = /[<>:"/\\|?*\x00-\x1F]/;
+    return invalidChars.test(control.value) ? { invalidFileName: true } : null;
+  }
+
+  private windowsPathValidator(control: AbstractControl): ValidationErrors | null {
+    const windowsPathPattern = /^[a-zA-Z]:\\(?:[a-zA-Z0-9]+\\?)*$/;
+    return windowsPathPattern.test(control.value) ? null : { invalidWindowsPath: true };
   }
 }

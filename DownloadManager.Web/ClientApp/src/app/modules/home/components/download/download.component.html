@@ -4,17 +4,32 @@
             <mat-form-field appearance="outline" class="full-width-input">
                 <mat-label>File URL</mat-label>
                 <input matInput type="url" formControlName="fileUrl" required>
-                <mat-error *ngIf="form.controls.fileUrl.invalid">Field is required.</mat-error>
+                <mat-error *ngIf="form.controls.fileUrl.hasError('required')">
+                    File URL is required.
+                </mat-error>
+                <mat-error *ngIf="form.controls.fileUrl.hasError('invalidUrl')">
+                    Please enter a valid URL.
+                </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" class="full-width-input">
                 <mat-label>File name</mat-label>
                 <input matInput type="text" formControlName="fileName" required>
-                <mat-error *ngIf="form.controls.fileName.invalid">Field is required.</mat-error>
+                <mat-error *ngIf="form.controls.fileName.hasError('required')">
+                    File name is required.
+                </mat-error>
+                <mat-error *ngIf="form.controls.fileName.hasError('invalidFileName')">
+                    File name contains invalid characters.
+                </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" class="full-width-input">
                 <mat-label>Destination folder</mat-label>
                 <input matInput type="text" formControlName="destinationFolder" required>
-                <mat-error *ngIf="form.controls.destinationFolder.invalid">Field is required.</mat-error>
+                <mat-error *ngIf="form.controls.destinationFolder.hasError('required')">
+                    Destination folder is required.
+                </mat-error>
+                <mat-error *ngIf="form.controls.destinationFolder.hasError('invalidWindowsPath')">
+                    Please enter a valid Windows path.
+                </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" class="full-width-input">
                 <mat-label>Download method</mat-label>
@@ -23,7 +38,7 @@
                         {{ option.name }}
                     </mat-option>
                 </mat-select>
-                <mat-error *ngIf="form.controls.downloadMethod.invalid">Field is required.</mat-error>
+                <mat-error *ngIf="form.controls.downloadMethod.invalid">Download method is required.</mat-error>
             </mat-form-field>
             <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
             <div class="buttons">
