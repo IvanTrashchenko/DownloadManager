@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 const modules: any[] = [
   CommonModule,
@@ -24,7 +25,8 @@ const modules: any[] = [
   MatFormFieldModule,
   MatTableModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  NgScrollbarModule
 ]
 
 @NgModule({

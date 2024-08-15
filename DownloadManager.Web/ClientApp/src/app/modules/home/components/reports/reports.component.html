@@ -68,8 +68,8 @@
                     <mat-form-field appearance="outline">
                         <mat-label>File Download Time To</mat-label>
                         <input matInput formControlName="fileDownloadTimeEnd" [matDatepicker]="pickerEnd">
-                        <button *ngIf="!isControlEmpty('fileDownloadTimeEnd')" matSuffix mat-icon-button aria-label="Clear"
-                            (click)="resetControl('fileDownloadTimeEnd')">
+                        <button *ngIf="!isControlEmpty('fileDownloadTimeEnd')" matSuffix mat-icon-button
+                            aria-label="Clear" (click)="resetControl('fileDownloadTimeEnd')">
                             <mat-icon>close</mat-icon>
                         </button>
                         <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
@@ -85,52 +85,55 @@
         </form>
     </mat-card-content>
 </mat-card>
-<div class="table-container content-card">
-    <mat-table [dataSource]="dataSource">
-        <!-- FileId Column -->
-        <ng-container matColumnDef="fileId">
-            <mat-header-cell *matHeaderCellDef ngClass="file-id-column"> File ID </mat-header-cell>
-            <mat-cell *matCellDef="let entry" ngClass="file-id-column"> {{entry.FileId}} </mat-cell>
-        </ng-container>
+<ng-scrollbar autoHeightDisabled="false" track="horizontal" class="scroll-container">
+    <div class="table-container content-card">
+        <mat-table [dataSource]="dataSource">
+            <!-- FileId Column -->
+            <ng-container matColumnDef="fileId">
+                <mat-header-cell *matHeaderCellDef ngClass="file-id-column"> File ID </mat-header-cell>
+                <mat-cell *matCellDef="let entry" ngClass="file-id-column"> {{entry.FileId}} </mat-cell>
+            </ng-container>
 
-        <!-- FileName Column -->
-        <ng-container matColumnDef="fileName">
-            <mat-header-cell *matHeaderCellDef ngClass="file-name-column"> File Name </mat-header-cell>
-            <mat-cell *matCellDef="let entry" ngClass="file-name-column"> {{entry.FileName}} </mat-cell>
-        </ng-container>
+            <!-- FileName Column -->
+            <ng-container matColumnDef="fileName">
+                <mat-header-cell *matHeaderCellDef ngClass="file-name-column"> File Name </mat-header-cell>
+                <mat-cell *matCellDef="let entry" ngClass="file-name-column"> {{entry.FileName}} </mat-cell>
+            </ng-container>
 
-        <!-- FileDownloadDirectory Column -->
-        <ng-container matColumnDef="fileDownloadDirectory">
-            <mat-header-cell *matHeaderCellDef ngClass="file-download-directory-column"> File Download Directory
-            </mat-header-cell>
-            <mat-cell *matCellDef="let entry" ngClass="file-download-directory-column"> {{entry.FileDownloadDirectory}}
-            </mat-cell>
-        </ng-container>
+            <!-- FileDownloadDirectory Column -->
+            <ng-container matColumnDef="fileDownloadDirectory">
+                <mat-header-cell *matHeaderCellDef ngClass="file-download-directory-column"> File Download Directory
+                </mat-header-cell>
+                <mat-cell *matCellDef="let entry" ngClass="file-download-directory-column">
+                    {{entry.FileDownloadDirectory}}
+                </mat-cell>
+            </ng-container>
 
-        <!-- FileDownloadMethod Column -->
-        <ng-container matColumnDef="fileDownloadMethod">
-            <mat-header-cell *matHeaderCellDef ngClass="file-download-method-column"> File Download Method
-            </mat-header-cell>
-            <mat-cell *matCellDef="let entry" ngClass="file-download-method-column">
-                {{this.downloadMethodLabel.get(entry.FileDownloadMethod)}} </mat-cell>
-        </ng-container>
+            <!-- FileDownloadMethod Column -->
+            <ng-container matColumnDef="fileDownloadMethod">
+                <mat-header-cell *matHeaderCellDef ngClass="file-download-method-column"> File Download Method
+                </mat-header-cell>
+                <mat-cell *matCellDef="let entry" ngClass="file-download-method-column">
+                    {{this.downloadMethodLabel.get(entry.FileDownloadMethod)}} </mat-cell>
+            </ng-container>
 
-        <!-- Username Column -->
-        <ng-container matColumnDef="username">
-            <mat-header-cell *matHeaderCellDef ngClass="username-column"> User Name </mat-header-cell>
-            <mat-cell *matCellDef="let entry" ngClass="username-column"> {{entry.Username}} </mat-cell>
-        </ng-container>
+            <!-- Username Column -->
+            <ng-container matColumnDef="username">
+                <mat-header-cell *matHeaderCellDef ngClass="username-column"> User Name </mat-header-cell>
+                <mat-cell *matCellDef="let entry" ngClass="username-column"> {{entry.Username}} </mat-cell>
+            </ng-container>
 
-        <!-- FileDownloadTime Column -->
-        <ng-container matColumnDef="fileDownloadTime">
-            <mat-header-cell *matHeaderCellDef ngClass="file-download-time-column"> File Download Time
-            </mat-header-cell>
-            <mat-cell *matCellDef="let entry" ngClass="file-download-time-column"> {{entry.FileDownloadTime |
-                date:'yyyy-MM-dd HH:mm:ss.SSS'}} </mat-cell>
-        </ng-container>
+            <!-- FileDownloadTime Column -->
+            <ng-container matColumnDef="fileDownloadTime">
+                <mat-header-cell *matHeaderCellDef ngClass="file-download-time-column"> File Download Time
+                </mat-header-cell>
+                <mat-cell *matCellDef="let entry" ngClass="file-download-time-column"> {{entry.FileDownloadTime |
+                    date:'yyyy-MM-dd HH:mm:ss.SSS'}} </mat-cell>
+            </ng-container>
 
-        <!-- Header and Row Definitions -->
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-</div>
+            <!-- Header and Row Definitions -->
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+</ng-scrollbar>
