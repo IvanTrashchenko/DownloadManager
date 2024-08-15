@@ -1,22 +1,22 @@
 <mat-card class="content-card">
     <mat-card-content class="card-content">
         <form [formGroup]="form" (ngSubmit)="download()">
-            <mat-form-field class="full-width-input">
+            <mat-form-field appearance="outline" class="full-width-input">
                 <mat-label>File URL</mat-label>
                 <input matInput type="url" formControlName="fileUrl" required>
                 <mat-error *ngIf="form.controls.fileUrl.invalid">Field is required.</mat-error>
             </mat-form-field>
-            <mat-form-field class="full-width-input">
+            <mat-form-field appearance="outline" class="full-width-input">
                 <mat-label>File name</mat-label>
                 <input matInput type="text" formControlName="fileName" required>
                 <mat-error *ngIf="form.controls.fileName.invalid">Field is required.</mat-error>
             </mat-form-field>
-            <mat-form-field class="full-width-input">
+            <mat-form-field appearance="outline" class="full-width-input">
                 <mat-label>Destination folder</mat-label>
                 <input matInput type="text" formControlName="destinationFolder" required>
                 <mat-error *ngIf="form.controls.destinationFolder.invalid">Field is required.</mat-error>
             </mat-form-field>
-            <mat-form-field class="full-width-input">
+            <mat-form-field appearance="outline" class="full-width-input">
                 <mat-label>Download method</mat-label>
                 <mat-select formControlName="downloadMethod">
                     <mat-option *ngFor="let option of downloadMethodOptions" [value]="option.value">
