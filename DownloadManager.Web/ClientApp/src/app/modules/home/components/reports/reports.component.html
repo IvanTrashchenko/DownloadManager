@@ -54,7 +54,7 @@
                 </div>
                 <div class="filter-field">
                     <mat-form-field appearance="outline">
-                        <mat-label>File Download Start</mat-label>
+                        <mat-label>File Download Time From</mat-label>
                         <input matInput formControlName="fileDownloadStart" [matDatepicker]="pickerStart">
                         <button *ngIf="!isControlEmpty('fileDownloadStart')" matSuffix mat-icon-button
                             aria-label="Clear" (click)="resetControl('fileDownloadStart')">
@@ -66,7 +66,7 @@
                 </div>
                 <div class="filter-field">
                     <mat-form-field appearance="outline">
-                        <mat-label>File Download End</mat-label>
+                        <mat-label>File Download Time To</mat-label>
                         <input matInput formControlName="fileDownloadEnd" [matDatepicker]="pickerEnd">
                         <button *ngIf="!isControlEmpty('fileDownloadEnd')" matSuffix mat-icon-button aria-label="Clear"
                             (click)="resetControl('fileDownloadEnd')">
