@@ -43,10 +43,10 @@ const modules: any[] = [
     {
         provide: MAT_DATE_FORMATS, useValue: {
             parse: {
-                dateInput: 'l, HH:mm:ss'
+                dateInput: 'dd/MM/yyyy HH:mm:ss.SSS'
             },
             display: {
-                dateInput: 'l, HH:mm:ss',
+                dateInput: 'dd/MM/yyyy HH:mm:ss.SSS',
                 monthYearLabel: 'MMM YYYY',
                 dateA11yLabel: 'LL',
                 monthYearA11yLabel: 'MMMM YYYY',
