@@ -36,6 +36,8 @@
                     <mat-form-field appearance="outline">
                         <mat-label>File Download Method</mat-label>
                         <mat-select formControlName="fileDownloadMethod">
+                            <mat-option [value]="null">
+                              </mat-option>
                             <mat-option *ngFor="let option of downloadMethodOptions" [value]="option.value">
                                 {{ option.name }}
                             </mat-option>

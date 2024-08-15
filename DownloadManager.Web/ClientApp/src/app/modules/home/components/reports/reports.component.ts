@@ -76,7 +76,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
       fileId: [''],
       fileName: [''],
       fileDownloadDirectory: [''],
-      fileDownloadMethod: [''],
+      fileDownloadMethod: [null],
       username: [''],
       fileDownloadTimeStart: [''],
       fileDownloadTimeEnd: ['']
