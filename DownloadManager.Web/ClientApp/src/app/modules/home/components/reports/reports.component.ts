@@ -105,7 +105,6 @@ export class ReportsComponent implements OnInit, OnDestroy {
       fileDownloadTimeEnd: this.form.controls.fileDownloadTimeEnd.value ? this.form.controls.fileDownloadTimeEnd.value.toISOString() : null,
       username: this.form.controls.username.value
     };
-    debugger
 
     this.subscription = this.filesService.getReport(model).subscribe(
       (response) => {
