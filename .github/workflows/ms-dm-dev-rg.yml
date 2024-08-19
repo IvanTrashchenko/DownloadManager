@@ -3,6 +3,10 @@ name: Create resources (ms-dm-dev-rg)
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build-and-deploy:
     runs-on: windows-latest
@@ -14,17 +18,14 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          allow-no-subscriptions: true
-          scope: /
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          resource: https://management.azure.com/
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          auth-type: oidc
 
       - name: ARM Deploy
         uses: azure/arm-deploy@v1
         with:
-          scopeLevel: Subscription
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ vars.AZURE_RESOURCE_GROUP }}
           template: ./DownloadManager.ArmTemplate/azuredeploy.json
