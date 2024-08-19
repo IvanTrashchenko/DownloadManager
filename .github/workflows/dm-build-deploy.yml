@@ -1,0 +1,57 @@
+name: Deploy to Azure Web App (ms-dm-dev-app)
+
+on:
+    workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest  
+    environment: DEV
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+
+    - name: Restore NuGet packages
+      run: nuget restore DownloadManager.sln  
+
+    - name: Build solution
+      run: msbuild /p:Configuration=Release DownloadManager.sln
+
+    - name: Publish API
+      run: msbuild /p:DeployOnBuild=true /p:Configuration=Release /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\WebApp.zip" DownloadManager.sln
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'  
+
+    - name: Install dependencies (Angular)
+      working-directory: ./ClientApp  
+      run: npm install
+
+    - name: Build Angular
+      working-directory: ./ClientApp 
+      run: npm run build -- --prod
+
+    - name: Deploy API to Azure Web App
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ vars.AZURE_WEBAPP_NAME }}
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
+        package: $(Build.ArtifactStagingDirectory)\WebApp.zip
+
+    - name: Deploy Angular app to Azure Web App
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ vars.AZURE_WEBAPP_NAME }}
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
+        package: ./ClientApp/dist  
