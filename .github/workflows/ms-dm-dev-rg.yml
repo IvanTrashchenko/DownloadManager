@@ -32,6 +32,3 @@ jobs:
             ./DownloadManager.ArmTemplate/azuredeploy.parameters.json
             sqlAdministratorLogin=${{ vars.SQL_ADMIN_LOGIN }}
             sqlAdministratorPassword=${{ secrets.SQL_ADMIN_PASSWORD }}
-
-      - name: Azure Logout
-        uses: azure/logout@v1
