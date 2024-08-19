@@ -5,7 +5,7 @@
   <a mat-button routerLink="/reports" routerLinkActive="active-link">Reports</a>
   
   <button mat-button [matMenuTriggerFor]="menu">
-    {{authService.auth_username}} 
+    {{authService.username}} 
     <mat-icon>more_vert</mat-icon> 
   </button>
   <mat-menu #menu="matMenu">

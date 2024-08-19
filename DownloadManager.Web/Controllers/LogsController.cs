@@ -11,7 +11,7 @@ using DownloadManager.Web.Models;
 
 namespace DownloadManager.Web.Controllers
 {
-    [BasicAuthentication]
+    [JwtAuthentication]
     public class LogsController : ApiController
     {
         #region Private fields

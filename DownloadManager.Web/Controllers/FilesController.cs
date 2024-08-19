@@ -10,7 +10,7 @@ using DownloadManager.Web.Models;
 
 namespace DownloadManager.Web.Controllers
 {
-    [BasicAuthentication]
+    [JwtAuthentication]
     public class FilesController : ApiController
     {
         #region Private fields

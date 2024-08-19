@@ -1,15 +1,19 @@
 ﻿using DownloadManager.Service.Contract;
 using System;
+using System.Configuration;
 using System.Web.Http;
 using DownloadManager.Service.Models.Input;
-using System.Net;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DownloadManager.Web.Controllers
 {
     public class UsersController : ApiController
     {
         #region Private fields
-        
+
         private readonly IUserService _userService;
 
         #endregion
@@ -36,7 +40,8 @@ namespace DownloadManager.Web.Controllers
             try
             {
                 _userService.RegisterUser(model);
-                return Ok();
+                var token = GenerateJwtToken(model.Username);
+                return Ok(new { Token = token });
             }
             catch (Exception e)
             {
@@ -69,7 +74,8 @@ namespace DownloadManager.Web.Controllers
 
                 if (isCredentialsValid)
                 {
-                    return Ok();
+                    var token = GenerateJwtToken(model.Username);
+                    return Ok(new { Token = token });
                 }
                 else
                 {
@@ -87,6 +93,28 @@ namespace DownloadManager.Web.Controllers
                     return InternalServerError(e);
                 }
             }
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private string GenerateJwtToken(string username)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(ConfigurationManager.AppSettings["DownloadManager:Token"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim("unique_name", username)
+                    //new Claim(ClaimTypes.Name, username)
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(30),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         #endregion

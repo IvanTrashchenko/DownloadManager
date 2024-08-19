@@ -108,10 +108,12 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
     this.subscription = this.filesService.getReport(model).subscribe(
       (response) => {
+        this.errorMessage = null;
         this.dataSource.data = response.Items;
       },
       (error) => {
-        this.errorMessage = error;
+        console.log(error);
+        this.errorMessage = error.message;
       }
     );
   }

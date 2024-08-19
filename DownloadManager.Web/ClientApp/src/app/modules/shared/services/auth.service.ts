@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { AuthModel } from '../../auth/models/auth.model';
+import * as jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -16,35 +17,30 @@ export class AuthService extends BaseService {
   }
 
   public get isLoggedIn(): boolean {
-    const header = localStorage.getItem('auth_header');
-    if (header !== null) {
-      return true;
+    return !!this.authToken && !this.isTokenExpired();
+  }  
+
+  private setAuthToken(value: string) {
+    localStorage.setItem('auth_token', value);
+  }
+
+  public get authToken(): string {
+    return localStorage.getItem('auth_token');
+  }
+
+  public get username(): string | null {
+    const token = this.authToken;
+    if (token) {
+      const decodedToken = jwt_decode.jwtDecode<any>(token);
+      return decodedToken?.unique_name || null;
     }
-    return false;
-  }
-
-  public get auth_header(): string {
-    return localStorage.getItem('auth_header');
-  }
-
-  public get auth_username(): string {
-    return localStorage.getItem('auth_username');
-  }
-
-  private setAuthHeader(value: string) {
-    localStorage.setItem('auth_header', value);
-  }
-
-  private setAuthUsername(value: string) {
-    localStorage.setItem('auth_username', value);
+    return null;
   }
 
   login(model: AuthModel): Observable<any> {
     return this.post('login', model).pipe(
-      tap((response) => {
-        let authHeader = 'Basic ' + btoa(model.username + ':' + model.password);
-        this.setAuthHeader(authHeader);
-        this.setAuthUsername(model.username);
+      tap((response: any) => {
+        this.setAuthToken(response.Token);
       }),
       catchError((error) => {
         return throwError(error);
@@ -54,10 +50,8 @@ export class AuthService extends BaseService {
 
   register(model: AuthModel): Observable<any> {
     return this.post('register', model).pipe(
-      tap((response) => {
-        let authHeader = 'Basic ' + btoa(model.username + ':' + model.password);
-        this.setAuthHeader(authHeader);
-        this.setAuthUsername(model.username);
+      tap((response: any) => {
+        this.setAuthToken(response.Token);
       }),
       catchError((error) => {
         return throwError(error);
@@ -66,7 +60,17 @@ export class AuthService extends BaseService {
   }
 
   logout(): void {
-    localStorage.removeItem('auth_header');
-    localStorage.removeItem('auth_username');
+    localStorage.removeItem('auth_token');
+  }
+
+  public isTokenExpired(): boolean {
+    const token = this.authToken;
+    if (token) {
+      const decodedToken = jwt_decode.jwtDecode<any>(token);
+      const expirationDate = new Date(0);
+      expirationDate.setUTCSeconds(decodedToken.exp);
+      return expirationDate < new Date();
+    }
+    return true;
   }
 }

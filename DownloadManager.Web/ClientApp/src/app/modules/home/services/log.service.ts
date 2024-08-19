@@ -19,16 +19,16 @@ export class LogService {
     getLogs(): Observable<LogEntry[]> {
         return timer(0, 1000).pipe(
             switchMap(() => {
-                const authHeader = localStorage.getItem('auth_header') || '';
-                const headers = new HttpHeaders().set('Authorization', authHeader);
+                const authToken = localStorage.getItem('auth_token') || '';
+                const headers = new HttpHeaders().set('Authorization', `Bearer ${authToken}`);
                 return this.http.get<LogEntry[]>(this.apiUrl, { headers: headers });
             })
         );
     }
 
     clear(): Observable<any> {
-        const authHeader = localStorage.getItem('auth_header') || '';
-        const headers = new HttpHeaders().set('Authorization', authHeader);
+        const authToken = localStorage.getItem('auth_token') || '';
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${authToken}`);
         return this.http.delete(this.apiUrl, { headers: headers });
     }
 }
