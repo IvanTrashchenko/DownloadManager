@@ -31,6 +31,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.Data.Dal.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadManager.Web", "DownloadManager.Web\DownloadManager.Web.csproj", "{D8E26EE3-9821-47F8-8783-ABC637545935}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{259DB083-0AC8-4D16-9BA0-0089B6AEE52D}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "DownloadManager.ArmTemplate", "DownloadManager.ArmTemplate\DownloadManager.ArmTemplate.deployproj", "{FC217443-53D2-4980-9AE6-E3687BBAB8BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +79,10 @@ Global
 		{D8E26EE3-9821-47F8-8783-ABC637545935}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8E26EE3-9821-47F8-8783-ABC637545935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8E26EE3-9821-47F8-8783-ABC637545935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC217443-53D2-4980-9AE6-E3687BBAB8BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC217443-53D2-4980-9AE6-E3687BBAB8BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC217443-53D2-4980-9AE6-E3687BBAB8BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC217443-53D2-4980-9AE6-E3687BBAB8BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +97,7 @@ Global
 		{E6145694-687F-4280-A6B6-166F39DFB9F0} = {0BD52AD8-3A85-4217-88F4-ECAA06345F62}
 		{02D6C16F-E8C1-4EDA-98C5-3037369F63CD} = {0BD52AD8-3A85-4217-88F4-ECAA06345F62}
 		{D8E26EE3-9821-47F8-8783-ABC637545935} = {91CE4C39-19E7-4B02-A582-DF70E795D93E}
+		{FC217443-53D2-4980-9AE6-E3687BBAB8BF} = {259DB083-0AC8-4D16-9BA0-0089B6AEE52D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {949CF967-C6E4-4BE6-A425-40AE1060779A}
