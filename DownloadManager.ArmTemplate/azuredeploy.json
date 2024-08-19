@@ -15,8 +15,8 @@
   "variables": {
     "sqlServerName": "[concat('ms-dm-', parameters('stage'), '-sqls')]",
     "sqlDatabaseName": "[concat('ms-dm-',  parameters('stage'), '-sqldb')]",
-    "webAppName": "[concat('ms-dm',  parameters('stage'), '-app')]",
-    "appServicePlanName": "[concat('ms-dm',  parameters('stage'), '-asp')]"
+    "webAppName": "[concat('ms-dm-',  parameters('stage'), '-app')]",
+    "appServicePlanName": "[concat('ms-dm-',  parameters('stage'), '-asp')]"
   },
   "resources": [
     {
