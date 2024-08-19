@@ -9,13 +9,29 @@ jobs:
     environment: DEV
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: azure/login@v1
+      - uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - uses: azure/arm-deploy@v1
+          allow-no-subscriptions: true
+          scope: /
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          resource: https://management.azure.com/
+
+      - name: ARM Deploy
+        uses: azure/arm-deploy@v1
         with:
+          scopeLevel: Subscription
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ vars.AZURE_RESOURCE_GROUP }}
           template: ./DownloadManager.ArmTemplate/azuredeploy.json
-          parameters: ./DownloadManager.ArmTemplate/azuredeploy.parameters.json sqlAdministratorLogin=${{vars.SQL_ADMIN_LOGIN}} sqlAdministratorPassword=${{secrets.SQL_ADMIN_PASSWORD}}"
+          parameters: |
+            ./DownloadManager.ArmTemplate/azuredeploy.parameters.json
+            sqlAdministratorLogin=${{ vars.SQL_ADMIN_LOGIN }}
+            sqlAdministratorPassword=${{ secrets.SQL_ADMIN_PASSWORD }}
+
+      - name: Azure Logout
+        uses: azure/logout@v1
