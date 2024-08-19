@@ -55,7 +55,7 @@
     <mat-table [dataSource]="dataSource">
         <!-- Date Column -->
         <ng-container matColumnDef="datetime">
-            <mat-header-cell *matHeaderCellDef ngClass="date-column"> Date </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef ngClass="date-column"> Time (UTC) </mat-header-cell>
             <mat-cell *matCellDef="let log" ngClass="date-column"> {{log.Datetime | date:'dd/MM/yyyy HH:mm:ss.SSS'}}
             </mat-cell>
         </ng-container>

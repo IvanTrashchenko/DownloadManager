@@ -127,7 +127,7 @@
 
             <!-- FileDownloadTime Column -->
             <ng-container matColumnDef="fileDownloadTime">
-                <mat-header-cell *matHeaderCellDef ngClass="file-download-time-column"> File Download Time
+                <mat-header-cell *matHeaderCellDef ngClass="file-download-time-column"> File Download Time (UTC)
                 </mat-header-cell>
                 <mat-cell *matCellDef="let entry" ngClass="file-download-time-column"> {{entry.FileDownloadTime |
                     date:'dd/MM/yyyy HH:mm:ss.SSS'}} </mat-cell>
