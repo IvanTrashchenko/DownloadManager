@@ -41,7 +41,7 @@ jobs:
 
     - name: Build Angular
       working-directory: ./DownloadManager.Web/ClientApp 
-      run: npm run build -- --prod
+      run: npm run build --configuration production
 
     - name: Deploy API to Azure Web App
       uses: azure/webapps-deploy@v3
