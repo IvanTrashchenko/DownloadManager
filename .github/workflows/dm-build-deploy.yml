@@ -1,7 +1,7 @@
 name: Deploy to Azure Web App (ms-dm-dev-app)
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -12,23 +12,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Visual Studio Build Tools
-      run: |
-        choco install visualstudio2019buildtools --params "--add Microsoft.VisualStudio.Workload.WebBuildTools --includeRecommended --includeOptional" -y
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.x'
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
 
-    - name: Restore dependencies
-      run: dotnet restore ./DownloadManager.Web/DownloadManager.Web.csproj  
+    - name: Restore NuGet packages
+      run: nuget restore ./DownloadManager.Web/DownloadManager.Web.csproj  
 
-    - name: Build Web Application
-      run: dotnet build --configuration Release ./DownloadManager.Web/DownloadManager.Web.csproj
+    - name: Build Web App
+      run: msbuild /p:Configuration=Release ./DownloadManager.Web/DownloadManager.Web.csproj
 
-    - name: Publish Web Application
-      run: dotnet publish --configuration Release -o ./publish ./DownloadManager.Web/DownloadManager.Web.csproj
+    - name: Create Artifact Directory
+      run: mkdir -p ${{ runner.temp }}/artifact
+
+    - name: Publish API
+      run: msbuild /p:DeployOnBuild=true /p:Configuration=Release /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="${{ runner.temp }}/artifact/WebApp.zip" ./DownloadManager.Web/DownloadManager.Web.csproj
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -49,29 +49,10 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         auth-type: SERVICE_PRINCIPAL
 
-    - name: Get Publish Profile
-      id: webapp
-      run: |
-        az webapp deployment list-publishing-profiles `
-          --name ${{ vars.AZURE_WEBAPP_NAME }} `
-          --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} `
-          --output tsv > publishProfile.xml
-        $publish_profile = Get-Content -Raw -Path publishProfile.xml
-        echo "##vso[task.setvariable variable=publishProfile]$publish_profile"
-      shell: pwsh
-
     - name: Deploy API to Azure Web App
-      uses: azure/webapps-deploy@v3
-      with:
-        app-name: ${{ vars.AZURE_WEBAPP_NAME }}
-        slot-name: 'production'
-        publish-profile:  ${{steps.webapp.outputs.profile}}  
-        package: ./publish
+      run: |
+        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "${{ runner.temp }}/artifact/WebApp.zip"
 
     - name: Deploy Angular app to Azure Web App
-      uses: azure/webapps-deploy@v3
-      with:
-        app-name: ${{ vars.AZURE_WEBAPP_NAME }}
-        slot-name: 'production'
-        publish-profile: ${{steps.webapp.outputs.profile}} 
-        package: ./DownloadManager.Web/ClientApp/dist  
+      run: |
+        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "./DownloadManager.Web/ClientApp/dist"
