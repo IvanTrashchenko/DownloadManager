@@ -24,16 +24,19 @@ jobs:
     - name: Build solution
       run: msbuild /p:Configuration=Release DownloadManager.sln
 
-    - name: Create Artifact Directory
-      run: mkdir -p ${{ runner.temp }}/artifact
+    - name: Create Backend Artifact Directory
+      run: mkdir -p ${{ runner.temp }}/artifact/backend
 
     - name: Publish API
-      run: msbuild /p:DeployOnBuild=true /p:Configuration=Release /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="${{ runner.temp }}/artifact/WebApp.zip" ./DownloadManager.Web/DownloadManager.Web.csproj
+      run: msbuild /p:DeployOnBuild=true /p:Configuration=Release /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="${{ runner.temp }}/artifact/backend/WebAppBackend.zip" ./DownloadManager.Web/DownloadManager.Web.csproj
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '16.x'  
+
+    - name: Create Frontend Artifact Directory
+      run: mkdir -p ${{ runner.temp }}/artifact/frontend
 
     - name: Install dependencies (Angular)
       working-directory: ./DownloadManager.Web/ClientApp  
@@ -41,7 +44,12 @@ jobs:
 
     - name: Build Angular
       working-directory: ./DownloadManager.Web/ClientApp 
-      run: npm run build -- --configuration=production
+      run: npm run build -- --configuration=production --output-path ${{ runner.temp }}/artifact/frontend
+
+    - name: Archive Frontend Build Files
+      run: |
+        cd ${{ runner.temp }}/artifact/frontend
+        zip -r ${{ runner.temp }}/artifact/frontend/WebAppFrontend.zip .
 
     - name: Azure Login
       uses: azure/login@v2
@@ -51,8 +59,8 @@ jobs:
 
     - name: Deploy API to Azure Web App
       run: |
-        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "${{ runner.temp }}/artifact/WebApp.zip"
+        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "${{ runner.temp }}/artifact/backend/WebAppBackend.zip"
 
     - name: Deploy Angular app to Azure Web App
       run: |
-        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "./DownloadManager.Web/ClientApp/dist"
+        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "${{ runner.temp }}/artifact/frontend/WebAppFrontend.zip"
