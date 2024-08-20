@@ -43,6 +43,12 @@ jobs:
       working-directory: ./DownloadManager.Web/ClientApp 
       run: npm run build -- --configuration=production
 
+    - name: Azure Login
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        auth-type: SERVICE_PRINCIPAL
+        
     - name: Get publish Profile
       id: webapp
       uses: azure/powershell@v1
