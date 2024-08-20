@@ -34,7 +34,7 @@ jobs:
       run: msbuild /p:Configuration=${{ github.event.inputs.configuration }} DownloadManager.sln
 
     - name: Publish API
-      run: msbuild /t:Publish /p:Configuration=${{ github.event.inputs.configuration }}  /p:SkipInvalidConfigurations=true /p:PublishDir=="DownloadManager.Web/publish" DownloadManager.Web/DownloadManager.Web.csproj
+      run: msbuild /t:Publish /p:Configuration=${{ github.event.inputs.configuration }} /p:PublishDir="DownloadManager.Web/publish" ./DownloadManager.Web.csproj
 
     - name: Deploy DACPAC to Azure SQL Database
       uses: Azure/sql-action@v2.3
