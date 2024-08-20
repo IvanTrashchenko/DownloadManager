@@ -50,7 +50,7 @@ jobs:
         auth-type: SERVICE_PRINCIPAL
 
     - name: Get Publish Profile
-      id: get-publish-profile
+      id: webapp
       run: |
         az webapp deployment list-publishing-profiles \
           --name ${{ vars.AZURE_WEBAPP_NAME }} \
