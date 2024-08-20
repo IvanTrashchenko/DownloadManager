@@ -13,7 +13,8 @@ namespace DownloadManager.Web
         {
             // Web API configuration and services
 
-            var cors = new EnableCorsAttribute("http://localhost:4200", "*", "*");
+            //var cors = new EnableCorsAttribute("http://localhost:4200", "*", "*");
+            var cors = new EnableCorsAttribute("https://ms-dm-dev-app.azurewebsites.net", "*", "*");
             config.EnableCors(cors);
 
             // Web API routes
