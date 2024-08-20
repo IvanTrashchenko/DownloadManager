@@ -24,8 +24,11 @@ jobs:
     - name: Build solution
       run: msbuild /p:Configuration=Release DownloadManager.sln
 
+    - name: Create Artifact Directory
+      run: mkdir -p ${{ runner.temp }}/artifact
+
     - name: Publish API
-      run: msbuild /p:DeployOnBuild=true /p:Configuration=Release /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\WebApp.zip" DownloadManager.sln
+      run: msbuild /p:DeployOnBuild=true /p:Configuration=Release /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="${{ runner.temp }}/artifact/WebApp.zip" DownloadManager.sln
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -46,7 +49,7 @@ jobs:
         app-name: ${{ vars.AZURE_WEBAPP_NAME }}
         slot-name: 'production'
         publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
-        package: $(Build.ArtifactStagingDirectory)\WebApp.zip
+        package: ${{ runner.temp }}/artifact/WebApp.zip
 
     - name: Deploy Angular app to Azure Web App
       uses: azure/webapps-deploy@v3
