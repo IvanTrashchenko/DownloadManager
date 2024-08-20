@@ -30,6 +30,10 @@ jobs:
     - name: Publish API
       run: msbuild /p:DeployOnBuild=true /p:Configuration=Release /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="${{ runner.temp }}/artifact/backend/WebAppBackend.zip" ./DownloadManager.Web/DownloadManager.Web.csproj
 
+    - name: Deploy DACPAC to Azure SQL Database
+      run: |
+        sqlpackage /Action:Publish /SourceFile:"./DownloadManager.Data.Database/bin/Release/DownloadManager.Data.Database.dacpac" /TargetServerName:"${{ vars.AZURE_SQL_SERVER_NAME }}" /TargetDatabaseName:"${{ vars.AZURE_SQL_DATABASE_NAME }}" /TargetUser:"${{ vars.SQL_ADMIN_LOGIN }}" /TargetPassword:"${{ secrets.SQL_ADMIN_PASSWORD }}" /p:DropObjectsNotInSource=True /p:BlockOnPossibleDataLoss=False
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
