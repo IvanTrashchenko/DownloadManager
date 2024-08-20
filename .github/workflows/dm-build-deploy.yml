@@ -33,11 +33,8 @@ jobs:
     - name: Build solution
       run: msbuild /p:Configuration=${{ github.event.inputs.configuration }} DownloadManager.sln
 
-    - name: Create Backend Artifact Directory
-      run: mkdir -p ${{ runner.temp }}/artifact/backend
-
     - name: Publish API
-      run: msbuild /p:DeployOnBuild=true /p:Configuration=${{ github.event.inputs.configuration }} /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="${{ runner.temp }}/artifact/backend/WebAppBackend.zip" ./DownloadManager.Web/DownloadManager.Web.csproj
+      run: msbuild /t:Publish /p:Configuration=${{ github.event.inputs.configuration }}  /p:SkipInvalidConfigurations=true /p:PublishDir=="./DownloadManager.Web/publish" ./DownloadManager.Web/DownloadManager.Web.csproj
 
     - name: Deploy DACPAC to Azure SQL Database
       uses: Azure/sql-action@v2.3
@@ -59,6 +56,12 @@ jobs:
     - name: Build Angular
       working-directory: ./DownloadManager.Web/ClientApp 
       run: npm run build -- --configuration=production
+
+    - name: Archive Backend Build Files
+      uses: vimtor/action-zip@v1.1
+      with:
+        dest: 'WebAppBackend.zip'
+        files: 'DownloadManager.Web\publish\'
 
     - name: Archive Frontend Build Files
       uses: vimtor/action-zip@v1.1
