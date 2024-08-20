@@ -12,23 +12,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.0.2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.x'
 
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.5
-
-    - name: Restore NuGet packages
-      run: nuget restore DownloadManager.sln  
+    - name: Restore dependencies
+      run: dotnet restore DownloadManager.sln  
 
     - name: Build solution
-      run: msbuild /p:Configuration=Release DownloadManager.sln
-
-    - name: Create Artifact Directory
-      run: mkdir -p ${{ runner.temp }}/artifact
+      run: dotnet build --configuration Release DownloadManager.sln
 
     - name: Publish API
-      run: msbuild /p:DeployOnBuild=true /p:Configuration=Release /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="${{ runner.temp }}/artifact/WebApp.zip" DownloadManager.sln
+      run: dotnet publish -c Release -o ./publish
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -66,7 +62,7 @@ jobs:
         app-name: ${{ vars.AZURE_WEBAPP_NAME }}
         slot-name: 'production'
         publish-profile:  ${{steps.webapp.outputs.profile}}  
-        package: ${{ runner.temp }}/artifact/WebApp.zip
+        package: ${{ runner.temp }}/publish
 
     - name: Deploy Angular app to Azure Web App
       uses: azure/webapps-deploy@v3
