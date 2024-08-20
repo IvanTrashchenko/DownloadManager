@@ -1,4 +1,4 @@
-name: Deploy to Azure Web App (ms-dm-dev-app)
+name: Deploy code (ms-dm-dev-app & ms-dm-dev-sqldb)
 
 on:
   workflow_dispatch:
