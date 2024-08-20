@@ -35,22 +35,19 @@ jobs:
       with:
         node-version: '16.x'  
 
-    - name: Create Frontend Artifact Directory
-      run: mkdir -p ${{ runner.temp }}/artifact/frontend
-
     - name: Install dependencies (Angular)
       working-directory: ./DownloadManager.Web/ClientApp  
       run: npm install
 
     - name: Build Angular
       working-directory: ./DownloadManager.Web/ClientApp 
-      run: npm run build -- --configuration=production --output-path ${{ runner.temp }}/artifact/frontend
+      run: npm run build -- --configuration=production
 
     - name: Archive Frontend Build Files
       uses: vimtor/action-zip@v1.1
       with:
-        dest: '${{ runner.temp }}\artifact\frontend\WebAppFrontend.zip'
-        files: '${{ runner.temp }}\artifact\frontend\client-app\'
+        dest: 'WebAppFrontend.zip'
+        files: 'DownloadManager.Web\ClientApp\dist\client-app\'
 
     - name: Azure Login
       uses: azure/login@v2
@@ -64,4 +61,4 @@ jobs:
 
     - name: Deploy Angular app to Azure Web App
       run: |
-        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "${{ runner.temp }}/artifact/frontend/WebAppFrontend.zip"
+        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "WebAppFrontend.zip"
