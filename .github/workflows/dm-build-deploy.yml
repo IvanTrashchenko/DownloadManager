@@ -50,7 +50,7 @@ jobs:
       uses: vimtor/action-zip@v1.1
       with:
         dest: '${{ runner.temp }}\artifact\frontend\WebAppFrontend.zip'
-        files: '${{ runner.temp }}\artifact\frontend\client-app\
+        files: '${{ runner.temp }}\artifact\frontend\client-app\'
 
     - name: Azure Login
       uses: azure/login@v2
