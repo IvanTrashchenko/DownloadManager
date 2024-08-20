@@ -18,13 +18,13 @@ jobs:
         dotnet-version: '6.x'
 
     - name: Restore dependencies
-      run: dotnet restore DownloadManager.sln  
+      run: dotnet restore ./DownloadManager.Web/DownloadManager.Web.csproj  
 
-    - name: Build solution
-      run: dotnet build --configuration Release DownloadManager.sln
+    - name: Build Web Application
+      run: dotnet build --configuration Release ./DownloadManager.Web/DownloadManager.Web.csproj
 
-    - name: Publish API
-      run: dotnet publish -c Release -o ./publish
+    - name: Publish Web Application
+      run: dotnet publish --configuration Release -o ./publish ./DownloadManager.Web/DownloadManager.Web.csproj
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -62,7 +62,7 @@ jobs:
         app-name: ${{ vars.AZURE_WEBAPP_NAME }}
         slot-name: 'production'
         publish-profile:  ${{steps.webapp.outputs.profile}}  
-        package: ${{ runner.temp }}/publish
+        package: ./publish
 
     - name: Deploy Angular app to Azure Web App
       uses: azure/webapps-deploy@v3
