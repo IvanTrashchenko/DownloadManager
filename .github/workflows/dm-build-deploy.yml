@@ -2,6 +2,15 @@ name: Deploy code (ms-dm-dev-app & ms-dm-dev-sqldb)
 
 on:
   workflow_dispatch:
+    inputs:
+      configuration:
+        description: 'Choose the build configuration'
+        required: true
+        default: 'Release'
+        type: choice
+        options:
+          - Release
+          - Debug
 
 jobs:
   build-and-deploy:
@@ -22,19 +31,19 @@ jobs:
       run: nuget restore DownloadManager.sln  
 
     - name: Build solution
-      run: msbuild /p:Configuration=Release DownloadManager.sln
+      run: msbuild /p:Configuration=${{ github.event.inputs.configuration }} DownloadManager.sln
 
     - name: Create Backend Artifact Directory
       run: mkdir -p ${{ runner.temp }}/artifact/backend
 
     - name: Publish API
-      run: msbuild /p:DeployOnBuild=true /p:Configuration=Release /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="${{ runner.temp }}/artifact/backend/WebAppBackend.zip" ./DownloadManager.Web/DownloadManager.Web.csproj
+      run: msbuild /p:DeployOnBuild=true /p:Configuration=${{ github.event.inputs.configuration }} /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="${{ runner.temp }}/artifact/backend/WebAppBackend.zip" ./DownloadManager.Web/DownloadManager.Web.csproj
 
     - name: Deploy DACPAC to Azure SQL Database
       uses: Azure/sql-action@v2.3
       with:
         connection-string: Server=tcp:${{vars.AZURE_SQL_SERVER_NAME}}.database.windows.net,1433;Initial Catalog=${{vars.AZURE_SQL_DATABASE_NAME}};Persist Security Info=False;User ID=${{vars.SQL_ADMIN_LOGIN}};Password=${{secrets.SQL_ADMIN_PASSWORD}};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=60;
-        path: ./DownloadManager.Data.Database/bin/Release/DownloadManager.Data.Database.dacpac
+        path: ./DownloadManager.Data.Database/bin/${{ github.event.inputs.configuration }}/DownloadManager.Data.Database.dacpac
         build-arguments: '/p:DropObjectsNotInSource=True /p:BlockOnPossibleDataLoss=False'
         action: Publish
       
