@@ -2,7 +2,16 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "stage": {
+    "sqlServerName": {
+      "type": "string"
+    },
+    "sqlDatabaseName": {
+      "type": "string"
+    },
+    "webAppName": {
+      "type": "string"
+    },
+    "appServicePlanName": {
       "type": "string"
     },
     "sqlAdministratorLogin": {
@@ -12,17 +21,12 @@
       "type": "securestring"
     }
   },
-  "variables": {
-    "sqlServerName": "[concat('ms-dm-', parameters('stage'), '-sqls')]",
-    "sqlDatabaseName": "[concat('ms-dm-',  parameters('stage'), '-sqldb')]",
-    "webAppName": "[concat('ms-dm-',  parameters('stage'), '-app')]",
-    "appServicePlanName": "[concat('ms-dm-',  parameters('stage'), '-asp')]"
-  },
+  "variables": {},
   "resources": [
     {
       "type": "Microsoft.Sql/servers",
       "apiVersion": "2015-05-01-preview",
-      "name": "[variables('sqlServerName')]",
+      "name": "[parameters('sqlServerName')]",
       "location": "[resourceGroup().location]",
       "properties": {
         "administratorLogin": "[parameters('sqlAdministratorLogin')]",
@@ -40,7 +44,7 @@
             "endIpAddress": "0.0.0.0"
           },
           "dependsOn": [
-            "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+            "[concat('Microsoft.Sql/servers/', parameters('sqlServerName'))]"
           ]
         }
       ]
@@ -48,10 +52,10 @@
     {
       "type": "Microsoft.Sql/servers/databases",
       "apiVersion": "2022-05-01-preview",
-      "name": "[concat(variables('sqlServerName'), '/', variables('sqlDatabaseName'))]",
+      "name": "[concat(parameters('sqlServerName'), '/', parameters('sqlDatabaseName'))]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
       ],
       "properties": {
         "readScale": "Disabled",
@@ -62,7 +66,7 @@
     {
       "type": "Microsoft.Web/serverfarms",
       "apiVersion": "2021-02-01",
-      "name": "[variables('appServicePlanName')]",
+      "name": "[parameters('appServicePlanName')]",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "F1",
@@ -76,13 +80,13 @@
     {
       "type": "Microsoft.Web/sites",
       "apiVersion": "2021-02-01",
-      "name": "[variables('webAppName')]",
+      "name": "[parameters('webAppName')]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+        "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
       ],
       "properties": {
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('appServicePlanName'))]"
       },
       "resources": [
         {
@@ -90,11 +94,11 @@
           "type": "config",
           "name": "connectionstrings",
           "dependsOn": [
-            "[variables('webAppName')]"
+            "[parameters('webAppName')]"
           ],
           "properties": {
             "DownloadManagerDb": {
-              "value": "[concat('Server=tcp:', reference(concat('Microsoft.Sql/servers/', variables('sqlServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('sqlDatabaseName'), ';Persist Security Info=False;User ID=', parameters('sqlAdministratorLogin'),';Password=', parameters('sqlAdministratorPassword'), ';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=60;')]",
+              "value": "[concat('Server=tcp:', reference(concat('Microsoft.Sql/servers/', parameters('sqlServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('sqlDatabaseName'), ';Persist Security Info=False;User ID=', parameters('sqlAdministratorLogin'),';Password=', parameters('sqlAdministratorPassword'), ';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=60;')]",
               "type": "SQLServer"
             }
           }
