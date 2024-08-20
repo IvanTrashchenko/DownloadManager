@@ -34,7 +34,7 @@ jobs:
       run: msbuild /p:Configuration=${{ github.event.inputs.configuration }} DownloadManager.sln
 
     - name: Publish API
-      run: msbuild /t:Publish /p:Configuration=${{ github.event.inputs.configuration }}  /p:SkipInvalidConfigurations=true /p:PublishDir=="./DownloadManager.Web/publish" ./DownloadManager.Web/DownloadManager.Web.csproj
+      run: msbuild /t:Publish /p:Configuration=${{ github.event.inputs.configuration }}  /p:SkipInvalidConfigurations=true /p:PublishDir=="DownloadManager.Web/publish" ./DownloadManager.Web/DownloadManager.Web.csproj
 
     - name: Deploy DACPAC to Azure SQL Database
       uses: Azure/sql-action@v2.3
@@ -77,7 +77,7 @@ jobs:
 
     - name: Deploy API to Azure Web App
       run: |
-        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "${{ runner.temp }}/artifact/backend/WebAppBackend.zip"
+        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "WebAppBackend.zip"
 
     - name: Deploy Angular app to Azure Web App
       run: |
