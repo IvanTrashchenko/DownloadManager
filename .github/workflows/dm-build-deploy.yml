@@ -47,9 +47,10 @@ jobs:
       run: npm run build -- --configuration=production --output-path ${{ runner.temp }}/artifact/frontend
 
     - name: Archive Frontend Build Files
-      run: |
-        cd ${{ runner.temp }}/artifact/frontend
-        zip -r ${{ runner.temp }}/artifact/frontend/WebAppFrontend.zip .
+      uses: vimtor/action-zip@v1.1
+      with:
+        dest: '${{ runner.temp }}/artifact/frontend/WebAppFrontend.zip'
+        files: ${{ runner.temp }}/artifact/frontend/
 
     - name: Azure Login
       uses: azure/login@v2
