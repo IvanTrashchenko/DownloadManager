@@ -48,21 +48,16 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         auth-type: SERVICE_PRINCIPAL
-        
-    - name: Get publish Profile
-      id: webapp
-      uses: azure/powershell@v1
-      with:
-        inlineScript: |
-          $azContext = Get-AzSubscription -SubscriptionId (Get-AzContext).Subscription.Id
-          Set-AzContext -SubscriptionId $azContext.Id
-           
-          $profile = Get-AzWebAppPublishingProfile `
-               -ResourceGroupName ${{ vars.AZURE_RESOURCE_GROUP }} `
-               -Name ${{ vars.AZURE_WEBAPP_NAME }}
-          $profile = $profile.Replace("`r", "").Replace("`n", "")
-          Write-Output "::set-output name=profile::$profile"
-        azPSVersion: latest
+
+    - name: Get Publish Profile
+      id: get-publish-profile
+      run: |
+        az webapp deployment list-publishing-profiles \
+          --name ${{ vars.AZURE_WEBAPP_NAME }} \
+          --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} \
+          --output tsv > publishProfile.xml
+        publish_profile=$(cat publishProfile.xml)
+        echo "##vso[task.setvariable variable=publishProfile]$publish_profile"
 
     - name: Deploy API to Azure Web App
       uses: azure/webapps-deploy@v3
