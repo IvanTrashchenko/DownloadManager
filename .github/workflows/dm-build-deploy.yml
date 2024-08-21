@@ -25,9 +25,6 @@ jobs:
     - name: Build solution
       run: msbuild /p:Configuration=Release DownloadManager.sln
 
-    - name: Publish API
-      run: msbuild /p:DeployOnBuild=true /p:PublishProfile=FolderProfile /p:Configuration=Release DownloadManager.Web/DownloadManager.Web.csproj
-
     - name: Deploy DACPAC to Azure SQL Database
       uses: Azure/sql-action@v2.3
       with:
@@ -48,17 +45,14 @@ jobs:
     - name: Build Angular
       working-directory: ./DownloadManager.Web/ClientApp 
       run: npm run build -- --configuration=production
+      
+    - name: Publish API
+      run: msbuild /p:DeployOnBuild=true /p:PublishProfile=FolderProfile /p:Configuration=Release DownloadManager.Web/DownloadManager.Web.csproj
 
-    - name: Archive Backend Build Files
+    - name: Archive Build Files
       uses: vimtor/action-zip@v1.1
       with:
-        dest: 'WebAppBackend.zip'
-        files: 'DownloadManager.Web\publish\'
-
-    - name: Archive Frontend Build Files
-      uses: vimtor/action-zip@v1.1
-      with:
-        dest: 'WebAppFrontend.zip'
+        dest: 'WebApp.zip'
         files: 'DownloadManager.Web\ClientApp\dist\client-app\'
 
     - name: Azure Login
@@ -67,10 +61,6 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         auth-type: SERVICE_PRINCIPAL
 
-    - name: Deploy API to Azure Web App
+    - name: Deploy to Azure Web App
       run: |
-        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "WebAppBackend.zip"
-
-    - name: Deploy Angular app to Azure Web App
-      run: |
-        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "WebAppFrontend.zip"
+        az webapp deploy --resource-group ${{ vars.AZURE_RESOURCE_GROUP }} --name ${{ vars.AZURE_WEBAPP_NAME }} --src-path "WebApp.zip"
