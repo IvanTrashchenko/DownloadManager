@@ -1,12 +1,20 @@
-name: Create resources (ms-dm-dev-rg)
+name: Create resources
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: 'Environment'
+        required: true
+        options: 
+          - DEV
+          - DEV-2
 
 jobs:
   build-and-deploy:
     runs-on: windows-latest
-    environment: DEV
+    environment: ${{github.event.inputs.environment}}
 
     steps:
       - uses: actions/checkout@v3
