@@ -13,8 +13,10 @@ namespace DownloadManager.Web
         {
             // Web API configuration and services
 
+            var domain = Environment.GetEnvironmentVariable("AZURE_WEBAPP_NAME");
+
             //var cors = new EnableCorsAttribute("http://localhost:4200", "*", "*");
-            var cors = new EnableCorsAttribute("https://ms-dm-dev-app.azurewebsites.net", "*", "*");
+            var cors = new EnableCorsAttribute($"https://{domain}.azurewebsites.net", "*", "*");
             config.EnableCors(cors);
 
             // Web API routes
