@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -41,6 +42,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
+                LogWriter.Log(e, MethodBase.GetCurrentMethod()?.Name);
                 return InternalServerError(e);
             }
         }
@@ -55,6 +57,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
+                LogWriter.Log(e, MethodBase.GetCurrentMethod()?.Name);
                 return InternalServerError(e);
             }
         }

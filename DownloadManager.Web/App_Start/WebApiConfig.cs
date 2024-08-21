@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using DownloadManager.Web.Logging;
 
 namespace DownloadManager.Web
 {
@@ -13,10 +14,26 @@ namespace DownloadManager.Web
         {
             // Web API configuration and services
 
-            var domain = Environment.GetEnvironmentVariable("AZURE_WEBAPP_NAME");
+            string hostname = Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME");
+
+            string subdomain = null;
+
+            if (!string.IsNullOrEmpty(hostname))
+            {
+                // Split the hostname into parts
+                var parts = hostname.Split('.');
+
+                // Assuming the format is subdomain.azurewebsites.net, the subdomain is the first part
+                if (parts.Length > 2)
+                {
+                    subdomain = parts[0];
+                }
+            }
+
+            LogWriter.Log(LogWriterSeverity.Info, $"Subdomain (WEBSITE_HOSTNAME): {subdomain}", "WebApiConfig.Register");
 
             //var cors = new EnableCorsAttribute("http://localhost:4200", "*", "*");
-            var cors = new EnableCorsAttribute($"https://{domain}.azurewebsites.net", "*", "*");
+            var cors = new EnableCorsAttribute($"https://{subdomain}.azurewebsites.net", "*", "*");
             config.EnableCors(cors);
 
             // Web API routes

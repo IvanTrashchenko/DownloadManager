@@ -43,6 +43,7 @@ export class AuthService extends BaseService {
         this.setAuthToken(response.Token);
       }),
       catchError((error) => {
+        console.log(error);
         return throwError(error);
       })
     );
@@ -54,6 +55,7 @@ export class AuthService extends BaseService {
         this.setAuthToken(response.Token);
       }),
       catchError((error) => {
+        console.log(error);
         return throwError(error);
       })
     );

@@ -4,9 +4,11 @@ using System.Configuration;
 using System.Web.Http;
 using DownloadManager.Service.Models.Input;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using DownloadManager.Web.Logging;
 
 namespace DownloadManager.Web.Controllers
 {
@@ -45,6 +47,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
+                LogWriter.Log(e, MethodBase.GetCurrentMethod()?.Name);
                 if (e is ArgumentException)
                 {
                     return BadRequest(e.Message);
@@ -84,6 +87,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
+                LogWriter.Log(e, MethodBase.GetCurrentMethod()?.Name);
                 if (e is ArgumentException)
                 {
                     return BadRequest(e.Message);

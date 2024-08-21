@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/']);
       },
       (error) => {
+        console.log(error);
         if (error.status === 401 || error.status === 400) {
           this.errorMessage = 'Invalid username or password.';
         } else if (error.status === 500) {

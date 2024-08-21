@@ -60,6 +60,7 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/']);
       },
       (error) => {
+        console.log(error);
         if (error.status === 409) {
           this.errorMessage = 'User with these credentials already exists.';
         } else if (error.status === 400) {

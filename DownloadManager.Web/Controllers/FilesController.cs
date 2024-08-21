@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -6,6 +7,7 @@ using DownloadManager.Service.Contract;
 using DownloadManager.Service.Contract.Models.Output;
 using DownloadManager.Service.Models.Input;
 using DownloadManager.Web.Filter;
+using DownloadManager.Web.Logging;
 using DownloadManager.Web.Models;
 
 namespace DownloadManager.Web.Controllers
@@ -63,6 +65,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception ex)
             {
+                LogWriter.Log(ex, MethodBase.GetCurrentMethod()?.Name);
                 if (ex is ArgumentException)
                 {
                     return BadRequest(ex.Message);
@@ -92,6 +95,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception ex)
             {
+                LogWriter.Log(ex, MethodBase.GetCurrentMethod()?.Name);
                 return InternalServerError(ex);
             }
 
