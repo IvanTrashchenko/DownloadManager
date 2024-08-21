@@ -75,7 +75,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       fileUrl: ['https://i.redd.it/ufxj58wy79w81.jpg', [Validators.required, this.urlValidator]],
       fileName: ['file', [Validators.required, this.fileNameValidator]],
-      destinationFolder: ['C:\\DownloadManagerFolder', [Validators.required, this.windowsPathValidator]],
+      destinationFolder: ['C:\\home', [Validators.required, this.windowsPathValidator]],
       downloadMethod: [DownloadMethod.BeginInvoke, Validators.required]
     });
   }
