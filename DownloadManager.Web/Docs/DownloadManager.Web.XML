@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DownloadManager.Web</name>
+    </assembly>
+    <members>
+        <member name="M:DownloadManager.Web.Controllers.FilesController.Download(DownloadManager.Web.Models.DownloadModel)">
+            <summary>
+            Downloads the file.
+            </summary>
+            <param name="model">A JSON model containing the information about the download.</param>
+        </member>
+        <member name="M:DownloadManager.Web.Controllers.FilesController.GetReport(DownloadManager.Service.Models.Input.FileFilterModel)">
+            <summary>
+            Gets filtered report about downloaded files.
+            </summary>
+            <param name="model">The filter data.</param>
+            <returns>A JSON object representing the report model.</returns>
+        </member>
+        <member name="M:DownloadManager.Web.Controllers.UsersController.Register(DownloadManager.Service.Models.Input.UserCredentialsModel)">
+            <summary>
+            Registers a new user.
+            </summary>
+            <param name="model">The register model containing the user's desired username and password.</param>
+            <returns>A response indicating the success or failure of the registration.</returns>
+        </member>
+        <member name="M:DownloadManager.Web.Controllers.UsersController.CheckCredentials(DownloadManager.Service.Models.Input.UserCredentialsModel)">
+            <summary>
+            Authenticate a user.
+            </summary>
+            <param name="model">The login model containing the user's username and password.</param>
+            <returns>A response indicating the success or failure of the authentication.</returns>
+        </member>
+    </members>
+</doc>

@@ -237,6 +237,9 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Docs\DownloadManager.Web.XML">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -403,4 +406,8 @@
   </Target>
   <Target Name="AfterBuild">
   </Target> -->
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>Docs\DownloadManager.Web.XML</DocumentationFile>
+  </PropertyGroup>
 </Project>
