@@ -16,25 +16,32 @@ namespace DownloadManager.Web
 
             string hostname = Environment.GetEnvironmentVariable("WEBSITE_HOSTNAME");
 
-            string subdomain = null;
-
-            if (!string.IsNullOrEmpty(hostname))
+            if (!string.IsNullOrWhiteSpace(hostname))
             {
-                // Split the hostname into parts
-                var parts = hostname.Split('.');
+                string subdomain = null;
 
-                // Assuming the format is subdomain.azurewebsites.net, the subdomain is the first part
-                if (parts.Length > 2)
+                if (!string.IsNullOrEmpty(hostname))
                 {
-                    subdomain = parts[0];
+                    // Split the hostname into parts
+                    var parts = hostname.Split('.');
+
+                    // Assuming the format is subdomain.azurewebsites.net, the subdomain is the first part
+                    if (parts.Length > 2)
+                    {
+                        subdomain = parts[0];
+                    }
                 }
+
+                LogWriter.Log(LogWriterSeverity.Info, $"Subdomain (WEBSITE_HOSTNAME): {subdomain}", "WebApiConfig.Register");
+
+                var corsAzure = new EnableCorsAttribute($"https://{subdomain}.azurewebsites.net", "*", "*");
+                config.EnableCors(corsAzure);
             }
 
-            LogWriter.Log(LogWriterSeverity.Info, $"Subdomain (WEBSITE_HOSTNAME): {subdomain}", "WebApiConfig.Register");
+            //var corsDebug = new EnableCorsAttribute("http://localhost:4200", "*", "*");
 
-            //var cors = new EnableCorsAttribute("http://localhost:4200", "*", "*");
-            var cors = new EnableCorsAttribute($"https://{subdomain}.azurewebsites.net", "*", "*");
-            config.EnableCors(cors);
+            var corsDocker = new EnableCorsAttribute("http://localhost:8080", "*", "*");
+            config.EnableCors(corsDocker);
 
             // Web API routes
             config.MapHttpAttributeRoutes();
