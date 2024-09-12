@@ -65,7 +65,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                LogWriter.Log(ex, MethodBase.GetCurrentMethod()?.Name);
+                LogWriter.Log(ex);
                 if (ex is ArgumentException)
                 {
                     return BadRequest(ex.Message);
@@ -95,7 +95,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception ex)
             {
-                LogWriter.Log(ex, MethodBase.GetCurrentMethod()?.Name);
+                LogWriter.Log(ex);
                 return InternalServerError(ex);
             }
 

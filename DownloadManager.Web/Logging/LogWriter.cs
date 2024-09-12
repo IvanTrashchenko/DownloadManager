@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Web;
 
@@ -52,19 +53,19 @@ namespace DownloadManager.Web.Logging
                     _filter = filter;
 
                     string message = $"Found valid LoggingSeverity '{_filter}'.";
-                    Log(LogWriterSeverity.Info, message, "logWriter");
+                    Log(LogWriterSeverity.Info, message, "LogWriter");
                 }
                 else
                 {
                     string message = $"LoggingSeverity '{filterString}' is invalid. Allowed values are: 'None', 'Error', 'Warning', 'Info', 'Verbose'. Setting LoggingSeverity to 'Warning'.";
-                    Log(LogWriterSeverity.Warning, message, "logWriter");
+                    Log(LogWriterSeverity.Warning, message, "LogWriter");
                 }
             }
             else
             {
                 string message = $"No LoggingSeverity configuration found. It should be configured in an Environment Variable '{LoggingSeverityKey}' or in the App Settings section " +
                                  $"of the Logic App Configuration with name '{LoggingSeverityKey}'. Setting LoggingSeverity to 'Warning'.";
-                Log(LogWriterSeverity.Warning, message, "logWriter");
+                Log(LogWriterSeverity.Warning, message, "LogWriter");
             }
         }
 
@@ -72,7 +73,7 @@ namespace DownloadManager.Web.Logging
 
         #region Public methods
 
-        public static void Log(LogWriterSeverity severity, string message, string methodName)
+        public static void Log(LogWriterSeverity severity, string message, [CallerMemberName] string methodName = "")
         {
             if (IsEventPassed(severity))
             {
@@ -90,7 +91,7 @@ namespace DownloadManager.Web.Logging
             }
         }
 
-        public static void Log(Exception ex, string methodName)
+        public static void Log(Exception ex, [CallerMemberName] string methodName = "")
         {
             var severity = LogWriterSeverity.Error;
 

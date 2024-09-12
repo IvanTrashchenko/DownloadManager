@@ -42,7 +42,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
-                LogWriter.Log(e, MethodBase.GetCurrentMethod()?.Name);
+                LogWriter.Log(e);
                 return InternalServerError(e);
             }
         }
@@ -57,7 +57,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
-                LogWriter.Log(e, MethodBase.GetCurrentMethod()?.Name);
+                LogWriter.Log(e);
                 return InternalServerError(e);
             }
         }
