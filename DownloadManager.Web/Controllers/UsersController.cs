@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using DownloadManager.Web.Logging;
+using Serilog;
 
 namespace DownloadManager.Web.Controllers
 {
@@ -47,7 +48,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
-                LogWriter.Log(e);
+                Log.Error(e, e.Message);
                 if (e is ArgumentException)
                 {
                     return BadRequest(e.Message);
@@ -87,7 +88,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
-                LogWriter.Log(e);
+                Log.Error(e, e.Message);
                 if (e is ArgumentException)
                 {
                     return BadRequest(e.Message);

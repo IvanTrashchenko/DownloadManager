@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using DownloadManager.Web.Logging;
+using Serilog;
 
 namespace DownloadManager.Web
 {
@@ -32,13 +33,14 @@ namespace DownloadManager.Web
                     }
                 }
 
-                LogWriter.Log(LogWriterSeverity.Info, $"Subdomain (WEBSITE_HOSTNAME): {subdomain}", "WebApiConfig.Register");
+                Log.Information($"Subdomain (WEBSITE_HOSTNAME): {subdomain}");
 
                 var corsAzure = new EnableCorsAttribute($"https://{subdomain}.azurewebsites.net", "*", "*");
                 config.EnableCors(corsAzure);
             }
 
-            //var corsDebug = new EnableCorsAttribute("http://localhost:4200", "*", "*");
+            var corsDebug = new EnableCorsAttribute("http://localhost:4200", "*", "*");
+            config.EnableCors(corsDebug);
 
             var corsDocker = new EnableCorsAttribute("http://localhost:8080", "*", "*");
             config.EnableCors(corsDocker);

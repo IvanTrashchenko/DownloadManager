@@ -9,6 +9,7 @@ using DownloadManager.Service.Models.Input;
 using DownloadManager.Web.Filter;
 using DownloadManager.Web.Logging;
 using DownloadManager.Web.Models;
+using Serilog;
 
 namespace DownloadManager.Web.Controllers
 {
@@ -42,7 +43,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
-                LogWriter.Log(e);
+                Log.Error(e, e.Message);
                 return InternalServerError(e);
             }
         }
@@ -57,7 +58,7 @@ namespace DownloadManager.Web.Controllers
             }
             catch (Exception e)
             {
-                LogWriter.Log(e);
+                Log.Error(e, e.Message);
                 return InternalServerError(e);
             }
         }
