@@ -1,6 +1,34 @@
+version: '3.8'
 services:
-  app:
+  web:
     build:
       context: .
+      dockerfile: ./Dockerfile
     ports:
-      - 8080:80
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - downloadmanager_default
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  db:
+    build:
+      context: DownloadManager.Data.Database/.
+      dockerfile: Dockerfile
+    environment:
+      SA_PASSWORD: "passw0rd"
+      ACCEPT_EULA: "Y"
+      DOCKER_ENV: "true"
+    ports:
+      - "1433:1433"
+    networks:
+      - downloadmanager_default
+    # isolation: hyperv  # Ensure Windows containers use Hyper-V isolation
+
+volumes:
+  dbdata:
+
+networks:
+  downloadmanager_default:
