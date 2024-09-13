@@ -237,7 +237,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
-    <Content Include="Docs\DownloadManager.Web.XML">
+    <Content Include="DownloadManager.Web.XML">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="favicon.ico" />
@@ -408,6 +408,6 @@
   </Target> -->
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>Docs\DownloadManager.Web.XML</DocumentationFile>
+    <DocumentationFile>DownloadManager.Web.XML</DocumentationFile>
   </PropertyGroup>
 </Project>

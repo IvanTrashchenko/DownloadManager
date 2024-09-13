@@ -39,11 +39,8 @@ namespace DownloadManager.Web
                 config.EnableCors(corsAzure);
             }
 
-            var corsDebug = new EnableCorsAttribute("http://localhost:4200", "*", "*");
-            config.EnableCors(corsDebug);
-
-            var corsDocker = new EnableCorsAttribute("http://localhost:8080", "*", "*");
-            config.EnableCors(corsDocker);
+            //var corsDebug = new EnableCorsAttribute("http://localhost:4200", "*", "*");
+            //config.EnableCors(corsDebug);
 
             // Web API routes
             config.MapHttpAttributeRoutes();
