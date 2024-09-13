@@ -410,4 +410,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>DownloadManager.Web.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+  <NoWarn>1591</NoWarn>
+</PropertyGroup>
 </Project>
