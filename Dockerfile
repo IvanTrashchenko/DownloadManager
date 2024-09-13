@@ -7,6 +7,9 @@ WORKDIR /app
 # Copy the entire solution/project into the container
 COPY . /app
 
+# Restore NuGet packages
+RUN nuget restore DownloadManager.sln
+
 # Publish API using FolderProfile
 RUN msbuild /p:DeployOnBuild=true /p:PublishProfile=FolderProfile /p:Configuration=Release DownloadManager.Web/DownloadManager.Web.csproj
 
