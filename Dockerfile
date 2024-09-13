@@ -22,11 +22,8 @@ COPY --from=build /app/DownloadManager.Web/ClientApp/dist/client-app/ .
 # Expose port 80 for the web app
 EXPOSE 80
 
-# Set up the logs and bin directories with permissions at runtime
+# Set up the logs directory with permissions at runtime
 RUN powershell -Command \
     "New-Item -Path 'C:/inetpub/wwwroot/logs' -ItemType Directory -Force; \
-     New-Item -Path 'C:/inetpub/wwwroot/bin' -ItemType Directory -Force; \
      icacls 'C:/inetpub/wwwroot/logs' /grant 'IIS_IUSRS:(OI)(CI)F' /T; \
-     icacls 'C:/inetpub/wwwroot/bin' /grant 'IIS_IUSRS:(OI)(CI)F' /T; \
-     icacls 'C:/inetpub/wwwroot/logs' /grant 'NETWORK SERVICE:(OI)(CI)F' /T; \
-     icacls 'C:/inetpub/wwwroot/bin' /grant 'NETWORK SERVICE:(OI)(CI)F' /T"
+     icacls 'C:/inetpub/wwwroot/logs' /grant 'NETWORK SERVICE:(OI)(CI)F' /T"
