@@ -28,7 +28,6 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2016 as final
 # Set up environment variables
 ENV ACCEPT_EULA=Y
 ENV SA_PASSWORD=Passw0rd
-ENV DOCKER_ENV=true
 
 # Create tools directory and download SqlPackage.exe
 RUN powershell -Command \
@@ -45,4 +44,4 @@ COPY --from=sqlproj-build /src/bin/Output/DownloadManager.Data.Database.dacpac /
 EXPOSE 1433
 
 # Start SQL Server and publish the DACPAC to it
-CMD ["cmd", "/C", "ping -n 30 127.0.0.1 > nul && C:/app/sqlpackage/SqlPackage.exe /Action:Publish /SourceFile:C:/app/DownloadManager.Data.Database.dacpac /TargetServerName:db /TargetDatabaseName:DownloadManagerDb /TargetUser:sa /TargetPassword:Passw0rd"]
+CMD ["cmd", "/C", "ping -n 30 127.0.0.1 > nul && C:/app/sqlpackage/SqlPackage.exe /Action:Publish /SourceFile:C:/app/DownloadManager.Data.Database.dacpac /TargetServerName:db /TargetDatabaseName:DownloadManagerDb /TargetUser:sa /TargetPassword:Passw0rd /p:CreateNewDatabase=true"]

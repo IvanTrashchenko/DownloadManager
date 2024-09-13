@@ -12,6 +12,7 @@ services:
       - downloadmanager_default
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - SQLCONNSTR_DownloadManagerDb="Server=db;Database=DownloadManagerDb;User Id=sa;Password=Passw0rd;"
 
   db:
     build:
@@ -20,7 +21,6 @@ services:
     environment:
       SA_PASSWORD: "passw0rd"
       ACCEPT_EULA: "Y"
-      DOCKER_ENV: "true"
     ports:
       - "1433:1433"
     networks:

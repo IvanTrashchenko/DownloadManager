@@ -12,16 +12,6 @@ namespace DownloadManager.Data.Dal.Util
         {
             try
             {
-                var dockerEnv = Environment.GetEnvironmentVariable("DOCKER_ENV");
-
-                if (bool.TryParse(dockerEnv, out bool isDockerEnv))
-                {
-                    if (isDockerEnv)
-                    {
-                        return "Server=db;Database=DownloadManagerDb;User Id=sa;Password=Passw0rd;";
-                    }
-                }
-
                 const string connectionStringName = "DownloadManagerDb";
                 const string connectionStringEnvVarName = "SQLCONNSTR_" + connectionStringName;
 
