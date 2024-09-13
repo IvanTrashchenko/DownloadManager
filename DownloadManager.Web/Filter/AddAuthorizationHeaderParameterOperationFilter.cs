@@ -24,7 +24,7 @@ namespace DownloadManager.Web.Filter
             {
                 name = "Authorization",
                 @in = "header",
-                description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+                description = "JWT Authorization header",
                 required = true,
                 type = "string"
             });

@@ -60,7 +60,7 @@ namespace DownloadManager.Web
                         // according to your specific authorization implementation
                         //
                         c.ApiKey("Bearer")
-                            .Description("JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'")
+                            .Description("JWT Authorization header.")
                             .Name("Authorization")
                             .In("header");
                         //
