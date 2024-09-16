@@ -1,11 +1,6 @@
 # Use a SQL Server image from Microsoft
 FROM mcr.microsoft.com/mssql/server:2022-latest
 
-# Set environment variables for SQL Server
-ENV SA_PASSWORD=Passw0rd
-ENV ACCEPT_EULA=Y
-ENV MSSQL_PID=Developer
-
 # Switch to the root user to perform privileged operations
 USER root
 
