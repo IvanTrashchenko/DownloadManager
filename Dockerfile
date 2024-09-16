@@ -33,7 +33,6 @@ RUN nuget restore DownloadManager.sln
 # Publish API using FolderProfile
 RUN msbuild /p:DeployOnBuild=true /p:PublishProfile=FolderProfile /p:Configuration=Release DownloadManager.Web/DownloadManager.Web.csproj
 
-
 # Stage 3: Final stage for deployment
 FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8 AS final
 
