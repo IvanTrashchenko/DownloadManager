@@ -1,0 +1,22 @@
+services:
+  dm-db:
+    container_name: dm-db
+    hostname: dm-db
+    build: .
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD: 'Passw0rd'
+      # MSSQL_DATA_DIR: /var/opt/mssql/data
+      MSSQL_PID: 'Developer' 
+      MSSQL_TCP_PORT: 1433 # Ensure the container binds to all interfaces
+      MSSQL_ENABLE_HSTS: '0'  # Disable HSTS to stop enforcing SSL encryption
+      MSSQL_FORCE_ENCRYPTION: 'No'  # Explicitly disable encryption
+      # MSSQL_IPADDR: 0.0.0.0
+    #volumes:
+    #  - ./sqlscripts:/usr/src/sqlscripts
+
+networks:
+  dm-network:
+    driver: bridge
