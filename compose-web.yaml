@@ -8,9 +8,9 @@ services:
     networks:
       - dm-network
     environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      SQLCONNSTR_DownloadManagerDb: Server=localhost,1433;Database=DownloadManagerDb;User Id=sa;Password=Passw0rd;
+      ASPNETCORE_ENVIRONMENT: 'Development'
+      SQLCONNSTR_DownloadManagerDb: 'Server=localhost,1433;Database=DownloadManagerDb;User Id=sa;Password=Passw0rd;'
 
 networks:
   dm-network:
-    # external: true
+    driver: bridge
