@@ -48,6 +48,9 @@ COPY --from=server-build /app/DownloadManager.Web/ClientApp/dist/client-app/. /i
 # Expose port 80 for the web app
 EXPOSE 80
 
+# Create directory C:\home
+RUN mkdir C:\home
+
 # Set up the logs directory with permissions at runtime
 RUN powershell -Command \
     "New-Item -Path 'C:/inetpub/wwwroot/logs' -ItemType Directory -Force; \
