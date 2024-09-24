@@ -10,3 +10,9 @@ services:
       MSSQL_SA_PASSWORD: 'Passw0rd'
       MSSQL_PID: 'Developer' 
       MSSQL_TCP_PORT: 1433
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:
+    driver: local 
