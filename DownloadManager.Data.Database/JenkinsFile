@@ -1,0 +1,36 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/IvanTrashchenko/DownloadManager.git' 
+            }
+        }
+        stage('Build and Deploy with Docker Compose') {
+            steps {
+                script {
+                    // Stop and remove any running services
+                    // bat 'docker-compose down'
+                    
+                    bat 'net stop winnat'
+                    
+                    // Build and deploy the containers using Docker Compose
+                    bat 'docker-compose -f compose-db.yaml up --build -d'
+                    
+                    bat 'net start winnat'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+        success {
+            echo 'Database deployed successfully!'
+        }
+        failure {
+            echo 'Deployment failed.'
+        }
+    }
+}
