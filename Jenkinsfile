@@ -6,6 +6,16 @@ pipeline {
                 git 'https://github.com/IvanTrashchenko/DownloadManager.git' 
             }
         }
+        stage('SonarQube Analysis - Backend') {
+            steps {
+                script {
+                    bat 'nuget restore DownloadManager.sln'
+                    bat 'SonarScanner.MSBuild.exe begin /k:"DownloadManagerBackend" /d:sonar.login="sqp_118a0c63fed172051976fd47d7211bc9f8f47f4f" /d:sonar.host.url="http://localhost:9000"'
+                    bat 'MSBuild.exe /t:Rebuild'
+                    bat 'SonarScanner.MSBuild.exe end /d:sonar.login="sqp_118a0c63fed172051976fd47d7211bc9f8f47f4f"'
+                }
+            }
+        }
         stage('Build and Deploy with Docker Compose') {
             steps {
                 script {
