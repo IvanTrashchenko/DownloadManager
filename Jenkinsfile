@@ -16,6 +16,15 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube Analysis - Frontend') {
+            steps {
+                dir('DownloadManager.Web/ClientApp') {
+                    script {
+                        bat 'sonar-scanner'
+                    }
+                }
+            }
+        }
         stage('Build and Deploy with Docker Compose') {
             steps {
                 script {
