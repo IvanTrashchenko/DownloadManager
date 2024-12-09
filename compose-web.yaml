@@ -7,4 +7,4 @@ services:
       - "8080:80"
     environment:
       ASPNETCORE_ENVIRONMENT: 'Development'
-      SQLCONNSTR_DownloadManagerDb: Server=127.0.1.1,1433;Database=DownloadManagerDb;User Id=sa;Password=Passw0rd; # hostname -I
+      SQLCONNSTR_DownloadManagerDb: Server=172.24.114.199,1433;Database=DownloadManagerDb;User Id=sa;Password=Passw0rd; # hostname -I
